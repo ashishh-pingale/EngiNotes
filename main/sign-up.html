@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | EngiNotes</title>
+    <link rel="stylesheet" href="sign-up.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="signup-container">
+        <div class="signup-card">
+            <div class="logo">Engi<span>Notes</span></div>
+
+            <h2>Create Account</h2>
+            <p class="subtitle">Join the community of engineering students</p>
+            <div id="error-box" class="error-msg" style="display:none;"></div>
+            <form id="signupForm">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="name" placeholder="John Doe" required>
+                </div>
+
+                <div class="form-group">
+                    <label>College Email</label>
+                    <input type="email" id="email" placeholder="name@college.edu" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="password" placeholder="••••••••" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" id="confirmPassword" placeholder="••••••••" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Branch <span class="opt">(Optional)</span></label>
+                        <select id="branch">
+                            <option value="">Select</option>
+                            <option>CSE</option>
+                            <option>ECE</option>
+                            <option>MECH</option>
+                            <option>CIVIL</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Year <span class="opt">(Optional)</span></label>
+                        <select id="year">
+                            <option value="">Select</option>
+                            <option>1st Year</option>
+                            <option>2nd Year</option>
+                            <option>3rd Year</option>
+                            <option>4th Year</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-signup">Sign Up</button>
+            </form>
+
+            <p class="login-text">
+                Already have an account? <a href="login.html">Login</a>
+            </p>
+        </div>
+
+        <a href="index.html" class="back-home">← Back to Home</a>
+    </div>
+    <script type="module" src="sign-up.js"></script>
+
+</body>
+
+</html>

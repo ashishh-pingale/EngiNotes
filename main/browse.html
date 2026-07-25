@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Notes | EngiNotes</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">Engi<span>Notes</span></div>
+        <ul class="nav-links">
+            <li><a href="/main/index.html">Home</a></li>
+            <li><a href="/main/browse.html" class="active">Explore Notes</a></li>
+            <li><a href="/main/contact.html">Contact Us</a></li>
+            <li><a href="/main/Users/discover.html">Discover</a></li>
+            <li><a href="/main/about.html">About Us</a></li>
+        </ul>
+        <div class="nav-auth" id="authSection">
+            <span class="auth-loading">...</span>
+            <button class="btn-secondary">Sign In</button>
+            <button class="btn-primary">Sign Up</button>
+        </div>
+    </nav>
+
+    <header class="browse-header">
+        <div class="container">
+            <h1>Find your study materials</h1>
+            <div class="filter-container">
+                <select id="branchFilter">
+                    <option value="">All Branches</option>
+                    <option value="CSE">CSE</option>
+                    <option value="ECE">ECE</option>
+                </select>
+
+                <select id="yearFilter">
+                    <option value="">All Years</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+
+                <button id="filterBtn">Filter</button>
+
+            </div>
+        </div>
+    </header>
+
+<main class="container">
+  <div class="notes-grid" id="notesContainer">
+  </div>
+</main>
+
+
+        <!-- <div class="notes-grid">
+            <div class="note-card cse">
+                <span class="branch-badge">CSE</span>
+                <h3>Data Structures & Algorithms</h3>
+                <p class="subject-code">CS301 • Semester 3</p>
+                <div class="user-info">
+                    <div class="avatar">AS</div>
+                    <span>Uploaded by <strong>Ankit Sharma</strong></span>
+                </div>
+                <div class="card-footer">
+                    <span class="file-size">4.2 MB • PDF</span>
+                    <button class="btn-download-small">Download</button>
+                </div>
+            </div>
+
+            <div class="note-card ece">
+                <span class="branch-badge">ECE</span>
+                <h3>Digital Circuit Design</h3>
+                <p class="subject-code">EC202 • Semester 4</p>
+                <div class="user-info">
+                    <div class="avatar">RP</div>
+                    <span>Uploaded by <strong>Rohan P.</strong></span>
+                </div>
+                <div class="card-footer">
+                    <span class="file-size">2.8 MB • PDF</span>
+                    <button class="btn-download-small">Download</button>
+                </div>
+            </div>
+
+            <div class="note-card mech">
+                <span class="branch-badge">MECH</span>
+                <h3>Thermodynamics Notes</h3>
+                <p class="subject-code">ME101 • Semester 2</p>
+                <div class="user-info">
+                    <div class="avatar">JS</div>
+                    <span>Uploaded by <strong>Jatin S.</strong></span>
+                </div>
+                <div class="card-footer">
+                    <span class="file-size">5.1 MB • PDF</span>
+                    <button class="btn-download-small">Download</button>
+                </div>
+            </div>
+
+            </div> -->
+    </main>
+    <script type="module" src="/js/notes.js"></script>
+    <script type="module" src="../js/auth-state.js"></script>
+
+
+</body>
+
+</html>

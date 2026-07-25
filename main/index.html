@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EngiNotes | Centralized Engineering Resources</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">Engi<span>Notes</span></div>
+        <ul class="nav-links">
+            <li><a href="/main/index.html" class="active">Home</a></li>
+            <li><a href="/main/browse.html">Explore Notes</a></li>
+            <li><a href="/main/contact.html">Contact Us</a></li>
+            <li><a href="/main/Users/discover.html">Discover</a></li>
+            <li><a href="/main/about.html">About Us</a></li>
+            <li><a href="/main/chat.html">chat</a></li>
+        </ul>
+        <div class="nav-auth" id="authSection">
+            <span class="auth-loading">...</span>
+            <button class="btn-secondary" onclick="window.location.href='login.html'">Sign In</button>
+            <button class="btn-primary" onclick="window.location.href='sign-up.html'">Sign Up</button>
+        </div>
+    </nav>
+
+    <header class="hero">
+        
+    <div class="container">
+        <div class="hero-badge-container">
+            <div class="hero-badge">
+                <span class="badge-q">What?</span>
+                <span class="badge-a">Centralized Note Hub</span>
+            </div>
+            <div class="hero-badge">
+                <span class="badge-q">Who?</span>
+                <span class="badge-a">B.E. & B.Tech Exclusively</span>
+            </div>
+            <div class="hero-badge">
+                <span class="badge-q">Why?</span>
+                <span class="badge-a">Zero-Cost Study Success</span>
+            </div>
+        </div>
+        
+        <h1>All the notes at one place.</h1>
+        <p class="hero-desc">The ultimate repository for engineering students. Access curated study materials, previous year questions, and handwritten notes shared by your peers.</p>
+        <button class="btn-large" onclick="window.location.href='/main/browse.html'">Browse Notes</button>
+    </div>
+</header>
+    <section class="how-it-works">
+        <div class="container">
+            <h2 class="section-title ">How It Works</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="icon">01</div>
+                    <h3>Choose Branch & Year</h3>
+                    <p>Select your engineering stream and current academic year to filter relevant content.</p>
+                </div>
+                <div class="card">
+                    <div class="icon">02</div>
+                    <h3>Browse Available Notes</h3>
+                    <p>Search through high-quality PDFs and digital notes uploaded by top-performing students.</p>
+                </div>
+                <div class="card">
+                    <div class="icon">03</div>
+                    <h3>Download or Upload</h3>
+                    <p>Get the resources you need instantly, or contribute your own notes to help the community grow.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="trust">
+        <div class="container">
+            <div class="trust-grid">
+                <div class="trust-item">
+                    <h4>Organized by Branch & Semester</h4>
+                    <p>No more messy folders. Everything is categorized exactly how your syllabus is structured.</p>
+                </div>
+                <div class="trust-item">
+                    <h4>Community Driven</h4>
+                    <p>Built by students, for students. The quality is maintained by a peer-review rating system.</p>
+                </div>
+                <div class="trust-item">
+                    <h4>Free & Easy Access</h4>
+                    <p>No hidden paywalls. Accessing knowledge should be as easy as a single click.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="#">About</a>
+                    <a href="#">Contact</a>
+                </div>
+                <p>&copy; 2026 EngiNotes. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="js/firebase.js"></script>
+    <script type="module" src="../js/auth-state.js"></script>
+
+
+</body>
+</html>

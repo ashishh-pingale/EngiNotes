@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discover Peers | EngiNotes</title>
+    <link rel="stylesheet" href="discover.css">
+</head>
+
+<body>
+
+    <!-- ✅ NAVBAR -->
+    <nav class="navbar">
+        <div class="logo">EngiNotes</div>
+
+        <ul class="nav-links">
+            <li><a href="/main/index.html">Home</a></li>
+            <li><a href="/main/browse.html">Explore Notes</a></li>
+            <li><a href="/main/contact.html">Contact Us</a></li>
+            <li><a href="/main/Users/discover.html" class="active">Discover</a></li>
+            <li><a href="/main/about.html">About Us</a></li>
+        </ul>
+
+        <!-- ✅ IMPORTANT FIX: Added ID -->
+        <div class="nav-right" id="authSection"></div>
+    </nav>
+
+    <!-- HEADER -->
+    <header class="discover-header">
+        <h1>Find Your Study Tribe</h1>
+        <p>Connect with B.E. & B.Tech students from around the world.</p>
+
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search by name, branch, or college...">
+        </div>
+    </header>
+
+    <!-- USERS GRID -->
+    <div class="grid-container" id="usersList">
+
+    </div>
+
+    <!-- ✅ FIXED SCRIPT PATH -->
+    <script type="module" src="/js/auth-state.js"></script>
+    <script type="module" src="/main/Users/discover.js"></script>>
+
+</body>
+
+</html>

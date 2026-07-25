@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile | EngiNotes</title>
+    <link rel="stylesheet" href="user_profile.css">
+</head>
+<body>
+
+    <nav>
+        <a href="/main/index.html" class="logo">EngiNotes</a>
+        
+    </nav>
+
+    <div class="profile-container">
+        <div class="profile-card">
+
+            <div class="profile-avatar" id="profileAvatar">👤</div>
+
+            <h1 class="profile-name" id="profileName">Loading...</h1>
+            <p class="profile-bio" id="profileBio">Loading bio...</p>
+
+            <div class="stats-row">
+                <a href="#" class="stat-item">
+                    <span class="stat-value" id="followersCount">0</span>
+                    <span class="stat-label">Followers</span>
+                </a>
+                <a href="#" class="stat-item">
+                    <span class="stat-value" id="followingCount">0</span>
+                    <span class="stat-label">Following</span>
+                </a>
+            </div>
+
+            <button class="btn btn-connect" id="connectBtn">Loading...</button>
+
+        </div>
+    </div>
+
+    <!-- JS -->
+    <script type="module" src="user_profile.js"></script>
+
+</body>
+</html>
