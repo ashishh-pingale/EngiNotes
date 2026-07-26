@@ -11,7 +11,7 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-    font-family: 'Inter', sans-serif;
+    font-family:'Poppins',sans-serif;
     background-color: #f8fafc;
     color: var(--text-dark);
 }
@@ -19,13 +19,14 @@ body {
 .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
 
 /* Navbar (Global Consistency) */
-.navbar {
+/* .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     padding: 15px 5%;
     background: var(--white);
-    border-bottom: 1px solid var(--border-color);
+   
     position: sticky; top: 0; z-index: 1000;
 }
 
@@ -41,7 +42,7 @@ body {
 .nav-links li a.active { color: var(--primary-blue); }
 
 .btn-primary { background: var(--primary-blue); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;}
-.btn-secondary { background: transparent; color: var(--primary-blue); border: none; padding: 10px 20px; cursor: pointer; font-weight: 600;}
+.btn-secondary { background: transparent; color: var(--primary-blue); border: none; padding: 10px 20px; cursor: pointer; font-weight: 600;} */
 
 /* Contact Section Layout */
 .contact-container {

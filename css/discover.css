@@ -10,6 +10,17 @@
     --bg-body: #f7fafc;
     --white: #ffffff;
     --border: #edf2f7;
+
+    --accent-color: #00d1b2;
+    --text-light: #666;
+    --bg-light: #f4f7f9;
+
+    --primary-blue: #0077b6;
+    --dark-blue: #023e8a;
+    --light-blue: #e0f2fe;
+    --white: #ffffff;
+    --text-dark: #1e293b;
+    --text-muted: #64748b;
 }
 
 /* Reset */
@@ -20,14 +31,14 @@
 }
 
 body {
-    font-family: 'Inter', -apple-system, sans-serif;
-    background-color: var(--bg-body);
-    color: var(--text-main);
+    font-family:'Poppins',sans-serif;
+    background-color: #f0f7ff;
+    color: var(--text-dark);
 }
 
 /* ================= NAVBAR ================= */
 
-.navbar {
+/* .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -41,14 +52,15 @@ body {
 
 .logo {
     font-size: 1.5rem;
-    font-weight: 800;
+    font-weight: 700;
     color: var(--secondary-color);
-    text-decoration: none;
 }
 
+.logo span { color: var(--primary-color); }
+
 .nav-links {
-    list-style: none;
     display: flex;
+    list-style: none;
 }
 
 .nav-links li a {
@@ -59,28 +71,27 @@ body {
     transition: 0.3s;
 }
 
-.nav-links li a:hover,
-.nav-links li a.active {
-    color: var(--primary-color);
+.nav-links li a:hover, .nav-links li a.active {
+    color: var(--primary-blue);
 }
 
-/* RIGHT NAV */
+
 .nav-right {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-/* FORCE VISIBILITY */
+
 .nav-right button,
 .nav-right a {
     display: inline-block;
 }
 
-/* BUTTONS */
-.btn-primary,
-.btn-secondary {
-    padding: 8px 16px;
+
+.btn-primary, .btn-secondary, .btn-large {
+   
+    padding: 10px 20px;
     border-radius: 6px;
     cursor: pointer;
     font-weight: 600;
@@ -88,34 +99,18 @@ body {
     transition: 0.3s;
 }
 
-.btn-primary {
+.btn-primary { background: var(--primary-blue); color: white; }
+.btn-primary:hover { background: var(--secondary-color); }
+
+.btn-secondary { background: transparent; color: var(--primary-blue); }
+
+.btn-large {
+    padding: 15px 40px;
     background: var(--primary-color);
     color: white;
-}
-
-.btn-primary:hover {
-    background: var(--secondary-color);
-}
-
-.btn-secondary {
-    background: transparent;
-    color: var(--primary-color);
-}
-
-/* LOGOUT BUTTON (if anchor used) */
-.logout-btn {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 8px 18px;
-    border-radius: 6px;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
-}
-
-.logout-btn:hover {
-    background-color: var(--secondary-color);
-}
+    font-size: 1.1rem;
+    margin-top: 20px;
+} */
 
 /* ================= HEADER ================= */
 

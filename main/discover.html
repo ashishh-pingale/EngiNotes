@@ -5,25 +5,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Discover Peers | EngiNotes</title>
-    <link rel="stylesheet" href="discover.css">
+    <link rel="stylesheet" href="/css/discover.css">
+    <link rel="stylesheet" href="/css/nav-bar.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
     <!-- ✅ NAVBAR -->
-    <nav class="navbar">
-        <div class="logo">EngiNotes</div>
-
+        <nav class="navbar">
+        <div class="logo">Engi<span>Notes</span></div>
         <ul class="nav-links">
-            <li><a href="/main/index.html">Home</a></li>
+            <li><a href="/main/index.html" >Home</a></li>
             <li><a href="/main/browse.html">Explore Notes</a></li>
             <li><a href="/main/contact.html">Contact Us</a></li>
             <li><a href="/main/Users/discover.html" class="active">Discover</a></li>
             <li><a href="/main/about.html">About Us</a></li>
+            <li><a href="/main/chat.html">chat</a></li>
         </ul>
-
-        <!-- ✅ IMPORTANT FIX: Added ID -->
-        <div class="nav-right" id="authSection"></div>
+        <div class="nav-auth" id="authSection">
+            <span class="auth-loading">...</span>
+            <button class="btn-secondary" onclick="window.location.href='login.html'">Sign In</button>
+            <button class="btn-primary" onclick="window.location.href='sign-up.html'">Sign Up</button>
+        </div>
     </nav>
 
     <!-- HEADER -->
@@ -43,7 +49,7 @@
 
     <!-- ✅ FIXED SCRIPT PATH -->
     <script type="module" src="/js/auth-state.js"></script>
-    <script type="module" src="/main/Users/discover.js"></script>>
+    <script type="module" src="/js/discover.js"></script>>
 
 </body>
 
