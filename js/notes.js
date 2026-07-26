@@ -16,7 +16,7 @@ const filterBtn = document.getElementById("filterBtn");
 
 async function fetchNotes() {
   try {
-    console.log("w")
+    console.log("Fetching notes...");
     const querySnapshot = await getDocs(collection(db, "notes"));
     notesContainer.innerHTML = "";
 
@@ -41,8 +41,8 @@ async function fetchNotes() {
           <p class="subject-code">${note.subject} • Semester ${note.year}</p>
 
           <div class="user-info">
-              <div class="avatar">NH</div>
-              <span>Uploaded by <strong>NotesHub User</strong></span>
+          <div class="avatar">${note.uploaderName ? note.uploaderName.charAt(0) : "U"}</div>
+          <span>Uploaded by <strong>${note.uploaderName || "Unknown"}</strong></span>
           </div>
 
           <div class="card-footer">
@@ -57,7 +57,7 @@ async function fetchNotes() {
           if (!currentUser) {
             window.location.href = "login.html";
           } else {
-            alert("Download allowed (real file next)");
+            window.open(note.pdfUrl, "_blank", "noopener,noreferrer");
           }
 
         });
