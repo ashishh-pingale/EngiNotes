@@ -1,38 +1,131 @@
-import { auth } from "../js/firebase.js";
-import { 
-    signInWithEmailAndPassword 
+import { auth, db } from "../js/firebase.js";
+
+import {
+    signInWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-// Toggle Password Visibility
-const togglePassword = document.querySelector('#togglePassword');
-const passwordInput = document.querySelector('#password');
+import {
+    doc,
+    getDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-togglePassword.addEventListener('click', function () {
-    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-    passwordInput.setAttribute('type', type);
-    this.textContent = type === 'password' ? 'Show' : 'Hide';
+/* ============================================
+   Password Toggle
+============================================ */
+
+const togglePassword = document.querySelector("#togglePassword");
+const passwordInput = document.querySelector("#password");
+
+togglePassword.addEventListener("click", () => {
+
+    const type =
+        passwordInput.type === "password"
+            ? "text"
+            : "password";
+
+    passwordInput.type = type;
+
+    togglePassword.textContent =
+        type === "password"
+            ? "Show"
+            : "Hide";
+
 });
 
-// Handle Login
-const loginForm = document.querySelector('#loginForm');
-const errorBox = document.querySelector('#error-box');
+/* ============================================
+   Login
+============================================ */
 
-errorBox.style.display = 'none';
+const loginForm = document.querySelector("#loginForm");
+const errorBox = document.querySelector("#error-box");
 
-loginForm.addEventListener('submit', async function (e) {
+errorBox.style.display = "none";
+
+loginForm.addEventListener("submit", async (e) => {
+
     e.preventDefault();
 
-    const email = document.querySelector('#email').value;
-    const password = document.querySelector('#password').value;
+    const email =
+        document.querySelector("#email").value.trim();
+
+    const password =
+        document.querySelector("#password").value;
+
+    errorBox.style.display = "none";
 
     try {
-        await signInWithEmailAndPassword(auth, email, password);
 
-        // Login successful
-        window.location.href = "browse.html";
+        // Login User
+        const userCredential =
+            await signInWithEmailAndPassword(
+                auth,
+                email,
+                password
+            );
 
-    } catch (error) {
-        errorBox.style.display = 'block';
-        errorBox.textContent = "Invalid email or password. Please try again.";
+        const user = userCredential.user;
+
+        // Get Firestore User Document
+        const userRef = doc(db, "users", user.uid);
+
+        const userSnap = await getDoc(userRef);
+
+        if (!userSnap.exists()) {
+
+            errorBox.style.display = "block";
+
+            errorBox.textContent =
+                "User profile not found.";
+
+            return;
+
+        }
+
+        const userData = userSnap.data();
+
+        /* -------------------------
+           Redirect Based On Role
+        -------------------------- */
+
+        if (userData.role === "admin") {
+
+            window.location.replace("/main/admin.html");
+
+        }
+
+        else {
+
+            window.location.replace("/main/browse.html");
+
+        }
+
     }
+
+    catch (error) {
+
+        console.error("Login Error:", error);
+
+        errorBox.style.display = "block";
+
+        switch (error.code) {
+
+            case "auth/invalid-credential":
+            case "auth/wrong-password":
+            case "auth/user-not-found":
+            case "auth/invalid-email":
+
+                errorBox.textContent =
+                    "Invalid email or password.";
+
+                break;
+
+            default:
+
+                errorBox.textContent =
+                    error.message;
+
+        }
+
+    }
+
 });
