@@ -1,6 +1,9 @@
 import { db, auth } from "./firebase.js";
+
 import {
     collection,
+    query,
+    where,
     getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -40,16 +43,19 @@ async function fetchNotes() {
         const selectedBranch = branchFilter.value;
         const selectedYear = yearFilter.value;
 
-        const snapshot = await getDocs(collection(db, "notes"));
+        // Only fetch APPROVED notes
+        const notesQuery = query(
+            collection(db, "notes"),
+            where("status", "==", "approved")
+        );
+
+        const snapshot = await getDocs(notesQuery);
 
         let notesFound = false;
 
-        snapshot.forEach((doc) => {
+        snapshot.forEach((docSnap) => {
 
-            const note = doc.data();
-
-            // Hide only rejected notes while developing
-            if (note.status === "rejected") return;
+            const note = docSnap.data();
 
             if (
                 (selectedBranch === "" || note.branch === selectedBranch) &&
@@ -76,13 +82,17 @@ async function fetchNotes() {
                     </h3>
 
                     <p class="subject-code">
-                        ${note.subject || "Unknown Subject"} • ${getYearText(note.year)} • Semester ${note.semester || "-"}
+                        ${note.subject || "Unknown Subject"}
+                        • ${getYearText(note.year)}
+                        • Semester ${note.semester || "-"}
                     </p>
 
                     <div class="user-info">
 
                         <div class="avatar">
-                            ${(note.uploaderName || "U").charAt(0).toUpperCase()}
+                            ${(note.uploaderName || "U")
+                                .charAt(0)
+                                .toUpperCase()}
                         </div>
 
                         <span>
@@ -130,17 +140,15 @@ async function fetchNotes() {
         if (!notesFound) {
 
             notesContainer.innerHTML = `
-
                 <div class="no-notes">
 
                     <h2>No Notes Found 📚</h2>
 
                     <p>
-                        No notes match the selected filters.
+                        There are no approved notes matching your filters.
                     </p>
 
                 </div>
-
             `;
 
         }
@@ -150,7 +158,6 @@ async function fetchNotes() {
         console.error("Error fetching notes:", error);
 
         notesContainer.innerHTML = `
-
             <div class="no-notes">
 
                 <h2>Something went wrong</h2>
@@ -158,8 +165,34 @@ async function fetchNotes() {
                 <p>Please refresh the page.</p>
 
             </div>
-
         `;
+
+    }
+
+}
+
+// ======================================================
+// Utility
+// ======================================================
+
+function getYearText(year) {
+
+    switch (String(year)) {
+
+        case "1":
+            return "1st Year";
+
+        case "2":
+            return "2nd Year";
+
+        case "3":
+            return "3rd Year";
+
+        case "4":
+            return "4th Year";
+
+        default:
+            return "Year";
 
     }
 
@@ -169,20 +202,6 @@ async function fetchNotes() {
 // Events
 // ======================================================
 
-function getYearText(year) {
-    switch (String(year)) {
-        case "1":
-            return "1st Year";
-        case "2":
-            return "2nd Year";
-        case "3":
-            return "3rd Year";
-        case "4":
-            return "4th Year";
-        default:
-            return "Year";
-    }
-}
 fetchNotes();
 
 filterBtn.addEventListener("click", fetchNotes);
