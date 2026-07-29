@@ -267,13 +267,36 @@ approveBtn.addEventListener("click", async () => {
     // Reject Button (Placeholder)
     // ==========================================
 
-    rejectBtn.addEventListener("click", () => {
+rejectBtn.addEventListener("click", async () => {
 
-        alert(
-            `Reject feature coming next.\n\n${note.title}`
+    const confirmReject = confirm(
+        `Reject "${note.title}"?\n\nThis action will hide the note from students.`
+    );
+
+    if (!confirmReject) return;
+
+    try {
+
+        await updateDoc(
+            doc(db, "notes", note.id),
+            {
+                status: "rejected"
+            }
         );
 
-    });
+        alert("Note rejected successfully.");
+
+        await loadDashboard();
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert("Failed to reject note.");
+
+    }
+
+});
 
     return tr;
 
