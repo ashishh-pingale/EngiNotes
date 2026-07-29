@@ -89,7 +89,7 @@ loginForm.addEventListener("submit", async (e) => {
 
         if (userData.role === "admin") {
 
-            window.location.replace("/main/admin.html");
+            window.location.replace("/admin/html/admin.html");
 
         }
 

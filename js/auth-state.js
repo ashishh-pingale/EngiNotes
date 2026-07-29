@@ -26,7 +26,7 @@ const protectedPages = [
 ];
 
 const adminPages = [
-    "/main/admin.html"
+    "/admin/html/admin.html"
 ];
 
 const currentPath = window.location.pathname;
