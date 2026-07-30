@@ -4,7 +4,8 @@ import {
     collection,
     query,
     where,
-    getDocs
+    getDocs,
+    increment
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import {
@@ -55,7 +56,10 @@ async function fetchNotes() {
 
         snapshot.forEach((docSnap) => {
 
-            const note = docSnap.data();
+            const note = {
+            id: docSnap.id,
+            ...docSnap.data()
+        };
 
             if (
                 (selectedBranch === "" || note.branch === selectedBranch) &&
@@ -105,7 +109,7 @@ async function fetchNotes() {
                     <div class="card-footer">
 
                         <button class="btn-download-small">
-                            View PDF
+                            Open PDF
                         </button>
 
                     </div>
@@ -114,22 +118,37 @@ async function fetchNotes() {
                 const downloadBtn =
                     card.querySelector(".btn-download-small");
 
-                downloadBtn.addEventListener("click", () => {
+downloadBtn.addEventListener("click", async () => {
 
-                    if (!currentUser) {
+    if (!currentUser) {
 
-                        window.location.href = "login.html";
-                        return;
+        window.location.href = "login.html";
+        return;
 
-                    }
+    }
 
-                    window.open(
-                        note.pdfUrl,
-                        "_blank",
-                        "noopener,noreferrer"
-                    );
+    try {
 
-                });
+        await updateDoc(
+            doc(db, "notes", note.id),
+            {
+                downloads: increment(1)
+            }
+        );
+
+    } catch (error) {
+
+        console.error("Download count update failed:", error);
+
+    }
+
+    window.open(
+        note.pdfUrl,
+        "_blank",
+        "noopener,noreferrer"
+    );
+
+});
 
                 notesContainer.appendChild(card);
 

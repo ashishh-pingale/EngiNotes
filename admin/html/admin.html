@@ -2,1642 +2,544 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EngiNotes Admin Panel</title>
+
+    <title>EngiNotes Admin</title>
 
     <link rel="stylesheet" href="/admin/css/admin.css">
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
 </head>
 
 <body>
 
-    <div class="admin-layout">
+    <div class="admin-container">
 
-        <!-- ========================= -->
+        <!-- ========================================= -->
         <!-- Sidebar -->
-        <!-- ========================= -->
+        <!-- ========================================= -->
 
         <aside class="sidebar">
             <div class="logo">
-                <div class="logo-icon">
-                    <i class="fa-solid fa-book-open"></i>
-                </div>
-
-                <div class="logo-text">
+                <i class="fa-solid fa-book-open"></i>
+                <div>
                     <h2>EngiNotes</h2>
                     <span>Admin Panel</span>
                 </div>
-
             </div>
-
             <nav class="sidebar-nav">
-
-                <a href="#dashboard" class="nav-item active">
+                <a href="#dashboard" class="nav-link active">
                     <i class="fa-solid fa-house"></i>
                     <span>Dashboard</span>
                 </a>
-
-                <a href="#pending-notes" class="nav-item">
+                <a href="#pending-notes" class="nav-link">
                     <i class="fa-solid fa-clock"></i>
                     <span>Pending Notes</span>
                 </a>
-
-                <a href="#approved-notes" class="nav-item">
-                    <i class="fa-solid fa-check"></i>
+                <a href="#approved-notes" class="nav-link">
+                    <i class="fa-solid fa-circle-check"></i>
                     <span>Approved Notes</span>
                 </a>
-
-                <a href="#rejected-notes" class="nav-item">
-                    <i class="fa-solid fa-xmark"></i>
+                <a href="#rejected-notes" class="nav-link">
+                    <i class="fa-solid fa-circle-xmark"></i>
                     <span>Rejected Notes</span>
                 </a>
-
-                <a href="#users" class="nav-item">
+                <a href="#users" class="nav-link">
                     <i class="fa-solid fa-users"></i>
                     <span>Users</span>
                 </a>
-
-                <a href="#analytics" class="nav-item">
-                    <i class="fa-solid fa-chart-line"></i>
-                    <span>Analytics</span>
-                </a>
-
-                <a href="#settings" class="nav-item">
+                <a href="#settings" class="nav-link">
                     <i class="fa-solid fa-gear"></i>
                     <span>Settings</span>
                 </a>
-
             </nav>
-
-            <div class="sidebar-footer">
-
-                <button class="logout-btn">
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                    Logout
-                </button>
-
-            </div>
-
+            <button id="logoutBtn" class="logout-btn">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                Logout
+            </button>
         </aside>
 
-        <!-- ========================= -->
-        <!-- Main -->
-        <!-- ========================= -->
+        <!-- ========================================= -->
+        <!-- Main Content -->
+        <!-- ========================================= -->
 
         <main class="main-content">
 
+            <!-- ========================================= -->
             <!-- Topbar -->
+            <!-- ========================================= -->
 
             <header class="topbar">
-
-                <button id="menuBtn">
-                    <i class="fa-solid fa-bars"></i>
-                </button>
-                <div class="global-search">
-
-                    <i class="fa-solid fa-magnifying-glass"></i>
-
-                    <input type="text" id="globalSearch" placeholder="Search users, notes, reports...">
-
+                <div class="topbar-left">
+                    <button class="menu-btn">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <h1>Admin Dashboard</h1>
                 </div>
-
-                <div class="topbar-actions">
-
-                    <button class="icon-btn">
-                        <i class="fa-solid fa-bell"></i>
-                    </button>
-
-                    <button class="icon-btn">
-                        <i class="fa-solid fa-envelope"></i>
-                    </button>
-
-                    <div class="notification-wrapper">
-
-                        <button class="icon-btn" id="notificationBtn">
-                            <i class="fa-solid fa-bell"></i>
-                            <span class="notification-count" id="notificationCount">3</span>
-                        </button>
-
-                        <div class="notification-menu" id="notificationMenu">
-
-                            <div class="notification-header">
-
-                                <h3>Notifications</h3>
-
-                                <button id="markAllRead">Mark all read</button>
-
-                            </div>
-
-                            <div class="notification-list" id="notificationList">
-
-                                <div class="notification-item unread">
-                                    <strong>New Note Uploaded</strong>
-                                    <p>DBMS Complete Notes submitted.</p>
-                                    <small>2 mins ago</small>
-                                </div>
-
-                                <div class="notification-item unread">
-                                    <strong>New User Registered</strong>
-                                    <p>A new student joined EngiNotes.</p>
-                                    <small>18 mins ago</small>
-                                </div>
-
-                                <div class="notification-item unread">
-                                    <strong>Report Submitted</strong>
-                                    <p>A note has been reported.</p>
-                                    <small>45 mins ago</small>
-                                </div>
-
-                            </div>
-
-                        </div>
+                <div class="topbar-right">
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" placeholder="Search notes or users..." id="globalSearch">
 
                     </div>
-
-                    <div class="admin-profile">
-
-                        <img src="https://ui-avatars.com/api/?name=Admin" alt="Admin">
-
+                    <div class="admin-info">
+                        <img src="https://ui-avatars.com/api/?name=Admin&background=2563eb&color=fff" alt="Admin">
                         <div>
-
                             <h4>Administrator</h4>
                             <span>Super Admin</span>
-
                         </div>
-
                     </div>
-
                 </div>
-
-                <button class="theme-toggle" id="themeToggle">
-                    <i class="fa-solid fa-moon"></i>
-                </button>
-
             </header>
 
+            <!-- ========================================= -->
             <!-- Dashboard -->
+            <!-- ========================================= -->
 
-            <section id="dashboard" class="dashboard">
-
-                <!-- ===================================================
-     PENDING NOTES MANAGEMENT
-==================================================== -->
-
-                <section id="pending-notes" class="panel pending-section">
-                    <div class="panel-header">
-
+            <section id="dashboard" class="page-section active-page">
+                <div class="section-header">
+                    <div>
+                        <h2>Dashboard</h2>
+                        <p>Quick overview of your platform.</p>
+                    </div>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
                         <div>
-                            <h2>Pending Notes</h2>
-                            <p>Review uploaded notes before publishing.</p>
+                            <span>Pending Notes</span>
+                            <h3 id="pendingCount">0</h3>
                         </div>
-
-                        <button class="primary-btn">
-                            <i class="fa-solid fa-rotate"></i>
-                            Refresh
-                        </button>
-
+                        <i class="fa-solid fa-clock"></i>
                     </div>
-
-                    <!-- Filters -->
-
-                    <div class="filter-bar">
-
-                        <input type="text" id="pendingSearch" placeholder="Search notes...">
-                        <select id="branchFilter">
-                            <option value="">All Branches</option>
-                            <option>CSE</option>
-                            <option>IT</option>
-                            <option>ENTC</option>
-                            <option>Mechanical</option>
-                            <option>Civil</option>
-                        </select>
-
-                        <select id="yearFilter">
-                            <option value="">All Years</option>
-                            <option>First Year</option>
-                            <option>Second Year</option>
-                            <option>Third Year</option>
-                            <option>Final Year</option>
-                        </select>
-
+                    <div class="stat-card">
+                        <div>
+                            <span>Approved Notes</span>
+                            <h3 id="approvedCount">0</h3>
+                        </div>
+                        <i class="fa-solid fa-circle-check"></i>
                     </div>
-
-                    <!-- Table -->
-
-                    <table class="notes-table">
-
+                    <div class="stat-card">
+                        <div>
+                            <span>Total Users</span>
+                            <h3 id="usersCount">0</h3>
+                        </div>
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <div class="stat-card">
+                        <div>
+                            <span>Total Downloads</span>
+                            <h3 id="downloadsCount">0</h3>
+                        </div>
+                        <i class="fa-solid fa-download"></i>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Recent Uploads</h3>
+                    </div>
+                    <table class="data-table">
                         <thead>
                             <tr>
-                                <th width="40">
-                                    <input type="checkbox">
-                                </th>
                                 <th>Title</th>
+                                <th>Uploader</th>
+                                <th>Branch</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentUploadsTable"></tbody>
+                    </table>
+                </div>
+
+            </section>
+
+            <!-- =========================================
+     Pending Notes
+========================================= -->
+
+            <section id="pending-notes" class="page-section">
+
+                <div class="section-header">
+                    <div>
+                        <h2>Pending Notes</h2>
+                        <p>Review and approve uploaded notes.</p>
+                    </div>
+                </div>
+
+                <div class="toolbar">
+                    <input id="pendingSearch" type="text" placeholder="Search notes...">
+
+                    <select id="branchFilter">
+                        <option value="">All Branches</option>
+                        <option>CSE</option>
+                        <option>IT</option>
+                        <option>ENTC</option>
+                        <option>Mechanical</option>
+                        <option>Civil</option>
+                    </select>
+
+                    <select id="yearFilter">
+                        <option value="">All Years</option>
+                        <option>First Year</option>
+                        <option>Second Year</option>
+                        <option>Third Year</option>
+                        <option>Final Year</option>
+                    </select>
+                </div>
+
+                <div class="card">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Subject</th>
                                 <th>Uploader</th>
                                 <th>Branch</th>
                                 <th>Year</th>
                                 <th>Date</th>
-                                <th>Status</th>
-                                <th width="320">
-                                    Actions
-                                </th>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <input type="checkbox">
-                                </td>
-                                <td>
-                                    DBMS Unit 1 Notes
-                                </td>
-                                <td>
-                                    Rahul Sharma
-                                </td>
-                                <td>
-                                    CSE
-                                </td>
-                                <td>
-                                    Second Year
-                                </td>
-                                <td>
-                                    12 Jul
-                                </td>
-                                <td>
-                                    <span class="status pending">
-                                        Pending
-                                    </span>
-                                </td>
-                                <td>
-                                    <button class="table-btn preview">
-                                        Preview
-                                    </button>
-                                    <button class="table-btn approve">
-                                        Approve
-                                    </button>
-                                    <button class="table-btn reject">
-                                        Reject
-                                    </button>
-                                    <button class="table-btn delete">
-                                        Delete
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input type="checkbox">
-                                </td>
-                                <td>
-                                    Engineering Mathematics
-                                </td>
-                                <td>
-                                    Aditya Patil
-                                </td>
-                                <td>
-                                    IT
-                                </td>
-                                <td>
-                                    First Year
-                                </td>
-                                <td>
-                                    Yesterday
-                                </td>
-                                <td>
-                                    <span class="status pending">
-                                        Pending
-                                    </span>
-                                </td>
-                                <td>
-                                    <button class="table-btn preview">
-                                        Preview
-                                    </button>
-                                    <button class="table-btn approve">
-                                        Approve
-                                    </button>
-                                    <button class="table-btn reject">
-                                        Reject
-                                    </button>
-                                    <button class="table-btn delete">
-                                        Delete
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input type="checkbox">
-
-                                </td>
-
-                                <td>
-
-                                    Digital Electronics
-
-                                </td>
-
-                                <td>
-
-                                    Sneha Joshi
-
-                                </td>
-
-                                <td>
-
-                                    ENTC
-
-                                </td>
-
-                                <td>
-
-                                    Third Year
-
-                                </td>
-
-                                <td>
-
-                                    5 min ago
-
-                                </td>
-
-                                <td>
-
-                                    <span class="status pending">
-
-                                        Pending
-
-                                    </span>
-
-                                </td>
-
-                                <td>
-
-                                    <button class="table-btn preview">
-
-                                        Preview
-
-                                    </button>
-
-                                    <button class="table-btn approve">
-
-                                        Approve
-
-                                    </button>
-
-                                    <button class="table-btn reject">
-
-                                        Reject
-
-                                    </button>
-
-                                    <button class="table-btn delete">
-
-                                        Delete
-
-                                    </button>
-
-                                </td>
-
-                            </tr>
-
-                        </tbody>
-
-                    </table>
-
-                </section>
-
-                <!-- =====================================================
-                    USER MANAGEMENT
-====================================================== -->
-
-                <section id="users" class="panel users-section">
-
-                    <div class="panel-header">
-
-                        <div>
-                            <h2>User Management</h2>
-                            <p>Manage students and contributors.</p>
-                        </div>
-
-                        <button class="primary-btn" id="addUserBtn">
-                            <i class="fa-solid fa-user-plus"></i>
-                            Add User
-                        </button>
-
-                    </div>
-
-                    <div class="filter-bar">
-
-                        <input type="text" id="userSearch" placeholder="Search users...">
-
-                        <select id="roleFilter">
-
-                            <option value="">All Roles</option>
-                            <option>Student</option>
-                            <option>Moderator</option>
-                            <option>Admin</option>
-
-                        </select>
-
-                    </div>
-
-                    <table class="users-table">
-
-                        <thead>
-
-                            <tr>
-
-                                <th>User</th>
-                                <th>Email</th>
-                                <th>Role</th>
-                                <th>Uploads</th>
-                                <th>Status</th>
-                                <th width="340">Actions</th>
-
-                            </tr>
-
-                        </thead>
-
-                        <tbody>
-
-                            <tr>
-
-                                <td>
-
-                                    <div class="user-info">
-
-                                        <img src="https://ui-avatars.com/api/?name=Rahul+Sharma">
-
-                                        <div>
-
-                                            <strong>Rahul Sharma</strong>
-
-                                            <span>ID #1024</span>
-
-                                        </div>
-
-                                    </div>
-
-                                </td>
-
-                                <td>
-
-                                    rahul@gmail.com
-
-                                </td>
-
-                                <td>
-
-                                    Student
-
-                                </td>
-
-                                <td>
-
-                                    12
-
-                                </td>
-
-                                <td>
-
-                                    <span class="status approved">
-
-                                        Active
-
-                                    </span>
-
-                                </td>
-
-                                <td>
-
-                                    <button class="table-btn view-user">
-
-                                        View
-
-                                    </button>
-
-                                    <button class="table-btn edit-user">
-
-                                        Edit
-
-                                    </button>
-
-                                    <button class="table-btn ban-user">
-
-                                        Ban
-
-                                    </button>
-
-                                    <button class="table-btn delete-user">
-
-                                        Delete
-
-                                    </button>
-
-                                </td>
-
-                            </tr>
-
-                            <tr>
-
-                                <td>
-
-                                    <div class="user-info">
-
-                                        <img src="https://ui-avatars.com/api/?name=Priya+Patil">
-
-                                        <div>
-
-                                            <strong>Priya Patil</strong>
-
-                                            <span>ID #2094</span>
-
-                                        </div>
-
-                                    </div>
-
-                                </td>
-
-                                <td>
-
-                                    priya@gmail.com
-
-                                </td>
-
-                                <td>
-
-                                    Moderator
-
-                                </td>
-
-                                <td>
-
-                                    41
-
-                                </td>
-
-                                <td>
-
-                                    <span class="status approved">
-
-                                        Active
-
-                                    </span>
-
-                                </td>
-
-                                <td>
-
-                                    <button class="table-btn view-user">
-
-                                        View
-
-                                    </button>
-
-                                    <button class="table-btn edit-user">
-
-                                        Edit
-
-                                    </button>
-
-                                    <button class="table-btn ban-user">
-
-                                        Ban
-
-                                    </button>
-
-                                    <button class="table-btn delete-user">
-
-                                        Delete
-
-                                    </button>
-
-                                </td>
-
-                            </tr>
-
-                            <tr>
-
-                                <td>
-
-                                    <div class="user-info">
-
-                                        <img src="https://ui-avatars.com/api/?name=Amit+Joshi">
-
-                                        <div>
-
-                                            <strong>Amit Joshi</strong>
-
-                                            <span>ID #1184</span>
-
-                                        </div>
-
-                                    </div>
-
-                                </td>
-
-                                <td>
-
-                                    amit@gmail.com
-
-                                </td>
-
-                                <td>
-
-                                    Student
-
-                                </td>
-
-                                <td>
-
-                                    5
-
-                                </td>
-
-                                <td>
-
-                                    <span class="status rejected">
-
-                                        Banned
-
-                                    </span>
-
-                                </td>
-
-                                <td>
-
-                                    <button class="table-btn view-user">
-
-                                        View
-
-                                    </button>
-
-                                    <button class="table-btn edit-user">
-
-                                        Edit
-
-                                    </button>
-
-                                    <button class="table-btn approve">
-
-                                        Unban
-
-                                    </button>
-
-                                    <button class="table-btn delete-user">
-
-                                        Delete
-
-                                    </button>
-
-                                </td>
-
-                            </tr>
-
-                        </tbody>
-
-                    </table>
-
-                </section>
-
-                <!-- =====================================================
-                    ANALYTICS
-====================================================== -->
-
-                <section id="analytics" class="panel analytics-section">
-
-                    <div class="panel-header">
-
-                        <div>
-
-                            <h2>Analytics</h2>
-
-                            <p>Platform insights and statistics</p>
-
-                        </div>
-
-                        <button class="primary-btn">
-
-                            Export Report
-
-                        </button>
-
-                    </div>
-
-                    <!-- Analytics Cards -->
-
-                    <div class="analytics-cards">
-
-                        <div class="analytics-card">
-
-                            <h3>Today's Uploads</h3>
-
-                            <h1>28</h1>
-
-                            <span>+12% from yesterday</span>
-
-                        </div>
-
-                        <div class="analytics-card">
-
-                            <h3>Total Downloads</h3>
-
-                            <h1>92,410</h1>
-
-                            <span>+8% this week</span>
-
-                        </div>
-
-                        <div class="analytics-card">
-
-                            <h3>New Users</h3>
-
-                            <h1>74</h1>
-
-                            <span>+15% today</span>
-
-                        </div>
-
-                        <div class="analytics-card">
-
-                            <h3>Pending Reviews</h3>
-
-                            <h1>18</h1>
-
-                            <span>Requires attention</span>
-
-                        </div>
-
-                    </div>
-
-                    <!-- Charts -->
-
-                    <div class="charts-grid">
-
-                        <div class="chart-box">
-
-                            <div class="chart-title">
-
-                                Monthly Uploads
-
-                            </div>
-
-                            <canvas id="uploadChart"></canvas>
-
-                        </div>
-
-                        <div class="chart-box">
-
-                            <div class="chart-title">
-
-                                Branch Distribution
-
-                            </div>
-
-                            <canvas id="branchChart"></canvas>
-
-                        </div>
-
-                    </div>
-
-                </section>
-
-                <!-- =====================================================
-                APPROVED NOTES
-====================================================== -->
-
-                <section id="approved-notes" class="panel approved-section">
-
-                    <div class="panel-header">
-
-                        <div>
-
-                            <h2>Approved Notes</h2>
-
-                            <p>Manage all published notes</p>
-
-                        </div>
-
-                        <button class="primary-btn" id="addNoteBtn">
-
-                            + Add Note
-
-                        </button>
-
-                    </div>
-
-                    <!-- Filters -->
-
-                    <div class="filter-bar">
-
-                        <input type="text" id="approvedSearch" placeholder="Search notes...">
-
-                        <select id="approvedBranch">
-
-                            <option value="">All Branches</option>
-                            <option>Computer</option>
-                            <option>IT</option>
-                            <option>Mechanical</option>
-                            <option>Civil</option>
-                            <option>Electrical</option>
-                            <option>ENTC</option>
-
-                        </select>
-
-                        <select id="approvedYear">
-
-                            <option value="">All Years</option>
-                            <option>First Year</option>
-                            <option>Second Year</option>
-                            <option>Third Year</option>
-                            <option>Final Year</option>
-
-                        </select>
-
-                    </div>
-
-                    <table class="approved-table">
-
-                        <thead>
-
-                            <tr>
-
-                                <th>Title</th>
-                                <th>Subject</th>
-                                <th>Branch</th>
-                                <th>Year</th>
-                                <th>Uploaded By</th>
-                                <th>Downloads</th>
-                                <th>Status</th>
                                 <th>Actions</th>
-
                             </tr>
-
                         </thead>
-
-                        <tbody>
-
-                            <tr>
-
-                                <td>DBMS Complete Notes</td>
-
-                                <td>DBMS</td>
-
-                                <td>Computer</td>
-
-                                <td>Second Year</td>
-
-                                <td>Aryan Patil</td>
-
-                                <td><span class="download-badge">438</span></td>
-
-                                <td>
-
-                                    <span class="status approved">
-
-                                        Published
-
-                                    </span>
-
-                                </td>
-
-                                <td>
-
-                                    <button class="action-btn preview-note">
-
-                                        View
-
-                                    </button>
-
-                                    <button class="action-btn edit-note">
-
-                                        Edit
-
-                                    </button>
-
-                                    <button class="action-btn delete-note">
-
-                                        Delete
-
-                                    </button>
-
-                                </td>
-
-                            </tr>
-
-                            <tr>
-
-                                <td>Operating System Notes</td>
-
-                                <td>OS</td>
-
-                                <td>IT</td>
-
-                                <td>Second Year</td>
-
-                                <td>Priya Shah</td>
-
-                                <td><span class="download-badge">291</span></td>
-
-                                <td>
-
-                                    <span class="status approved">
-
-                                        Published
-
-                                    </span>
-
-                                </td>
-
-                                <td>
-
-                                    <button class="action-btn preview-note">
-
-                                        View
-
-                                    </button>
-
-                                    <button class="action-btn edit-note">
-
-                                        Edit
-
-                                    </button>
-
-                                    <button class="action-btn delete-note">
-
-                                        Delete
-
-                                    </button>
-
-                                </td>
-
-                            </tr>
-
-                            <tr>
-
-                                <td>Engineering Mathematics</td>
-
-                                <td>Maths</td>
-
-                                <td>Mechanical</td>
-
-                                <td>First Year</td>
-
-                                <td>Rahul Singh</td>
-
-                                <td><span class="download-badge">682</span></td>
-
-                                <td>
-
-                                    <span class="status approved">
-
-                                        Published
-
-                                    </span>
-
-                                </td>
-
-                                <td>
-
-                                    <button class="action-btn preview-note">
-
-                                        View
-
-                                    </button>
-
-                                    <button class="action-btn edit-note">
-
-                                        Edit
-
-                                    </button>
-
-                                    <button class="action-btn delete-note">
-
-                                        Delete
-
-                                    </button>
-
-                                </td>
-
-                            </tr>
-
-                        </tbody>
+                        <tbody id="pendingNotesTable"></tbody>
 
                     </table>
-
-                </section>
-
-
-                <!-- =====================================================
-            REPORTS & ANNOUNCEMENTS
-====================================================== -->
-
-                <section id="rejected-notes" class="panel reports-section">
-
-                    <div class="panel-header">
-
-                        <div>
-
-                            <h2>Reports & Announcements</h2>
-
-                            <p>Handle reports and broadcast announcements</p>
-
-                        </div>
-
-                        <button class="primary-btn" id="newAnnouncement">
-
-                            + New Announcement
-
-                        </button>
-
-                    </div>
-
-                    <!-- Announcement -->
-
-                    <div class="announcement-box">
-
-                        <h3>Create Announcement</h3>
-
-                        <input type="text" id="announcementTitle" placeholder="Announcement Title">
-
-                        <textarea id="announcementMessage" rows="5"
-                            placeholder="Write your announcement here..."></textarea>
-
-                        <div class="announcement-actions">
-
-                            <button class="primary-btn" id="sendAnnouncement">
-
-                                Send to All Users
-
-                            </button>
-
-                            <button class="secondary-btn" id="clearAnnouncement">
-
-                                Clear
-
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                    <!-- Reports -->
-
-                    <div class="panel-header" style="margin-top:40px;">
-
-                        <h3>Reported Notes</h3>
-
-                    </div>
-
-                    <table class="reports-table">
-
-                        <thead>
-
-                            <tr>
-
-                                <th>Note</th>
-                                <th>Reported By</th>
-                                <th>Reason</th>
-                                <th>Date</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-
-                            </tr>
-
-                        </thead>
-
-                        <tbody>
-
-                            <tr>
-
-                                <td>Computer Networks Notes</td>
-
-                                <td>Rahul Sharma</td>
-
-                                <td>Duplicate Content</td>
-
-                                <td>13 Apr</td>
-
-                                <td>
-
-                                    <span class="status pending">
-
-                                        Open
-
-                                    </span>
-
-                                </td>
-
-                                <td>
-
-                                    <button class="action-btn resolve-report">
-
-                                        Resolve
-
-                                    </button>
-
-                                    <button class="action-btn dismiss-report">
-
-                                        Dismiss
-
-                                    </button>
-
-                                </td>
-
-                            </tr>
-
-                            <tr>
-
-                                <td>DBMS Notes</td>
-
-                                <td>Anjali Patil</td>
-
-                                <td>Wrong Subject</td>
-
-                                <td>11 Apr</td>
-
-                                <td>
-
-                                    <span class="status pending">
-
-                                        Open
-
-                                    </span>
-
-                                </td>
-
-                                <td>
-
-                                    <button class="action-btn resolve-report">
-
-                                        Resolve
-
-                                    </button>
-
-                                    <button class="action-btn dismiss-report">
-
-                                        Dismiss
-
-                                    </button>
-
-                                </td>
-
-                            </tr>
-
-                        </tbody>
-
-                    </table>
-
-                </section>
-
-                <!-- =====================================================
-                    SITE SETTINGS
-====================================================== -->
-
-                <section id="settings" class="panel settings-section">
-
-                    <div class="panel-header">
-                        <div>
-                            <h2>Site Settings</h2>
-                            <p>Configure EngiNotes platform</p>
-                        </div>
-                        <button class="primary-btn" id="saveSettings">
-                            Save Settings
-                        </button>
-                    </div>
-
-                    <div class="settings-grid">
-
-                        <div class="setting-card">
-
-                            <h3>General</h3>
-
-                            <div class="setting-group">
-                                <label>Website Name</label>
-                                <input type="text" id="siteName" value="EngiNotes">
-                            </div>
-
-                            <div class="setting-group">
-                                <label>Website Description</label>
-                                <textarea id="siteDescription" rows="4">Engineering Notes Sharing Platform</textarea>
-                            </div>
-
-                            <div class="setting-group">
-                                <label>Admin Email</label>
-                                <input type="email" id="adminEmail" value="admin@enginotes.com">
-                            </div>
-
-                        </div>
-
-                        <div class="setting-card">
-
-                            <h3>Platform Settings</h3>
-
-                            <div class="toggle-row">
-                                <label>Maintenance Mode</label>
-                                <label class="switch">
-                                    <input type="checkbox" id="maintenanceMode">
-                                    <span class="slider"></span>
-                                </label>
-                            </div>
-
-                            <div class="toggle-row">
-                                <label>Allow New Registrations</label>
-                                <label class="switch">
-                                    <input type="checkbox" id="registrationToggle" checked>
-                                    <span class="slider"></span>
-                                </label>
-                            </div>
-
-                            <div class="toggle-row">
-                                <label>Allow Note Uploads</label>
-                                <label class="switch">
-                                    <input type="checkbox" id="uploadToggle" checked>
-                                    <span class="slider"></span>
-                                </label>
-                            </div>
-
-                            <div class="setting-group">
-                                <label>Maximum Upload Size (MB)</label>
-                                <input type="number" id="maxUpload" value="25">
-                            </div>
-
-                            <div class="setting-group">
-                                <label>Allowed File Types</label>
-                                <input type="text" id="allowedFiles" value="pdf,doc,docx,ppt,pptx">
-                            </div>
-
-                        </div>
-
-                        <div class="setting-card">
-
-                            <h3>Security</h3>
-
-                            <div class="setting-group">
-                                <label>Session Timeout (Minutes)</label>
-                                <input type="number" value="30">
-                            </div>
-
-                            <div class="setting-group">
-                                <label>Maximum Login Attempts</label>
-                                <input type="number" value="5">
-                            </div>
-
-                            <div class="setting-group">
-                                <label>Password Minimum Length</label>
-                                <input type="number" value="8">
-                            </div>
-
-                            <div class="toggle-row">
-                                <label>Enable Two Factor Authentication</label>
-                                <label class="switch">
-                                    <input type="checkbox">
-                                    <span class="slider"></span>
-                                </label>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </section>
-
-
-                <!-- =====================================================
-                ADMIN PROFILE
-====================================================== -->
-
-                <section class="panel profile-section">
-
-                    <div class="panel-header">
-                        <div>
-                            <h2>Admin Profile</h2>
-                            <p>Manage your account and monitor activity</p>
-                        </div>
-                        <button class="primary-btn" id="saveProfile">
-                            Save Profile
-                        </button>
-                    </div>
-
-                    <div class="profile-grid">
-
-                        <div class="profile-card">
-
-                            <div class="profile-avatar">
-                                <img src="https://ui-avatars.com/api/?name=Admin&background=4f46e5&color=fff&size=200"
-                                    id="profilePreview" alt="Profile">
-                                <button class="secondary-btn" id="changeAvatar">Change Photo</button>
-                                <input type="file" id="profileImage" accept="image/*" hidden>
-                            </div>
-
-                            <div class="setting-group">
-                                <label>Full Name</label>
-                                <input type="text" id="adminName" value="Administrator">
-                            </div>
-
-                            <div class="setting-group">
-                                <label>Email</label>
-                                <input type="email" id="profileEmail" value="admin@enginotes.com">
-                            </div>
-
-                            <div class="setting-group">
-                                <label>Role</label>
-                                <input type="text" value="Super Admin" disabled>
-                            </div>
-
-                        </div>
-
-                        <div class="profile-card">
-
-                            <h3>Security</h3>
-
-                            <div class="setting-group">
-                                <label>Current Password</label>
-                                <input type="password" id="currentPassword">
-                            </div>
-
-                            <div class="setting-group">
-                                <label>New Password</label>
-                                <input type="password" id="newPassword">
-                            </div>
-
-                            <div class="setting-group">
-                                <label>Confirm Password</label>
-                                <input type="password" id="confirmPassword">
-                            </div>
-
-                            <button class="primary-btn" id="changePassword">
-                                Change Password
-                            </button>
-
-                        </div>
-
-                        <div class="profile-card">
-
-                            <h3>Recent Activity</h3>
-
-                            <ul class="activity-list">
-
-                                <li>
-                                    <span class="activity-dot"></span>
-                                    Approved "DBMS Notes"
-                                    <small>5 mins ago</small>
-                                </li>
-
-                                <li>
-                                    <span class="activity-dot"></span>
-                                    Deleted reported note
-                                    <small>22 mins ago</small>
-                                </li>
-
-                                <li>
-                                    <span class="activity-dot"></span>
-                                    Updated website settings
-                                    <small>1 hour ago</small>
-                                </li>
-
-                                <li>
-                                    <span class="activity-dot"></span>
-                                    New announcement published
-                                    <small>Yesterday</small>
-                                </li>
-
-                                <li>
-                                    <span class="activity-dot"></span>
-                                    Logged into dashboard
-                                    <small>Yesterday</small>
-                                </li>
-
-                            </ul>
-
-                        </div>
-
-                    </div>
-
-                </section>
-
-
-                <!-- Statistics -->
-
-                <div class="stats-grid">
-
-                    <div class="stat-card">
-
-                        <div>
-
-                            <span>Total Users</span>
-
-                            <h2>12,580</h2>
-
-                        </div>
-
-                        <i class="fa-solid fa-users"></i>
-
-                    </div>
-
-                    <div class="stat-card">
-
-                        <div>
-
-                            <span>Total Notes</span>
-
-                            <h2>3,420</h2>
-
-                        </div>
-
-                        <i class="fa-solid fa-file-lines"></i>
-
-                    </div>
-
-                    <div class="stat-card">
-
-                        <div>
-
-                            <span>Pending Approval</span>
-
-                            <h2>148</h2>
-
-                        </div>
-
-                        <i class="fa-solid fa-clock"></i>
-
-                    </div>
-
-                    <div class="stat-card">
-
-                        <div>
-
-                            <span>Downloads</span>
-
-                            <h2>92K</h2>
-
-                        </div>
-
-                        <i class="fa-solid fa-download"></i>
-
-                    </div>
-
                 </div>
 
-                <!-- Main Grid -->
+            </section>
 
-                <div class="dashboard-grid">
+            <!-- =========================================
+     Approved Notes
+========================================= -->
 
-                    <!-- Recent Uploads -->
+            <section id="approved-notes" class="page-section">
 
-                    <section class="panel">
+                <div class="section-header">
+                    <div>
+                        <h2>Approved Notes</h2>
+                        <p>Manage notes available to students.</p>
+                    </div>
+                </div>
 
-                        <div class="panel-header">
+                <div class="toolbar">
+                    <input id="approvedSearch" type="text" placeholder="Search approved notes...">
+                </div>
 
-                            <h3>Recent Uploads</h3>
+                <div class="card">
+                    <table class="data-table">
 
-                            <button>View All</button>
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Subject</th>
+                                <th>Uploader</th>
+                                <th>Downloads</th>
+                                <th>Uploaded</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
 
-                        </div>
+                        <tbody id="approvedNotesTable"></tbody>
 
-                        <table>
+                    </table>
+                </div>
 
-                            <thead>
+            </section>
 
-                                <tr>
+            <!-- =========================================
+     Rejected Notes
+========================================= -->
 
-                                    <th>Title</th>
-                                    <th>Branch</th>
-                                    <th>Status</th>
+            <section id="rejected-notes" class="page-section">
 
-                                </tr>
+                <div class="section-header">
+                    <div>
+                        <h2>Rejected Notes</h2>
+                        <p>Restore or permanently remove rejected notes.</p>
+                    </div>
+                </div>
 
-                            </thead>
+                <div class="toolbar">
+                    <input id="rejectedSearch" type="text" placeholder="Search rejected notes...">
+                </div>
 
-                            <tbody>
+                <div class="card">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Uploader</th>
+                                <th>Rejected On</th>
+                                <th>Reason</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
 
-                                <tr>
+                        <tbody id="rejectedNotesTable"></tbody>
+                    </table>
+                </div>
 
-                                    <td>Operating Systems</td>
+            </section>
 
-                                    <td>CSE</td>
+            <!-- =========================================
+     Users
+========================================= -->
 
-                                    <td>
+            <section id="users" class="page-section">
 
-                                        <span class="status pending">
-                                            Pending
-                                        </span>
+                <div class="section-header">
+                    <div>
+                        <h2>Users</h2>
+                        <p>Manage registered users.</p>
+                    </div>
+                </div>
 
-                                    </td>
+                <div class="toolbar">
+                    <input id="userSearch" type="text" placeholder="Search users...">
+                </div>
 
-                                </tr>
+                <div class="card">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Email</th>
+                                <th>Uploads</th>
+                                <th>Status</th>
+                                <th>Joined</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
 
-                                <tr>
+                        <tbody id="usersTable"></tbody>
+                    </table>
+                </div>
 
-                                    <td>DBMS Notes</td>
+            </section>
 
-                                    <td>IT</td>
+            <!-- =========================================
+     Settings
+========================================= -->
 
-                                    <td>
+            <section id="settings" class="page-section">
 
-                                        <span class="status approved">
-                                            Approved
-                                        </span>
+                <div class="section-header">
+                    <div>
+                        <h2>Settings</h2>
+                        <p>Configure platform settings.</p>
+                    </div>
+                </div>
 
-                                    </td>
+                <div class="settings-grid">
 
-                                </tr>
+                    <div class="setting-card">
 
-                                <tr>
+                        <label>Website Name</label>
+                        <input id="websiteName" type="text" value="EngiNotes">
 
-                                    <td>Engineering Maths</td>
+                        <label>Maximum Upload Size (MB)</label>
+                        <input id="uploadLimit" type="number" value="20">
 
-                                    <td>EXTC</td>
+                    </div>
 
-                                    <td>
+                    <div class="setting-card">
 
-                                        <span class="status rejected">
-                                            Rejected
-                                        </span>
+                        <label class="toggle-setting">
+                            <span>Allow Registrations</span>
+                            <input id="allowRegistrations" type="checkbox" checked>
+                        </label>
 
-                                    </td>
+                        <label class="toggle-setting">
+                            <span>Allow Note Uploads</span>
+                            <input id="allowUploads" type="checkbox" checked>
+                        </label>
 
-                                </tr>
+                        <button id="saveSettingsBtn" class="save-btn">
+                            <i class="fa-solid fa-floppy-disk"></i>
+                            Save Changes
+                        </button>
 
-                            </tbody>
-
-                        </table>
-
-                    </section>
-
-                    <!-- Quick Actions -->
-
-                    <section class="panel">
-
-                        <div class="panel-header">
-
-                            <h3>Quick Actions</h3>
-
-                        </div>
-
-                        <div class="quick-actions">
-
-                            <button>
-                                <i class="fa-solid fa-check"></i>
-                                Approve Notes
-                            </button>
-
-                            <button>
-                                <i class="fa-solid fa-user-plus"></i>
-                                Add Admin
-                            </button>
-
-                            <button>
-                                <i class="fa-solid fa-folder-plus"></i>
-                                Add Subject
-                            </button>
-
-                            <button>
-                                <i class="fa-solid fa-chart-column"></i>
-                                View Analytics
-                            </button>
-
-                        </div>
-
-                    </section>
+                    </div>
 
                 </div>
 
             </section>
 
+            <!-- =========================================
+     Preview Modal
+========================================= -->
+
+            <div class="modal" id="previewModal">
+
+                <div class="modal-content large">
+
+                    <div class="modal-header">
+                        <h3>Note Preview</h3>
+
+                        <button class="close-modal">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+
+                    <iframe src="" id="previewFrame"></iframe>
+
+                </div>
+
+            </div>
+
+            <div id="userModal" class="modal">
+
+                <div class="modal-content user-modal-content">
+
+                    <div class="modal-header">
+                        <h3>User Details</h3>
+
+                        <button class="close-modal" id="closeUserModal">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <div class="user-modal-profile">
+
+                            <img id="userModalAvatar"
+                                src="https://ui-avatars.com/api/?name=User&background=2563eb&color=fff" alt="User">
+
+                            <h2 id="userModalName">Loading...</h2>
+
+                            <p id="userModalEmail"></p>
+
+                        </div>
+
+                        <div class="user-info-grid">
+
+                            <div>
+                                <span>UID</span>
+                                <strong id="userModalUID"></strong>
+                            </div>
+
+                            <div>
+                                <span>Joined</span>
+                                <strong id="userModalJoined"></strong>
+                            </div>
+
+                            <div>
+                                <span>Total Uploads</span>
+                                <strong id="userModalUploads"></strong>
+                            </div>
+
+                            <div>
+                                <span>Approved Notes</span>
+                                <strong id="userModalApproved"></strong>
+                            </div>
+
+                            <div>
+                                <span>Pending Notes</span>
+                                <strong id="userModalPending"></strong>
+                            </div>
+
+                            <div>
+                                <span>Rejected Notes</span>
+                                <strong id="userModalRejected"></strong>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- =========================================
+     Delete Confirmation Modal
+========================================= -->
+
+            <div class="modal" id="deleteModal">
+
+                <div class="modal-content small">
+
+                    <div class="modal-header">
+                        <h3>Delete Note</h3>
+
+                        <button class="close-modal">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <p>Are you sure you want to permanently delete this item?</p>
+
+                        <div class="modal-actions">
+                            <button class="cancel-btn">Cancel</button>
+                            <button class="delete-btn">Delete</button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Delete Confirmation Modal -->
+
+            <div id="deleteModal" class="modal">
+
+                <div class="modal-content small">
+
+                    <div class="modal-header">
+                        <h3>Delete Note</h3>
+
+                        <button class="close-modal" id="closeDeleteModal">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <div class="delete-icon">
+                            <i class="fa-solid fa-trash"></i>
+                        </div>
+
+                        <h2>Delete this note?</h2>
+
+                        <p id="deleteMessage">
+                            This action cannot be undone.
+                        </p>
+
+                        <div class="modal-actions">
+
+                            <button class="cancel-btn" id="cancelDelete">
+
+                                Cancel
+
+                            </button>
+
+                            <button class="delete-btn" id="confirmDelete">
+
+                                Delete
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
         </main>
 
     </div>
+    <div id="toastContainer"></div>
 
-    <!-- =====================================================
-                    GLOBAL MODAL
-====================================================== -->
-
-    <div class="modal-overlay" id="modalOverlay">
-
-        <div class="custom-modal">
-
-            <div class="modal-header">
-                <h3 id="modalTitle">Confirmation</h3>
-                <button class="modal-close" id="modalClose">&times;</button>
-            </div>
-
-            <div class="modal-body">
-                <p id="modalMessage"></p>
-            </div>
-
-            <div class="modal-footer">
-                <button class="secondary-btn" id="modalCancel">Cancel</button>
-                <button class="primary-btn" id="modalConfirm">Confirm</button>
-            </div>
-
-        </div>
-
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="/admin/js/admin.js"></script>
+    <script type="module" src="../js/firebase-admin.js"></script>
+    <script type="module" src="/admin/js/admin.js"></script>
 
 </body>
 
