@@ -5,7 +5,9 @@ import {
     query,
     where,
     getDocs,
-    increment
+    increment,
+    updateDoc,
+    doc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import {
@@ -17,6 +19,7 @@ import {
 // ======================================================
 
 let currentUser = null;
+let currentPreviewNote = null;
 
 onAuthStateChanged(auth, (user) => {
     currentUser = user;
@@ -30,12 +33,29 @@ const notesContainer = document.getElementById("notesContainer");
 const branchFilter = document.getElementById("branchFilter");
 const yearFilter = document.getElementById("yearFilter");
 const filterBtn = document.getElementById("filterBtn");
+const notePreviewModal = document.getElementById("notePreviewModal");
+const previewFrame = document.getElementById("previewFrame");
+const previewTitle = document.getElementById("previewTitle");
+const previewSubject = document.getElementById("previewSubject");
+const previewSubject2 = document.getElementById("previewSubject2");
+const previewUploader = document.getElementById("previewUploader");
+const previewDate = document.getElementById("previewDate");
+const previewViews = document.getElementById("previewViews");
+const previewLikes = document.getElementById("previewLikes");
+const previewBranch = document.getElementById("previewBranch");
+const previewSemester = document.getElementById("previewSemester");
+const previewDescription = document.getElementById("previewDescription");
+const closePreviewBtn = document.getElementById("closePreview");
+const previewDownloads = document.getElementById("previewDownloads");
+const downloadBtn = document.getElementById("downloadBtn");
+const likeBtn = document.getElementById("likeBtn");
 
 // ======================================================
 // Fetch Notes
 // ======================================================
 
 async function fetchNotes() {
+    console.log("fetchNotes started");
 
     try {
 
@@ -115,40 +135,21 @@ async function fetchNotes() {
                     </div>
                 `;
 
-                const downloadBtn =
+                const openPdfBtn =
                     card.querySelector(".btn-download-small");
 
-downloadBtn.addEventListener("click", async () => {
+            openPdfBtn.addEventListener("click", async () => {
 
-    if (!currentUser) {
+                if (!currentUser) {
 
-        window.location.href = "login.html";
-        return;
+                    window.location.href = "login.html";
+                    return;
 
-    }
+                }
 
-    try {
+                openPreview(note);
 
-        await updateDoc(
-            doc(db, "notes", note.id),
-            {
-                downloads: increment(1)
-            }
-        );
-
-    } catch (error) {
-
-        console.error("Download count update failed:", error);
-
-    }
-
-    window.open(
-        note.pdfUrl,
-        "_blank",
-        "noopener,noreferrer"
-    );
-
-});
+            });
 
                 notesContainer.appendChild(card);
 
@@ -189,6 +190,102 @@ downloadBtn.addEventListener("click", async () => {
     }
 
 }
+
+
+// -------------------------
+// Preview Functions
+// -------------------------
+
+function openPreview(note){
+    currentPreviewNote = note;
+    previewTitle.textContent = note.title;
+    previewSubject.textContent = note.subject;
+    previewSubject2.textContent = note.subject;
+    previewViews.textContent = note.views || 0;
+    previewDownloads.textContent = note.downloads || 0;
+    previewLikes.textContent = note.likes || 0;
+
+    previewUploader.textContent = note.uploaderName;
+
+   if (note.uploadedAt?.toDate) {
+    previewDate.textContent =
+        note.uploadedAt.toDate().toLocaleDateString();
+    }
+    else{
+        previewDate.textContent = "-";
+    }
+
+
+    previewBranch.textContent = note.branch;
+    previewSemester.textContent = note.semester;
+
+    previewDescription.textContent = note.description;
+
+    previewFrame.src = note.pdfUrl;
+
+    notePreviewModal.classList.add("show");
+
+}
+
+function closePreview(){
+
+    notePreviewModal.classList.remove("show");
+
+    previewFrame.src = "";
+
+}
+
+
+closePreviewBtn.addEventListener("click", closePreview);
+
+notePreviewModal.addEventListener("click",(e)=>{
+
+    if(e.target===notePreviewModal){
+
+        closePreview();
+
+    }
+
+});
+
+
+
+downloadBtn.addEventListener("click", async () => {
+    if (!currentUser) {
+    window.location.href = "login.html";
+    return;
+}
+
+    if (!currentPreviewNote) return;
+
+    try {
+
+        await updateDoc(
+            doc(db, "notes", currentPreviewNote.id),
+            {
+                downloads: increment(1)
+            }
+        );
+
+        currentPreviewNote.downloads =
+            (currentPreviewNote.downloads || 0) + 1;
+
+        previewDownloads.textContent =
+            currentPreviewNote.downloads;
+
+    } catch (err) {
+
+        console.error(err);
+
+    }
+
+    window.open(
+        currentPreviewNote.pdfUrl,
+        "_blank",
+        "noopener,noreferrer"
+    );
+
+});
 
 // ======================================================
 // Utility

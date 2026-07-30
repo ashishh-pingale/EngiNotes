@@ -378,6 +378,7 @@ async function loadRecentUploads() {
 
             row.querySelector(".view-btn")
                 .addEventListener("click", () => {
+                    console.log("VIEW BUTTON CLICKED");
 
                     openPreview(note.pdfUrl);
 
@@ -402,6 +403,7 @@ async function loadRecentUploads() {
 // ======================================
 
 async function confirmDeleteNote(){
+    console.log("DELETE CLICKED");
 
     if(!noteToDelete) return;
 
@@ -570,6 +572,7 @@ function renderPendingNotes(notes) {
         // Approve
         row.querySelector(".approve-btn")
             .addEventListener("click", () => {
+                console.log("BUTTON CLICKED");
 
                 approveNote(note.id);
 
