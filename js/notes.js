@@ -7,7 +7,10 @@ import {
     getDocs,
     increment,
     updateDoc,
-    doc
+    doc,
+    getDoc,
+    setDoc,
+    deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import {
@@ -17,9 +20,9 @@ import {
 // ======================================================
 // Auth
 // ======================================================
-
 let currentUser = null;
 let currentPreviewNote = null;
+let hasLikedCurrentNote = false;
 
 onAuthStateChanged(auth, (user) => {
     currentUser = user;
@@ -49,6 +52,7 @@ const closePreviewBtn = document.getElementById("closePreview");
 const previewDownloads = document.getElementById("previewDownloads");
 const downloadBtn = document.getElementById("downloadBtn");
 const likeBtn = document.getElementById("likeBtn");
+
 
 // ======================================================
 // Fetch Notes
@@ -195,9 +199,46 @@ async function fetchNotes() {
 // -------------------------
 // Preview Functions
 // -------------------------
+async function checkIfLiked(noteId) {
 
-function openPreview(note){
+    if (!currentUser) {
+        hasLikedCurrentNote = false;
+        likeBtn.innerHTML = `🤍 Like`;
+        return;
+    }
+
+    const likeRef = doc(
+        db,
+        "noteLikes",
+        `${noteId}_${currentUser.uid}`
+    );
+
+    const likeSnap = await getDoc(likeRef);
+
+    hasLikedCurrentNote = likeSnap.exists();
+
+    likeBtn.innerHTML = hasLikedCurrentNote
+        ? "❤️ Liked"
+        : "🤍 Like";
+}
+
+
+
+
+async function openPreview(note){
     currentPreviewNote = note;
+    
+    try {
+    await updateDoc(
+        doc(db, "notes", note.id),{
+            views: increment(1)
+        }
+    );
+    note.views = (note.views || 0) + 1;
+} catch (err) {
+    console.error("Failed to update views:", err);
+
+}
     previewTitle.textContent = note.title;
     previewSubject.textContent = note.subject;
     previewSubject2.textContent = note.subject;
@@ -224,6 +265,7 @@ function openPreview(note){
     previewFrame.src = note.pdfUrl;
 
     notePreviewModal.classList.add("show");
+    checkIfLiked(note.id);
 
 }
 
@@ -284,6 +326,75 @@ downloadBtn.addEventListener("click", async () => {
         "_blank",
         "noopener,noreferrer"
     );
+
+});
+
+likeBtn.addEventListener("click", async () => {
+
+    if (!currentUser) {
+        window.location.href = "login.html";
+        return;
+    }
+
+    if (!currentPreviewNote) return;
+
+    const likeRef = doc(
+        db,
+        "noteLikes",
+        `${currentPreviewNote.id}_${currentUser.uid}`
+    );
+
+    try {
+
+        if (hasLikedCurrentNote) {
+
+            await deleteDoc(likeRef);
+
+            await updateDoc(
+                doc(db, "notes", currentPreviewNote.id),
+                {
+                    likes: increment(-1)
+                }
+            );
+
+            hasLikedCurrentNote = false;
+
+            currentPreviewNote.likes--;
+
+        } else {
+
+            await setDoc(likeRef, {
+
+                noteId: currentPreviewNote.id,
+                userId: currentUser.uid,
+                likedAt: new Date()
+
+            });
+
+            await updateDoc(
+                doc(db, "notes", currentPreviewNote.id),
+                {
+                    likes: increment(1)
+                }
+            );
+
+            hasLikedCurrentNote = true;
+
+            currentPreviewNote.likes =
+                (currentPreviewNote.likes || 0) + 1;
+        }
+
+        previewLikes.textContent = currentPreviewNote.likes;
+
+        likeBtn.innerHTML = hasLikedCurrentNote
+            ? "❤️ Liked"
+            : "🤍 Like";
+
+    } catch (err) {
+
+        console.error(err);
+
+    }
 
 });
 
