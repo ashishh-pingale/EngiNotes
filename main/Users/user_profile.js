@@ -1,210 +1,771 @@
-// 🔥 Firebase Imports
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+/* ===========================================================
+   EngiNotes - User Profile
+   =========================================================== */
+
+import { auth, db } from "../../js/firebase.js";
 
 import {
-  getFirestore,
-  collection,
-  addDoc,
-  deleteDoc,
-  doc,
-  getDoc,
-  query,
-  where,
-  getDocs,
-  onSnapshot
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
+    collection,
+    query,
+    where,
+    getDocs,
+    getDoc,
+    doc,
+    onSnapshot,
+    addDoc,
+    deleteDoc
+   
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import {
-  getAuth,
-  onAuthStateChanged
+    onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 
-// 🔐 Firebase Config
-const firebaseConfig = {
-  apiKey: "AIzaSyCrUCfiq_2w47JYC4pzJ3MSO38rN_sUwjU",
-  authDomain: "notes-hub-3eae3.firebaseapp.com",
-  projectId: "notes-hub-3eae3"
-};
+/* ===========================================================
+   DOM ELEMENTS
+   =========================================================== */
 
-// 🚀 Init
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
+const profileAvatar =
+document.getElementById("profileAvatar");
+
+const profileName =
+document.getElementById("profileName");
+
+const profileBranch =
+document.getElementById("profileBranch");
+
+const profileYear =
+document.getElementById("profileYear");
+
+const profileJoined =
+document.getElementById("profileJoined");
+
+const profileBio =
+document.getElementById("profileBio");
+
+const connectBtn =
+document.getElementById("connectBtn");
+
+const messageBtn =
+document.getElementById("messageBtn");
+
+const uploadsCount =
+document.getElementById("uploadsCount");
+
+const likesCount =
+document.getElementById("likesCount");
+
+const viewsCount =
+document.getElementById("viewsCount");
+
+const downloadsCount =
+document.getElementById("downloadsCount");
+
+const followersCount =
+document.getElementById("followersCount");
+
+const recentUploads =
+document.getElementById("recentUploads");
 
 
-// 🎯 DOM Elements
-const connectBtn = document.getElementById("connectBtn");
-const followersCountEl = document.getElementById("followersCount");
-const followingCountEl = document.getElementById("followingCount");
-const profileNameEl = document.getElementById("profileName");
-const profileBioEl = document.getElementById("profileBio");
+/* ===========================================================
+   GLOBAL VARIABLES
+   =========================================================== */
+
+let currentUser = null;
+
+let profileUserId = null;
+
+let profileUser = null;
+
+let userNotes = [];
 
 
-// 👤 USERS
-let currentUserId = null;
+/* ===========================================================
+   GET PROFILE USER ID
+   =========================================================== */
 
-// get profile user from URL
-const params = new URLSearchParams(window.location.search);
-const profileUserId = params.get("uid");
+const params =
+new URLSearchParams(window.location.search);
 
-if (!profileUserId) {
-  alert("Invalid profile");
+profileUserId =
+params.get("uid");
+
+if(!profileUserId){
+
+    alert("Invalid Profile");
+
+    window.location.href="/main/index.html";
+
 }
 
 
-// 🔒 AUTH STATE
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    currentUserId = user.uid;
-    init();
-  } else {
-    window.location.href = "/login.html";
-  }
-});
+/* ===========================================================
+   AUTH
+   =========================================================== */
 
+onAuthStateChanged(
 
-// 🚀 INIT
-async function init() {
-  await loadUserProfile();        // 🔥 NEW
-  preventSelfFollow();
-  listenFollowersCount();
-  loadFollowingCount();
-  checkFollowStatus();
-}
+    auth,
 
+    async(user)=>{
 
-// 🔥 LOAD USER PROFILE DATA
-async function loadUserProfile() {
-  try {
-    const userRef = doc(db, "users", profileUserId);
-    const userSnap = await getDoc(userRef);
+        if(!user){
 
-    if (userSnap.exists()) {
-      const data = userSnap.data();
+            window.location.href=
+            "/main/login.html";
 
-      console.log("User Data:", data);
+            return;
 
-      profileNameEl.textContent = data.name || "No Name";
-      profileBioEl.textContent = data.branch || "No bio";
+        }
 
-    } else {
-      profileNameEl.textContent = "User not found";
-      profileBioEl.textContent = "";
+        currentUser=user;
+
+        await initializeProfile();
+
     }
 
-  } catch (err) {
-    console.error("Error loading profile:", err);
-  }
+);
+
+
+/* ===========================================================
+   INITIALIZATION
+   =========================================================== */
+
+async function initializeProfile(){
+
+    await loadUserProfile();
+
+    await loadUserStatistics();
+
+    preventSelfFollow();
+
+    listenFollowersCount();
+
+    checkFollowStatus();
+
 }
 
 
-// 🚫 PREVENT SELF FOLLOW
-function preventSelfFollow() {
-  if (currentUserId === profileUserId) {
-    connectBtn.style.display = "none";
-  }
+/* ===========================================================
+   LOAD USER PROFILE
+   =========================================================== */
+
+async function loadUserProfile(){
+
+    try{
+
+        const userRef=
+        doc(
+            db,
+            "users",
+            profileUserId
+        );
+
+        const userSnap=
+        await getDoc(userRef);
+
+        if(!userSnap.exists()){
+
+            profileName.textContent=
+            "User Not Found";
+
+            return;
+
+        }
+
+        profileUser=
+        userSnap.data();
+
+        profileName.textContent=
+        profileUser.name || "Anonymous";
+
+        profileBranch.textContent=
+        profileUser.branch || "-";
+
+        profileYear.textContent=
+        profileUser.year || "-";
+
+        profileBio.textContent=
+        profileUser.bio ||
+        "This user hasn't added a bio yet.";
+
+        generateAvatar(
+            profileUser.name
+        );
+
+        formatJoinedDate(
+            profileUser.createdAt
+        );
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Profile Error:",
+            error
+        );
+
+    }
+
 }
 
 
-// 🔍 CHECK FOLLOW STATUS
-async function checkFollowStatus() {
-  const q = query(
-    collection(db, "follows"),
-    where("followerId", "==", currentUserId),
-    where("followingId", "==", profileUserId)
-  );
+/* ===========================================================
+   GENERATE AVATAR
+   =========================================================== */
 
-  const snapshot = await getDocs(q);
+function generateAvatar(name){
 
-  if (!snapshot.empty) {
-    connectBtn.textContent = "Disconnect";
-    connectBtn.dataset.followId = snapshot.docs[0].id;
-  } else {
-    connectBtn.textContent = "Connect";
-    connectBtn.dataset.followId = "";
-  }
+    if(!name){
+
+        profileAvatar.textContent="U";
+
+        return;
+
+    }
+
+    profileAvatar.textContent=
+    name
+    .trim()
+    .charAt(0)
+    .toUpperCase();
+
 }
 
 
-// 🔗 CONNECT USER
-async function connectUser() {
-  try {
-    const q = query(
-      collection(db, "follows"),
-      where("followerId", "==", currentUserId),
-      where("followingId", "==", profileUserId)
+/* ===========================================================
+   FORMAT JOIN DATE
+   =========================================================== */
+
+function formatJoinedDate(timestamp){
+
+    if(!timestamp){
+
+        profileJoined.textContent="-";
+
+        return;
+
+    }
+
+    const date=
+    timestamp.toDate();
+
+    profileJoined.textContent=
+    date.toLocaleDateString(
+
+        "en-US",
+
+        {
+
+            month:"long",
+
+            year:"numeric"
+
+        }
+
     );
 
-    const snapshot = await getDocs(q);
+}
 
-    if (!snapshot.empty) {
-      console.log("Already following");
-      return;
+
+/* ===========================================================
+   LOAD USER STATISTICS
+   =========================================================== */
+
+async function loadUserStatistics(){
+
+    try{
+
+        const q=query(
+
+            collection(db,"notes"),
+
+            where("uploaderId","==",profileUserId),
+            where("status","==","approved")
+
+        );
+
+        const snapshot=
+        await getDocs(q);
+
+        userNotes=[];
+
+        let totalLikes=0;
+
+        let totalViews=0;
+
+        let totalDownloads=0;
+
+        snapshot.forEach(doc=>{
+
+            const note=doc.data();
+
+            userNotes.push({
+
+                id:doc.id,
+
+                ...note
+
+            });
+
+            totalLikes+=
+            note.likes || 0;
+
+            totalViews+=
+            note.views || 0;
+
+            totalDownloads+=
+            note.downloads || 0;
+
+        });
+
+        uploadsCount.textContent=
+        userNotes.length;
+
+        likesCount.textContent=
+        totalLikes;
+
+        viewsCount.textContent=
+        totalViews;
+
+        downloadsCount.textContent=
+        totalDownloads;
+
+        userNotes.sort(
+
+            (a,b)=>{
+
+                const first=
+                a.uploadedAt?.seconds || 0;
+
+                const second=
+                b.uploadedAt?.seconds || 0;
+
+                return second-first;
+
+            }
+
+        );
+
+                renderRecentUploads();
+
     }
 
-    await addDoc(collection(db, "follows"), {
-      followerId: currentUserId,
-      followingId: profileUserId,
-      createdAt: new Date()
+    catch(error){
+
+        console.error(
+            "Statistics Error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* ===========================================================
+   RECENT UPLOADS
+   =========================================================== */
+
+function renderRecentUploads() {
+
+    recentUploads.innerHTML = "";
+
+    if (userNotes.length === 0) {
+
+        recentUploads.innerHTML = `
+            <div class="upload-empty">
+                <div class="empty-icon">📄</div>
+                <h3>No uploads yet</h3>
+                <p>This user hasn't uploaded any notes yet.</p>
+            </div>
+        `;
+
+        return;
+    }
+
+    const recent = userNotes.slice(0, 6);
+
+    recent.forEach(note => {
+
+        const row = document.createElement("div");
+
+        row.className = "upload-row";
+
+        row.innerHTML = `
+            <div class="upload-info">
+                <h3>${note.title}</h3>
+                <span>${note.subject || "Unknown Subject"}</span>
+            </div>
+
+            <button class="details-btn">
+                View Details →
+            </button>
+        `;
+
+        row.querySelector(".details-btn").addEventListener("click", (e) => {
+
+            e.stopPropagation();
+
+            window.location.href = `/main/Users/notes-details.html?id=${note.id}`;
+
+        });
+
+        row.addEventListener("click", () => {
+
+            window.location.href = `/main/Users/notes-details.html?id=${note.id}`;
+
+        });
+
+        recentUploads.appendChild(row);
+
     });
 
-  } catch (err) {
-    console.error("Error connecting:", err);
-  }
+}
+
+/* ===========================================================
+   FOLLOW SYSTEM
+   =========================================================== */
+
+async function checkFollowStatus(){
+
+    if(currentUser.uid===profileUserId){
+
+        return;
+
+    }
+
+    const q=query(
+
+        collection(db,"follows"),
+
+        where(
+            "followerId",
+            "==",
+            currentUser.uid
+        ),
+
+        where(
+            "followingId",
+            "==",
+            profileUserId
+        )
+
+    );
+
+    const snapshot=
+    await getDocs(q);
+
+    if(snapshot.empty){
+
+        connectBtn.textContent=
+        "Connect";
+
+        connectBtn.dataset.followId="";
+
+    }
+
+    else{
+
+        connectBtn.textContent=
+        "Disconnect";
+
+        connectBtn.dataset.followId=
+        snapshot.docs[0].id;
+
+    }
+
 }
 
 
-// ❌ DISCONNECT USER
-async function disconnectUser(followId) {
-  try {
-    await deleteDoc(doc(db, "follows", followId));
-  } catch (err) {
-    console.error("Error disconnecting:", err);
-  }
+/* ===========================================================
+   CONNECT USER
+   =========================================================== */
+
+async function connectUser(){
+
+    try{
+
+        await addDoc(
+
+            collection(db,"follows"),
+
+            {
+
+                followerId:
+                currentUser.uid,
+
+                followingId:
+                profileUserId,
+
+                createdAt:
+                new Date()
+
+            }
+
+        );
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Connect Error:",
+            error
+        );
+
+    }
+
 }
 
 
-// 🖱️ BUTTON CLICK
-connectBtn.addEventListener("click", async () => {
+/* ===========================================================
+   DISCONNECT USER
+   =========================================================== */
 
-  const followId = connectBtn.dataset.followId;
+async function disconnectUser(id){
 
-  connectBtn.disabled = true;
+    try{
 
-  if (followId) {
-    connectBtn.textContent = "Connect";
-    await disconnectUser(followId);
-  } else {
-    connectBtn.textContent = "Disconnect";
-    await connectUser();
-  }
+        await deleteDoc(
 
-  await checkFollowStatus();
-  connectBtn.disabled = false;
-});
+            doc(
+                db,
+                "follows",
+                id
+            )
 
+        );
 
-// 🔴 REAL-TIME FOLLOWERS COUNT
-function listenFollowersCount() {
-  const q = query(
-    collection(db, "follows"),
-    where("followingId", "==", profileUserId)
-  );
+    }
 
-  onSnapshot(q, (snapshot) => {
-    followersCountEl.textContent = snapshot.size;
-  });
+    catch(error){
+
+        console.error(
+            "Disconnect Error:",
+            error
+        );
+
+    }
+
 }
 
 
-// 🔢 FOLLOWING COUNT
-async function loadFollowingCount() {
-  const q = query(
-    collection(db, "follows"),
-    where("followerId", "==", profileUserId)
-  );
+/* ===========================================================
+   CONNECT BUTTON
+   =========================================================== */
 
-  const snapshot = await getDocs(q);
-  followingCountEl.textContent = snapshot.size;
+connectBtn.addEventListener(
+
+    "click",
+
+    async()=>{
+
+        connectBtn.disabled=true;
+
+        const followId=
+        connectBtn.dataset.followId;
+
+        if(followId){
+
+            await disconnectUser(
+                followId
+            );
+
+        }
+
+        else{
+
+            await connectUser();
+
+        }
+
+        await checkFollowStatus();
+
+        connectBtn.disabled=false;
+
+    }
+
+);
+
+
+/* ===========================================================
+   REALTIME FOLLOWERS
+   =========================================================== */
+
+function listenFollowersCount(){
+
+    const q=query(
+
+        collection(db,"follows"),
+
+        where(
+            "followingId",
+            "==",
+            profileUserId
+        )
+
+    );
+
+    onSnapshot(
+
+        q,
+
+        snapshot=>{
+
+            followersCount.textContent=
+            snapshot.size;
+
+        }
+
+    );
+
 }
+
+
+/* ===========================================================
+   PREVENT SELF FOLLOW
+   =========================================================== */
+
+function preventSelfFollow(){
+
+    if(currentUser.uid===profileUserId){
+
+        connectBtn.style.display="none";
+
+        messageBtn.style.display="none";
+
+    }
+
+}
+
+/* ===========================================================
+   MESSAGE BUTTON
+   =========================================================== */
+
+messageBtn.addEventListener(
+
+    "click",
+
+    ()=>{
+
+        if(currentUser.uid===profileUserId){
+
+            return;
+
+        }
+
+        window.location.href=
+        `/main/chat.html?uid=${profileUserId}`;
+
+    }
+
+);
+
+
+/* ===========================================================
+   REFRESH FOLLOW BUTTON
+   =========================================================== */
+
+async function refreshFollowButton(){
+
+    try{
+
+        await checkFollowStatus();
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* ===========================================================
+   FORMAT LARGE NUMBERS
+   =========================================================== */
+
+function formatNumber(number){
+
+    if(number>=1000000){
+
+        return (
+            number/1000000
+        ).toFixed(1)+"M";
+
+    }
+
+    if(number>=1000){
+
+        return (
+            number/1000
+        ).toFixed(1)+"K";
+
+    }
+
+    return number;
+
+}
+
+
+/* ===========================================================
+   OPTIONAL NUMBER FORMATTING
+   =========================================================== */
+
+// Uncomment if you want 1200 → 1.2K
+
+/*
+uploadsCount.textContent =
+formatNumber(Number(uploadsCount.textContent));
+
+likesCount.textContent =
+formatNumber(Number(likesCount.textContent));
+
+viewsCount.textContent =
+formatNumber(Number(viewsCount.textContent));
+
+downloadsCount.textContent =
+formatNumber(Number(downloadsCount.textContent));
+
+followersCount.textContent =
+formatNumber(Number(followersCount.textContent));
+*/
+
+
+/* ===========================================================
+   WINDOW ERROR HANDLER
+   =========================================================== */
+
+window.addEventListener(
+
+    "error",
+
+    (event)=>{
+
+        console.error(
+
+            "Profile JS Error:",
+
+            event.error
+
+        );
+
+    }
+
+);
+
+
+/* ===========================================================
+   DEBUG (REMOVE LATER)
+   =========================================================== */
+
+console.log("================================");
+console.log("EngiNotes User Profile Loaded");
+console.log("Profile UID:", profileUserId);
+console.log("================================");

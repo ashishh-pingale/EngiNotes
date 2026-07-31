@@ -473,8 +473,8 @@ async function handleFormSubmit(event){
                 status:"pending",
 
                 downloads:0,
-
-                likes:0
+                likes:0,
+                views:0
 
             }
 

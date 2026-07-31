@@ -52,6 +52,7 @@ const closePreviewBtn = document.getElementById("closePreview");
 const previewDownloads = document.getElementById("previewDownloads");
 const downloadBtn = document.getElementById("downloadBtn");
 const likeBtn = document.getElementById("likeBtn");
+const searchInput = document.getElementById("searchInput");
 
 
 // ======================================================
@@ -67,6 +68,10 @@ async function fetchNotes() {
 
         const selectedBranch = branchFilter.value;
         const selectedYear = yearFilter.value;
+        const searchText =
+        searchInput.value
+        .trim()
+        .toLowerCase();
 
         // Only fetch APPROVED notes
         const notesQuery = query(
@@ -85,10 +90,32 @@ async function fetchNotes() {
             ...docSnap.data()
         };
 
+            const matchesBranch =
+                selectedBranch === "" ||
+                note.branch === selectedBranch;
+
+            const matchesYear =
+                selectedYear === "" ||
+                note.year === selectedYear;
+
+            const matchesSearch =
+
+                searchText === "" ||
+
+                note.title?.toLowerCase().includes(searchText) ||
+
+                note.subject?.toLowerCase().includes(searchText) ||
+
+                note.uploaderName?.toLowerCase().includes(searchText);
+
             if (
-                (selectedBranch === "" || note.branch === selectedBranch) &&
-                (selectedYear === "" || note.year === selectedYear)
-            ) {
+                matchesBranch &&
+                matchesYear &&
+                matchesSearch
+            ) 
+
+                        
+            {
 
                 notesFound = true;
 
@@ -431,4 +458,7 @@ function getYearText(year) {
 
 fetchNotes();
 
-filterBtn.addEventListener("click", fetchNotes);
+// filterBtn.addEventListener("click", fetchNotes);
+searchInput.addEventListener("input", fetchNotes); 
+branchFilter.addEventListener("change", fetchNotes); 
+yearFilter.addEventListener("change", fetchNotes);

@@ -1,0 +1,731 @@
+/* ======================================================
+   RESET
+====================================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    font-family:'Inter',sans-serif;
+
+    background:#f5f7fb;
+
+    color:#1e293b;
+
+}
+
+
+/* ======================================================
+   NAVBAR
+====================================================== */
+
+.navbar{
+
+    height:75px;
+
+    background:#fff;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-bottom:1px solid #e5e7eb;
+
+    position:sticky;
+
+    top:0;
+
+    z-index:100;
+
+}
+
+.logo{
+
+    text-decoration:none;
+
+    font-size:30px;
+
+    font-weight:800;
+
+    color:#111827;
+
+}
+
+.logo span{
+
+    color:#2563eb;
+
+}
+
+
+/* ======================================================
+   PAGE
+====================================================== */
+
+.note-page{
+
+    width:min(1400px,95%);
+
+    margin:35px auto 60px;
+
+}
+
+
+/* ======================================================
+   BACK BUTTON
+====================================================== */
+
+.back-btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    text-decoration:none;
+
+    color:#2563eb;
+
+    font-weight:600;
+
+    margin-bottom:25px;
+
+    transition:.25s;
+
+}
+
+.back-btn:hover{
+
+    transform:translateX(-4px);
+
+}
+
+
+/* ======================================================
+   HEADER
+====================================================== */
+
+.note-header{
+
+    margin-bottom:30px;
+
+}
+
+#noteTitle{
+
+    font-size:40px;
+
+    font-weight:800;
+
+    color:#111827;
+
+}
+
+#noteSubject{
+
+    margin-top:8px;
+
+    font-size:18px;
+
+    color:#64748b;
+
+}
+
+
+/* ======================================================
+   MAIN LAYOUT
+====================================================== */
+
+.note-layout{
+
+    display:grid;
+
+    grid-template-columns:2fr 420px;
+
+    gap:30px;
+
+    align-items:start;
+
+}
+
+
+/* ======================================================
+   PDF
+====================================================== */
+
+.pdf-wrapper{
+
+    background:#fff;
+
+    border-radius:22px;
+
+    overflow:hidden;
+
+    box-shadow:
+
+        0 15px 40px rgba(0,0,0,.06);
+
+}
+
+#noteFrame{
+
+    width:100%;
+
+    height:900px;
+
+    border:none;
+
+}
+
+
+/* ======================================================
+   SIDEBAR
+====================================================== */
+
+.note-sidebar{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:22px;
+
+}
+
+
+/* ======================================================
+   CARD
+====================================================== */
+
+.card{
+
+    background:#fff;
+
+    border-radius:20px;
+
+    padding:24px;
+
+    box-shadow:
+
+        0 12px 30px rgba(0,0,0,.05);
+
+    transition:.25s;
+
+}
+
+.card:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:
+
+        0 20px 45px rgba(37,99,235,.12);
+
+}
+
+.card h3{
+
+    margin-bottom:18px;
+
+    font-size:20px;
+
+}
+
+
+/* ======================================================
+   UPLOADER
+====================================================== */
+
+.uploader{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+}
+
+.avatar{
+
+    width:60px;
+
+    height:60px;
+
+    border-radius:50%;
+
+    background:#2563eb;
+
+    color:#fff;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:24px;
+
+    font-weight:700;
+
+}
+
+.uploader h4{
+
+    font-size:18px;
+
+}
+
+.uploader span{
+
+    color:#64748b;
+
+    font-size:14px;
+
+}
+
+/* ======================================================
+   STATISTICS
+====================================================== */
+
+.stats-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+}
+
+.stat{
+    background:#f8fafc;
+    border-radius:16px;
+    padding:18px 10px;
+    text-align:center;
+    transition:.25s;
+}
+
+.stat:hover{
+    background:#eff6ff;
+}
+
+.number{
+    display:block;
+    font-size:22px;
+    font-weight:700;
+    color:#2563eb;
+    margin-bottom:6px;
+}
+
+.stat small{
+    color:#64748b;
+    font-size:13px;
+}
+
+/* ======================================================
+   DETAILS
+====================================================== */
+
+.detail-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:14px 0;
+    border-bottom:1px solid #f1f5f9;
+}
+
+.detail-row:last-child{
+    border-bottom:none;
+}
+
+.detail-row span{
+    color:#64748b;
+}
+
+.detail-row strong{
+    color:#111827;
+}
+
+/* ======================================================
+   ACTION BUTTONS
+====================================================== */
+
+.actions{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+}
+
+.like-btn,
+.download-btn{
+
+    width:100%;
+
+    border:none;
+
+    padding:15px;
+
+    border-radius:14px;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.25s;
+}
+
+.like-btn{
+
+    background:#fee2e2;
+
+    color:#dc2626;
+
+}
+
+.like-btn:hover{
+
+    background:#fecaca;
+
+}
+
+.download-btn{
+
+    background:#2563eb;
+
+    color:#fff;
+
+}
+
+.download-btn:hover{
+
+    background:#1d4ed8;
+
+}
+
+/* ======================================================
+   DESCRIPTION
+====================================================== */
+
+.description-section{
+
+    margin-top:35px;
+
+}
+
+.description-section h2{
+
+    margin-bottom:18px;
+
+}
+
+#noteDescription{
+
+    color:#475569;
+
+    line-height:1.9;
+
+    font-size:15px;
+
+}
+
+/* ======================================================
+   UPLOADER PROFILE
+====================================================== */
+
+.uploader-section{
+
+    margin-top:35px;
+
+}
+
+.uploader-profile{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:20px;
+
+}
+
+.large-avatar{
+
+    width:70px;
+
+    height:70px;
+
+    border-radius:50%;
+
+    background:#2563eb;
+
+    color:#fff;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:28px;
+
+    font-weight:700;
+
+}
+
+.uploader-info{
+
+    flex:1;
+
+}
+
+.uploader-info h3{
+
+    margin-bottom:6px;
+
+}
+
+.uploader-info p{
+
+    color:#64748b;
+
+}
+
+.profile-btn{
+
+    text-decoration:none;
+
+    color:#2563eb;
+
+    font-weight:600;
+
+}
+
+.profile-btn:hover{
+
+    text-decoration:underline;
+
+}
+
+/* ======================================================
+   MORE NOTES
+====================================================== */
+
+.more-notes{
+
+    margin-top:35px;
+
+}
+
+.section-title{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:20px;
+
+}
+
+.section-title h2{
+
+    font-size:24px;
+
+}
+
+.view-all{
+
+    color:#2563eb;
+
+    text-decoration:none;
+
+    font-weight:600;
+    cursor: pointer;
+
+}
+
+#moreNotesContainer{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:16px;
+
+}
+
+.more-note-card{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    background:#fff;
+
+    border-radius:18px;
+
+    padding:18px 22px;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.05);
+
+    transition:.25s;
+
+}
+
+.more-note-card:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:0 15px 35px rgba(37,99,235,.12);
+
+}
+
+.more-note-info h3{
+
+    font-size:18px;
+
+    margin-bottom:6px;
+
+}
+
+.more-note-info span{
+
+    color:#64748b;
+
+    font-size:14px;
+
+}
+
+.more-note-btn{
+
+    text-decoration:none;
+
+    color:#2563eb;
+
+    font-weight:600;
+    cursor: pointer;
+
+}
+
+.more-note-btn:hover{
+
+    text-decoration:underline;
+
+}
+
+/* ======================================================
+   EMPTY STATE
+====================================================== */
+
+.empty-state{
+
+    background:#fff;
+
+    padding:40px;
+
+    border-radius:18px;
+
+    text-align:center;
+
+    color:#64748b;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.05);
+
+}
+
+/* ======================================================
+   RESPONSIVE
+====================================================== */
+
+@media(max-width:1100px){
+
+    .note-layout{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .note-sidebar{
+
+        order:-1;
+
+    }
+
+    #noteFrame{
+
+        height:700px;
+
+    }
+
+}
+
+@media(max-width:768px){
+
+    .stats-grid{
+
+        grid-template-columns:repeat(3,1fr);
+
+    }
+
+    .uploader-profile{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+    }
+
+    #noteTitle{
+
+        font-size:30px;
+
+    }
+
+    #noteFrame{
+
+        height:550px;
+
+    }
+
+}
+
+@media(max-width:550px){
+
+    .stats-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .section-title{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:10px;
+
+    }
+
+    .more-note-card{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:14px;
+
+    }
+
+}

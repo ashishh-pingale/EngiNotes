@@ -1,44 +1,431 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
     <title>User Profile | EngiNotes</title>
-    <link rel="stylesheet" href="user_profile.css">
+
+    <link rel="stylesheet"
+        href="/main/Users/user_profile.css">
+
+    <link rel="preconnect"
+        href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
 </head>
+
 <body>
 
-    <nav>
-        <a href="/main/index.html" class="logo">EngiNotes</a>
-        
+    <!-- ===========================
+         NAVBAR
+    ============================ -->
+
+    <nav class="navbar">
+
+        <a href="/main/index.html" class="logo">
+
+            Engi<span>Notes</span>
+
+        </a>
+
     </nav>
 
-    <div class="profile-container">
-        <div class="profile-card">
 
-            <div class="profile-avatar" id="profileAvatar">👤</div>
+    <!-- ===========================
+         PAGE
+    ============================ -->
 
-            <h1 class="profile-name" id="profileName">Loading...</h1>
-            <p class="profile-bio" id="profileBio">Loading bio...</p>
+    <main class="profile-page">
 
-            <div class="stats-row">
-                <a href="#" class="stat-item">
-                    <span class="stat-value" id="followersCount">0</span>
-                    <span class="stat-label">Followers</span>
-                </a>
-                <a href="#" class="stat-item">
-                    <span class="stat-value" id="followingCount">0</span>
-                    <span class="stat-label">Following</span>
-                </a>
+
+        <!-- ===========================
+             HERO
+        ============================ -->
+
+        <section class="profile-hero">
+
+
+            <div class="hero-overlay"></div>
+
+
+            <div class="hero-content">
+
+
+                <!-- Avatar -->
+
+                <div
+                    class="profile-avatar"
+                    id="profileAvatar">
+
+                    A
+
+                </div>
+
+
+                <!-- User Name -->
+
+                <h1 id="profileName">
+
+                    Loading...
+
+                </h1>
+
+
+                <!-- Course -->
+
+                <div class="profile-course">
+
+                    <span id="profileBranch">
+
+                        Computer Engineering
+
+                    </span>
+
+                    <span class="dot"></span>
+
+                    <span id="profileYear">
+
+                        Third Year
+
+                    </span>
+
+                </div>
+
+
+                <!-- Joined -->
+
+                <div class="joined-wrapper">
+
+                    <svg
+                        class="joined-icon"
+                        width="18"
+                        height="18"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        viewBox="0 0 24 24">
+
+                        <rect
+                            x="3"
+                            y="4"
+                            width="18"
+                            height="18"
+                            rx="2">
+                        </rect>
+
+                        <line
+                            x1="16"
+                            y1="2"
+                            x2="16"
+                            y2="6">
+                        </line>
+
+                        <line
+                            x1="8"
+                            y1="2"
+                            x2="8"
+                            y2="6">
+                        </line>
+
+                        <line
+                            x1="3"
+                            y1="10"
+                            x2="21"
+                            y2="10">
+                        </line>
+
+                    </svg>
+
+                    <span>
+
+                        Joined
+
+                    </span>
+
+                    <strong
+                        id="profileJoined">
+
+                        July 2026
+
+                    </strong>
+
+                </div>
+
+
+                <!-- Buttons -->
+
+                <div class="profile-actions">
+
+                    <button
+                        id="connectBtn"
+                        class="primary-btn">
+
+                        Connect
+
+                    </button>
+
+                    <button
+                        id="messageBtn"
+                        class="secondary-btn">
+
+                        Message
+
+                    </button>
+
+                </div>
+
             </div>
 
-            <button class="btn btn-connect" id="connectBtn">Loading...</button>
+        </section>
 
-        </div>
-    </div>
 
-    <!-- JS -->
-    <script type="module" src="user_profile.js"></script>
+
+        <!-- ===========================
+             STATS
+        ============================ -->
+
+        <section class="stats-grid">
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+
+                    📄
+
+                </div>
+
+                <h2 id="uploadsCount">
+
+                    0
+
+                </h2>
+
+                <p>
+
+                    Uploads
+
+                </p>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+
+                    ❤️
+
+                </div>
+
+                <h2 id="likesCount">
+
+                    0
+
+                </h2>
+
+                <p>
+
+                    Likes
+
+                </p>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+
+                    👁
+
+                </div>
+
+                <h2 id="viewsCount">
+
+                    0
+
+                </h2>
+
+                <p>
+
+                    Views
+
+                </p>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+
+                    ⬇
+
+                </div>
+
+                <h2 id="downloadsCount">
+
+                    0
+
+                </h2>
+
+                <p>
+
+                    Downloads
+
+                </p>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+
+                    👥
+
+                </div>
+
+                <h2 id="followersCount">
+
+                    0
+
+                </h2>
+
+                <p>
+
+                    Followers
+
+                </p>
+
+            </div>
+
+        </section>
+
+<!-- ===========================
+     CONTENT
+=========================== -->
+
+<section class="profile-content">
+
+    <!-- LEFT SIDEBAR -->
+
+    <aside class="profile-sidebar">
+
+        <!-- About -->
+
+        <section class="content-card">
+
+            <div class="card-header">
+
+                <div class="header-left">
+
+                    <span class="section-icon">📝</span>
+
+                    <div>
+
+                        <h2>About</h2>
+
+                        <p>Information about this student.</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="about-content">
+
+                <p id="profileBio">
+
+                    This user hasn't added a bio yet.
+
+                </p>
+
+            </div>
+
+        </section>
+
+    </aside>
+
+
+    <!-- RIGHT CONTENT -->
+
+    <section class="profile-main">
+
+        <section class="content-card uploads-section">
+
+            <div class="card-header">
+
+                <div class="header-left">
+
+                    <span class="section-icon">📚</span>
+
+                    <div>
+
+                        <h2>Recent Uploads</h2>
+
+                        <p>
+                            Notes uploaded by this student.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div id="recentUploads">
+
+                <!-- JS Generates Upload Rows -->
+
+                <div class="upload-empty">
+
+                    <div class="empty-icon">
+
+                        📄
+
+                    </div>
+
+                    <h3>
+
+                        No uploads yet
+
+                    </h3>
+
+                    <p>
+
+                        Uploaded notes will appear here.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </section>
+
+</section>
+
+    </main>
 
 </body>
+
+<script type="module" src="/main/Users/user_profile.js"></script>
+
 </html>

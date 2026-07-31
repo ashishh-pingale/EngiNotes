@@ -1,93 +1,794 @@
-:root {
-            --primary: #3f51b5;
-            --primary-hover: #303f9f;
-            --bg-light: #f8faff;
-            --text-main: #2c3e50;
-            --text-muted: #64748b;
-            --border-color: #e2e8f0;
-        }
+/* ==========================================================
+   Google Font
+========================================================== */
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-light);
-            margin: 0;
-            color: var(--text-main);
-        }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
-        /* Reusing Navbar Style from EngiNotes */
-        nav {
-            background: white;
-            padding: 1rem 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
+/* ==========================================================
+   Variables
+========================================================== */
 
-        .logo { color: #0056b3; font-weight: bold; font-size: 1.5rem; text-decoration: none; }
+:root{
 
-        .profile-container {
-            max-width: 800px;
-            margin: 3rem auto;
-            padding: 0 20px;
-        }
+    --primary:#2563eb;
+    --primary-dark:#1d4ed8;
 
-        .profile-card {
-            background: white;
-            border-radius: 12px;
-            padding: 2.5rem;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-            border: 1px solid var(--border-color);
-        }
+    --background:#f4f7fb;
+    --surface:#ffffff;
 
-        .profile-avatar {
-            width: 100px;
-            height: 100px;
-            background: #e2e8f0;
-            border-radius: 50%;
-            margin: 0 auto 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5rem;
-            color: var(--text-muted);
-        }
+    --text:#111827;
+    --text-light:#6b7280;
 
-        .profile-name { margin: 0; font-size: 1.8rem; color: var(--primary); }
-        .profile-bio { color: var(--text-muted); margin: 0.5rem 0 1.5rem; }
+    --border:#e5e7eb;
 
-        .stats-row {
-            display: flex;
-            justify-content: center;
-            gap: 3rem;
-            margin-bottom: 2rem;
-            border-top: 1px solid var(--border-color);
-            border-bottom: 1px solid var(--border-color);
-            padding: 1.5rem 0;
-        }
+    --shadow:
+        0 10px 30px rgba(15,23,42,.08);
 
-        .stat-item { text-decoration: none; color: inherit; transition: 0.2s; }
-        .stat-item:hover { transform: translateY(-2px); }
-        .stat-value { display: block; font-size: 1.4rem; font-weight: bold; color: var(--text-main); }
-        .stat-label { font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; }
+    --shadow-hover:
+        0 20px 45px rgba(37,99,235,.18);
 
-        .btn {
-            padding: 0.8rem 2rem;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-            transition: 0.3s;
-            font-size: 1rem;
-        }
+    --radius:22px;
 
-        .btn-connect { background: var(--primary); color: white; }
-        .btn-connect:hover { background: var(--primary-hover); }
+}
 
-        .btn-disconnect { 
-            background: white; 
-            color: #e53e3e; 
-            border: 1px solid #e53e3e; 
-        }
-        .btn-disconnect:hover { background: #fff5f5; }
+/* ==========================================================
+   Reset
+========================================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    font-family:'Inter',sans-serif;
+
+    background:var(--background);
+
+    color:var(--text);
+
+}
+
+a{
+
+    text-decoration:none;
+
+    color:inherit;
+
+}
+
+button{
+
+    font-family:inherit;
+
+    cursor:pointer;
+
+}
+
+/* ==========================================================
+   Navbar
+========================================================== */
+
+.navbar{
+
+    width:100%;
+
+    height:75px;
+
+    background:#fff;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-bottom:1px solid var(--border);
+
+    position:sticky;
+
+    top:0;
+
+    z-index:100;
+
+}
+
+.logo{
+
+    font-size:28px;
+
+    font-weight:800;
+
+    color:#111827;
+
+}
+
+.logo span{
+
+    color:var(--primary);
+
+}
+
+/* ==========================================================
+   Main
+========================================================== */
+
+.profile-page{
+
+    width:min(1200px,92%);
+
+    margin:40px auto 80px;
+
+}
+
+/* ==========================================================
+   Hero
+========================================================== */
+
+.profile-hero{
+
+    position:relative;
+
+    overflow:hidden;
+
+    border-radius:30px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #4f46e5
+        );
+
+    padding:90px 40px 50px;
+
+    color:white;
+
+    text-align:center;
+
+    box-shadow:var(--shadow);
+
+}
+
+.hero-overlay{
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+
+        radial-gradient(
+
+            circle at top right,
+
+            rgba(255,255,255,.18),
+
+            transparent 40%
+
+        ),
+
+        radial-gradient(
+
+            circle at bottom left,
+
+            rgba(255,255,255,.12),
+
+            transparent 35%
+
+        );
+
+}
+
+.hero-content{
+
+    position:relative;
+
+    z-index:2;
+
+}
+
+/* ==========================================================
+   Avatar
+========================================================== */
+
+.profile-avatar{
+
+    width:120px;
+
+    height:120px;
+
+    border-radius:50%;
+
+    background:white;
+
+    color:var(--primary);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    margin:auto;
+
+    font-size:48px;
+
+    font-weight:700;
+
+    border:6px solid rgba(255,255,255,.25);
+
+    box-shadow:
+
+        0 15px 40px rgba(0,0,0,.25);
+
+    transition:.3s;
+
+}
+
+.profile-avatar:hover{
+
+    transform:translateY(-5px) scale(1.04);
+
+}
+
+/* ==========================================================
+   Name
+========================================================== */
+
+#profileName{
+
+    margin-top:24px;
+
+    font-size:40px;
+
+    font-weight:800;
+
+}
+
+.profile-course{
+
+    margin-top:14px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:14px;
+
+    color:rgba(255,255,255,.9);
+
+    font-size:18px;
+
+}
+
+.dot{
+
+    width:7px;
+
+    height:7px;
+
+    border-radius:50%;
+
+    background:white;
+
+}
+
+.joined-wrapper{
+
+    margin-top:18px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:10px;
+
+    color:rgba(255,255,255,.9);
+
+}
+
+.joined-wrapper strong{
+
+    color:white;
+
+}
+
+/* ==========================================================
+   Buttons
+========================================================== */
+
+.profile-actions{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:18px;
+
+    margin-top:35px;
+
+    flex-wrap:wrap;
+
+}
+
+.primary-btn{
+
+    border:none;
+
+    background:white;
+
+    color:var(--primary);
+
+    font-size:15px;
+
+    font-weight:700;
+
+    padding:14px 32px;
+
+    border-radius:999px;
+
+    transition:.25s;
+
+}
+
+.primary-btn:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:0 10px 25px rgba(0,0,0,.18);
+
+}
+
+.secondary-btn{
+
+    border:2px solid rgba(255,255,255,.35);
+
+    background:transparent;
+
+    color:white;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    padding:14px 32px;
+
+    border-radius:999px;
+
+    transition:.25s;
+
+}
+
+.secondary-btn:hover{
+
+    background:white;
+
+    color:var(--primary);
+
+}
+
+/* ==========================================================
+   Stats
+========================================================== */
+
+.stats-grid{
+
+    display:grid;
+
+    grid-template-columns:
+
+        repeat(5,1fr);
+
+    gap:22px;
+
+    margin-top:35px;
+
+}
+
+.stat-card{
+
+    background:var(--surface);
+
+    border-radius:22px;
+
+    padding:30px;
+
+    text-align:center;
+
+    box-shadow:var(--shadow);
+
+    transition:.25s;
+
+}
+
+.stat-card:hover{
+
+    transform:translateY(-6px);
+
+    box-shadow:var(--shadow-hover);
+
+}
+
+.stat-icon{
+
+    font-size:32px;
+
+    margin-bottom:18px;
+
+}
+
+.stat-card h2{
+
+    font-size:34px;
+
+    color:var(--primary);
+
+}
+
+.stat-card p{
+
+    margin-top:8px;
+
+    color:var(--text-light);
+
+    font-size:15px;
+
+}
+
+/* ==========================================================
+   Content Layout
+========================================================== */
+
+.profile-content{
+
+    display:grid;
+
+    grid-template-columns:
+
+        330px 1fr;
+
+    gap:28px;
+
+    margin-top:35px;
+
+}
+
+/* ===========================
+   Content Layout
+=========================== */
+
+.profile-sidebar{
+    display:flex;
+    flex-direction:column;
+    gap:24px;
+}
+
+.profile-main{
+    display:flex;
+    flex-direction:column;
+}
+
+.content-card{
+    background:var(--surface);
+    border-radius:24px;
+    padding:28px;
+    box-shadow:var(--shadow);
+    transition:.3s;
+}
+
+.content-card:hover{
+    transform:translateY(-4px);
+    box-shadow:var(--shadow-hover);
+}
+
+/* ===========================
+   Card Header
+=========================== */
+
+.card-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:24px;
+    padding-bottom:18px;
+    border-bottom:1px solid var(--border);
+}
+
+.header-left{
+    display:flex;
+    align-items:center;
+    gap:16px;
+}
+
+.section-icon{
+    width:52px;
+    height:52px;
+    border-radius:16px;
+    background:#eff6ff;
+    color:var(--primary);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:24px;
+}
+
+.card-header h2{
+    font-size:22px;
+    font-weight:700;
+    color:var(--text);
+}
+
+.card-header p{
+    margin-top:4px;
+    color:var(--text-light);
+    font-size:14px;
+}
+
+/* ===========================
+   About
+=========================== */
+
+.about-content{
+    line-height:1.8;
+}
+
+#profileBio{
+    color:var(--text-light);
+    font-size:15px;
+}
+
+/* ===========================
+   Upload List
+=========================== */
+
+#recentUploads{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+
+/* ===========================
+   Upload Card
+=========================== */
+
+.note-card{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:22px;
+    transition:.3s;
+}
+
+.note-card:hover{
+    transform:translateY(-5px);
+    border-color:#bfdbfe;
+    box-shadow:0 15px 35px rgba(37,99,235,.12);
+}
+
+.note-header{
+    display:flex;
+    align-items:center;
+    gap:16px;
+}
+
+.pdf-icon{
+    width:58px;
+    height:58px;
+    border-radius:16px;
+    background:#eff6ff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:28px;
+}
+
+.note-title{
+    font-size:20px;
+    font-weight:700;
+    color:var(--text);
+}
+
+.note-subject{
+    margin-top:4px;
+    color:var(--primary);
+    font-size:15px;
+    font-weight:600;
+}
+
+.note-description{
+    margin:18px 0;
+    color:var(--text-light);
+    line-height:1.7;
+    font-size:15px;
+}
+
+/* ===========================
+   Tags
+=========================== */
+
+.note-tags{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:22px;
+}
+
+.tag{
+    padding:7px 14px;
+    border-radius:999px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.branch{
+    background:#dbeafe;
+    color:#2563eb;
+}
+
+.year{
+    background:#ede9fe;
+    color:#7c3aed;
+}
+
+.sem{
+    background:#dcfce7;
+    color:#16a34a;
+}
+
+/* ===========================
+   Footer
+=========================== */
+
+.note-footer{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+}
+
+.note-stats{
+    display:flex;
+    gap:18px;
+    color:var(--text-light);
+    font-size:14px;
+}
+
+.view-btn{
+    background:var(--primary);
+    color:white;
+    padding:10px 18px;
+    border-radius:999px;
+    font-size:14px;
+    font-weight:600;
+    transition:.25s;
+}
+
+.view-btn:hover{
+    background:var(--primary-dark);
+    transform:translateY(-2px);
+}
+
+/* ===========================
+   Empty State
+=========================== */
+
+.upload-empty{
+    text-align:center;
+    padding:60px 20px;
+}
+
+.empty-icon{
+    width:90px;
+    height:90px;
+    margin:auto;
+    border-radius:50%;
+    background:#eff6ff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:40px;
+}
+
+.upload-empty h3{
+    margin-top:22px;
+    font-size:24px;
+    color:var(--text);
+}
+
+.upload-empty p{
+    margin-top:12px;
+    color:var(--text-light);
+    max-width:420px;
+    margin-inline:auto;
+    line-height:1.7;
+}
+
+/* ===========================
+   Responsive
+=========================== */
+
+@media (max-width:1100px){
+
+    .stats-grid{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+    .profile-content{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media (max-width:768px){
+
+    .profile-page{
+        width:94%;
+    }
+
+    .profile-hero{
+        padding:70px 24px 40px;
+    }
+
+    #profileName{
+        font-size:32px;
+    }
+
+    .profile-course{
+        flex-direction:column;
+        gap:8px;
+    }
+
+    .dot{
+        display:none;
+    }
+
+    .stats-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .note-footer{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .view-btn{
+        width:100%;
+        text-align:center;
+    }
+
+}
+
+@media (max-width:500px){
+
+    .stats-grid{
+        grid-template-columns:1fr;
+    }
+
+    .card-header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:16px;
+    }
+
+    .note-header{
+        align-items:flex-start;
+    }
+
+    .pdf-icon{
+        width:48px;
+        height:48px;
+        font-size:22px;
+    }
+
+    .note-title{
+        font-size:18px;
+    }
+
+}

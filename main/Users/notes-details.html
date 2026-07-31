@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Note Details | EngiNotes</title>
+
+    <link rel="stylesheet" href="/main/Users/notes-details.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <a href="/main/index.html" class="logo">
+
+        Engi<span>Notes</span>
+
+    </a>
+
+</nav>
+
+
+<main class="note-page">
+
+    <!-- Back Button -->
+
+    <a
+        href="javascript:history.back()"
+        class="back-btn">
+
+        ← Back
+
+    </a>
+
+
+    <!-- Header -->
+
+    <section class="note-header">
+
+        <div>
+
+            <h1 id="noteTitle">
+
+                Loading...
+
+            </h1>
+
+            <p id="noteSubject">
+
+                Loading Subject...
+
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- Main Content -->
+
+    <section class="note-layout">
+
+        <!-- LEFT -->
+
+        <div class="pdf-wrapper">
+
+            <iframe
+                id="noteFrame"
+                src=""
+                frameborder="0">
+
+            </iframe>
+
+        </div>
+
+
+
+        <!-- RIGHT -->
+
+        <aside class="note-sidebar">
+
+            <!-- Uploader -->
+
+            <div class="card">
+
+                <h3>
+
+                    Uploaded By
+
+                </h3>
+
+                <div class="uploader">
+
+                    <div
+                        id="uploaderAvatar"
+                        class="avatar">
+
+                        A
+
+                    </div>
+
+                    <div>
+
+                        <h4 id="uploaderName">
+
+                            Loading...
+
+                        </h4>
+
+                        <span
+                            id="uploadedDate">
+
+                            Loading...
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Statistics -->
+
+            <div class="card">
+
+                <h3>
+
+                    Statistics
+
+                </h3>
+
+                <div class="stats-grid">
+
+                    <div class="stat">
+
+                        <span class="number"
+                            id="noteViews">
+
+                            0
+
+                        </span>
+
+                        <small>
+
+                            Views
+
+                        </small>
+
+                    </div>
+
+                    <div class="stat">
+
+                        <span class="number"
+                            id="noteDownloads">
+
+                            0
+
+                        </span>
+
+                        <small>
+
+                            Downloads
+
+                        </small>
+
+                    </div>
+
+                    <div class="stat">
+
+                        <span class="number"
+                            id="noteLikes">
+
+                            0
+
+                        </span>
+
+                        <small>
+
+                            Likes
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Note Details -->
+
+            <div class="card">
+
+                <h3>
+
+                    Details
+
+                </h3>
+
+                <div class="detail-row">
+
+                    <span>
+
+                        Branch
+
+                    </span>
+
+                    <strong
+                        id="noteBranch">
+
+                        -
+
+                    </strong>
+
+                </div>
+
+                <div class="detail-row">
+
+                    <span>
+
+                        Year
+
+                    </span>
+
+                    <strong
+                        id="noteYear">
+
+                        -
+
+                    </strong>
+
+                </div>
+
+                <div class="detail-row">
+
+                    <span>
+
+                        Semester
+
+                    </span>
+
+                    <strong
+                        id="noteSemester">
+
+                        -
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- Actions -->
+
+            <div class="card actions">
+
+                <button
+                    id="likeBtn"
+                    class="like-btn">
+
+                    ❤️ Like
+
+                </button>
+
+                <button
+                    id="downloadBtn"
+                    class="download-btn">
+
+                    ⬇ Download PDF
+
+                </button>
+
+            </div>
+
+        </aside>
+
+    </section>
+
+        <!-- Description -->
+
+    <section class="description-section">
+
+        <div class="card">
+
+            <h2>Description</h2>
+
+            <p id="noteDescription">
+
+                Loading description...
+
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- Uploader Section -->
+
+    <section class="uploader-section">
+
+        <div class="card">
+
+            <div class="section-title">
+
+                <h2>About the Uploader</h2>
+
+            </div>
+
+            <div class="uploader-profile">
+
+                <div id="profileAvatar" class="large-avatar">
+
+                    A
+
+                </div>
+
+                <div class="uploader-info">
+
+                    <h3 id="profileName">
+
+                        Loading...
+
+                    </h3>
+
+                    <p id="profileBranch">
+
+                        Loading...
+
+                    </p>
+
+                </div>
+
+                <a
+                    id="profileBtn"
+                    class="profile-btn">
+
+                    View Profile →
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- More Uploads -->
+
+    <section class="more-notes">
+
+        <div class="section-title">
+
+            <h2>
+
+                More Notes from this User
+
+            </h2>
+
+            <a
+                id="allUploadsBtn"
+                class="view-all">
+
+                View All
+
+            </a>
+
+        </div>
+
+        <div id="moreNotesContainer">
+
+            <!-- Generated by JS -->
+
+            <div class="empty-state">
+
+                <p>
+
+                    No other uploads found.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+<script type="module" src="/main/Users/notes-details.js"></script>
+</body>
+
+</html>
