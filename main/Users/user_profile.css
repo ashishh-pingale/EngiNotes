@@ -43,7 +43,7 @@
 
 body{
 
-    font-family:'Inter',sans-serif;
+    font-family:'poppins',sans-serif;
 
     background:var(--background);
 
@@ -710,6 +710,47 @@ button{
     line-height:1.7;
 }
 
+
+.details-btn{
+
+    background:none;
+
+    border:none;
+
+    color:#2563eb;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    font-size:15px;
+
+    transition:.25s;
+
+}
+
+.details-btn:hover{
+
+    transform:translateX(4px);
+
+    color:#1d4ed8;
+
+}
+
+/* .details-btn{
+    margin-top: 10px;
+    border: none;
+    border-radius: 14px;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    color: white;
+    background: var(--primary);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+} */
 /* ===========================
    Responsive
 =========================== */

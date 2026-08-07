@@ -402,7 +402,7 @@ function renderRecentUploads() {
             </div>
 
             <button class="details-btn">
-                View Details →
+                View Details
             </button>
         `;
 
