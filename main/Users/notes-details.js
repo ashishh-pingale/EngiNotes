@@ -8,7 +8,9 @@ import {
     collection,
     query,
     where,
-    getDocs
+    getDocs,
+    setDoc,
+    deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import {
@@ -57,7 +59,14 @@ onAuthStateChanged(auth,(user)=>{
     console.log("Current URL:", window.location.href);
     console.log("noteId:", noteId);
 
-    loadNote();
+    if(!currentNote){
+        loadNote();
+    }
+    else{
+        checkLikeStatus();
+    }
+
+    
 
 });
 
@@ -106,6 +115,8 @@ async function loadNote(){
         await increaseViews();
 
         await loadUploader();
+
+        await checkLikeStatus();
 
         await loadMoreNotes();
 
@@ -228,6 +239,58 @@ downloadBtn.addEventListener("click",async()=>{
 
 });
 
+// =============================================
+// LIKE STATUS
+// =============================================
+
+async function checkLikeStatus(){
+
+    if(!currentUser || !currentNote){
+        likeBtn.textContent = "❤️ Like";
+        return;
+    }
+
+    const likeId =
+        `${currentNote.id}_${currentUser.uid}`;
+
+    try{
+
+        const likeRef =
+            doc(db,"noteLikes",likeId);
+
+        const likeSnap =
+            await getDoc(likeRef);
+
+        if(likeSnap.exists()){
+
+            likeBtn.textContent = "❤️ Liked";
+
+            likeBtn.classList.add("liked");
+
+        }
+        else{
+
+            likeBtn.textContent = "🤍 Like";
+
+            likeBtn.classList.remove("liked");
+
+        }
+
+    }
+
+    catch(err){
+
+        console.error("Error checking like:",err);
+
+    }
+
+}
+
+
+// =============================================
+// LIKE / UNLIKE
+// =============================================
+
 likeBtn.addEventListener("click",async()=>{
 
     if(!currentUser){
@@ -238,26 +301,100 @@ likeBtn.addEventListener("click",async()=>{
 
     }
 
+    if(!currentNote) return;
+
+    likeBtn.disabled = true;
+
+    const likeId =
+        `${currentNote.id}_${currentUser.uid}`;
+
+    const likeRef =
+        doc(db,"noteLikes",likeId);
+
     try{
 
-        await updateDoc(
-            doc(db,"notes",currentNote.id),
-            {
-                likes:increment(1)
-            }
-        );
+        const likeSnap =
+            await getDoc(likeRef);
 
-        currentNote.likes =
-            (currentNote.likes || 0) + 1;
 
-        noteLikes.textContent =
-            currentNote.likes;
+        // =====================================
+        // UNLIKE
+        // =====================================
+
+        if(likeSnap.exists()){
+
+            await deleteDoc(likeRef);
+
+            await updateDoc(
+                doc(db,"notes",currentNote.id),
+                {
+                    likes:increment(-1)
+                }
+            );
+
+            currentNote.likes =
+                Math.max(
+                    0,
+                    (currentNote.likes || 0) - 1
+                );
+
+            noteLikes.textContent =
+                currentNote.likes;
+
+            likeBtn.textContent =
+                "🤍 Like";
+
+            likeBtn.classList.remove("liked");
+
+        }
+
+
+        // =====================================
+        // LIKE
+        // =====================================
+
+        else{
+
+            await setDoc(
+                likeRef,
+                {
+                    noteId:currentNote.id,
+                    userId:currentUser.uid,
+                    likedAt:new Date()
+                }
+            );
+
+            await updateDoc(
+                doc(db,"notes",currentNote.id),
+                {
+                    likes:increment(1)
+                }
+            );
+
+            currentNote.likes =
+                (currentNote.likes || 0) + 1;
+
+            noteLikes.textContent =
+                currentNote.likes;
+
+            likeBtn.textContent =
+                "❤️ Liked";
+
+            likeBtn.classList.add("liked");
+
+        }
 
     }
 
     catch(err){
 
-        console.error(err);
+        console.error("Like operation failed:",err);
+
+    }
+
+    finally{
+
+        likeBtn.disabled = false;
 
     }
 
@@ -307,95 +444,102 @@ async function loadMoreNotes(){
     try{
 
         const q = query(
-
             collection(db,"notes"),
-
             where("uploaderId","==",uploaderId),
-
             where("status","==","approved")
-
         );
 
-        const snapshot =
-            await getDocs(q);
+        const snapshot = await getDocs(q);
 
         moreNotesContainer.innerHTML = "";
 
-        snapshot.forEach(docSnap=>{
+        const otherNotes = [];
 
-            if(docSnap.id===currentNote.id)
-                return;
+        snapshot.forEach(docSnap => {
 
-            const note={
-                id:docSnap.id,
+            if(docSnap.id === currentNote.id) return;
+
+            otherNotes.push({
+                id: docSnap.id,
                 ...docSnap.data()
-            };
+            });
+
+        });
+
+        // Show latest 6 notes
+        otherNotes.sort((a,b) => {
+
+            const dateA =
+                a.uploadedAt?.toDate?.() || new Date(0);
+
+            const dateB =
+                b.uploadedAt?.toDate?.() || new Date(0);
+
+            return dateB - dateA;
+
+        });
+
+        const recentNotes = otherNotes.slice(0,6);
+
+        if(recentNotes.length === 0){
+
+            moreNotesContainer.innerHTML = `
+                <div class="empty-state">
+                    <p>No other uploads from this user yet.</p>
+                </div>
+            `;
+
+            return;
+
+        }
+
+        recentNotes.forEach(note => {
 
             const card =
                 document.createElement("div");
 
-            card.className =
-                "more-note-card";
+            card.className = "more-note-card";
 
-            card.innerHTML=`
-
+            card.innerHTML = `
                 <div class="more-note-info">
 
-                    <h3>${note.title}</h3>
+                    <h3>
+                        ${note.title || "Untitled Note"}
+                    </h3>
 
                     <span>
-
-                        ${note.subject}
-
+                        ${note.subject || "Unknown Subject"}
                     </span>
 
                 </div>
 
-                <a
-                    class="more-note-btn">
-
+                <button class="more-note-btn">
                     View →
-
-                </a>
-
+                </button>
             `;
 
-            card.addEventListener("click",()=>{
+            card.addEventListener("click", () => {
 
-                window.location.href=
-                `/main/Users/notes-details.html?id=${note.id}`;
+                window.location.href =
+                    `/main/Users/notes-details.html?id=${note.id}`;
 
             });
 
-            moreNotesContainer
-            .appendChild(card);
+            moreNotesContainer.appendChild(card);
 
         });
-
-        if(
-            moreNotesContainer.innerHTML===""){
-
-            moreNotesContainer.innerHTML=`
-
-                <div class="empty-state">
-
-                    <p>
-
-                        No more uploads.
-
-                    </p>
-
-                </div>
-
-            `;
-
-        }
 
     }
 
     catch(err){
 
-        console.error(err);
+        console.error("Error loading more notes:",err);
+
+        moreNotesContainer.innerHTML = `
+            <div class="empty-state">
+                <p>Unable to load other uploads.</p>
+            </div>
+        `;
 
     }
 
@@ -409,3 +553,17 @@ profileBtn.addEventListener("click",(e)=>{
     `/main/Users/user_profile.html?uid=${uploaderId}`;
 
 });
+
+const allUploadsBtn =
+    document.getElementById("allUploadsBtn");
+
+if(allUploadsBtn){
+
+    allUploadsBtn.addEventListener("click", () => {
+
+        window.location.href =
+            `/main/Users/user_profile.html?uid=${uploaderId}`;
+
+    });
+
+}
