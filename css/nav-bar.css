@@ -75,3 +75,83 @@
     font-size: 1.1rem;
     margin-top: 20px;
 }
+
+/* =========================================
+   NOTIFICATIONS
+========================================= */
+
+.nav-auth {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 1001;
+}
+
+.notification-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    z-index: 1002;
+}
+
+.notification-btn {
+    position: relative;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 20px;
+    padding: 8px;
+}
+
+.notification-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    min-width: 17px;
+    height: 17px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #ef4444;
+    color: white;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    border-radius: 50%;
+}
+
+.notification-badge.hidden {
+    display: none;
+}
+
+.notification-dropdown {
+    position: absolute;
+
+    top: calc(100% + 10px);
+    right: 0;
+
+    width: 340px;
+    max-height: 420px;
+
+    background: #ffffff;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.15);
+
+    z-index: 9999;
+
+    display: none;
+
+    overflow: hidden;
+}
+
+.notification-dropdown.show {
+    display: block;
+}

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,10 +8,12 @@
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/nav-bar.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
 
     <nav class="navbar">
@@ -24,40 +27,95 @@
             <li><a href="/main/chat.html">Chat</a></li>
             <li><a href="/main/upload.html">Upload</a></li>
             <li id="adminLink" class="hidden">
-            <a href="/admin/html/admin.html">Admin</a></li>
-            
-                            
+                <a href="/admin/html/admin.html">Admin</a>
+            </li>
+
+
         </ul>
-        <div class="nav-auth" id="authSection">
-            <span class="auth-loading">...</span>
-            <button class="btn-secondary" onclick="window.location.href='login.html'">Sign In</button>
-            <button class="btn-primary" onclick="window.location.href='sign-up.html'">Sign Up</button>
+<div class="nav-auth">
+
+    <!-- Notification -->
+    <div class="notification-wrapper">
+
+        <button
+            class="notification-btn"
+            id="notificationBtn"
+            aria-label="Notifications"
+        >
+            🔔
+
+            <span
+                class="notification-badge hidden"
+                id="notificationBadge"
+            >
+                0
+            </span>
+        </button>
+
+        <div
+            class="notification-dropdown"
+            id="notificationDropdown"
+        >
+
+            <div class="notification-header">
+                <h3>Notifications</h3>
+            </div>
+
+            <div
+                class="notification-list"
+                id="notificationList"
+            >
+                <p class="notification-empty">
+                    No notifications yet.
+                </p>
+            </div>
+
         </div>
+
+    </div>
+
+    <!-- Auth controls -->
+    <div id="authSection">
+
+        <span class="auth-loading">...</span>
+
+        <button class="btn-secondary">
+            Sign In
+        </button>
+
+        <button class="btn-primary">
+            Sign Up
+        </button>
+
+    </div>
+
+</div>
     </nav>
 
     <header class="hero">
-        
-    <div class="container">
-        <div class="hero-badge-container">
-            <div class="hero-badge">
-                <span class="badge-q">What?</span>
-                <span class="badge-a">Centralized Note Hub</span>
+
+        <div class="container">
+            <div class="hero-badge-container">
+                <div class="hero-badge">
+                    <span class="badge-q">What?</span>
+                    <span class="badge-a">Centralized Note Hub</span>
+                </div>
+                <div class="hero-badge">
+                    <span class="badge-q">Who?</span>
+                    <span class="badge-a">B.E. & B.Tech Exclusively</span>
+                </div>
+                <div class="hero-badge">
+                    <span class="badge-q">Why?</span>
+                    <span class="badge-a">Zero-Cost Study Success</span>
+                </div>
             </div>
-            <div class="hero-badge">
-                <span class="badge-q">Who?</span>
-                <span class="badge-a">B.E. & B.Tech Exclusively</span>
-            </div>
-            <div class="hero-badge">
-                <span class="badge-q">Why?</span>
-                <span class="badge-a">Zero-Cost Study Success</span>
-            </div>
+
+            <h1>All the notes at one place.</h1>
+            <p class="hero-desc">The ultimate repository for engineering students. Access curated study materials,
+                previous year questions, and handwritten notes shared by your peers.</p>
+            <button class="btn-large" onclick="window.location.href='/main/browse.html'">Browse Notes</button>
         </div>
-        
-        <h1>All the notes at one place.</h1>
-        <p class="hero-desc">The ultimate repository for engineering students. Access curated study materials, previous year questions, and handwritten notes shared by your peers.</p>
-        <button class="btn-large" onclick="window.location.href='/main/browse.html'">Browse Notes</button>
-    </div>
-</header>
+    </header>
     <section class="how-it-works">
         <div class="container">
             <h2 class="section-title ">How It Works</h2>
@@ -75,7 +133,8 @@
                 <div class="card">
                     <div class="icon">03</div>
                     <h3>Download or Upload</h3>
-                    <p>Get the resources you need instantly, or contribute your own notes to help the community grow.</p>
+                    <p>Get the resources you need instantly, or contribute your own notes to help the community grow.
+                    </p>
                 </div>
             </div>
         </div>
@@ -120,4 +179,5 @@
 
 
 </body>
+
 </html>
