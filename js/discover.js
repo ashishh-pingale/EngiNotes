@@ -7,7 +7,8 @@ import {
   deleteDoc,
   query,
   where,
-  doc
+  doc,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import {
@@ -111,10 +112,52 @@ searchInput.addEventListener("input", () => {
   renderUsers(filtered);
 });
 
+
+// ======================
+// CREATE NOTIFICATION
+// ======================
+
+async function createNotification(
+  recipientId,
+  type,
+  message,
+  relatedId = null
+) {
+
+  try {
+
+    await addDoc(
+      collection(db, "notifications"),
+      {
+        recipientId: recipientId,
+        senderId: currentUser.uid,
+        type: type,
+        message: message,
+        relatedId: relatedId,
+        read: false,
+        createdAt: serverTimestamp()
+      }
+    );
+
+    console.log("Notification created successfully");
+
+  }
+  catch (error) {
+
+    console.error(
+      "Notification Error:",
+      error
+    );
+
+  }
+
+}
+
 // ======================
 // CONNECT / DISCONNECT
 // ======================
 async function toggleConnection(targetUserId, button) {
+
   const q = query(
     collection(db, "follows"),
     where("followerId", "==", currentUser.uid),
@@ -123,18 +166,61 @@ async function toggleConnection(targetUserId, button) {
 
   const snapshot = await getDocs(q);
 
+  // ======================
+  // DISCONNECT
+  // ======================
+
   if (!snapshot.empty) {
-    const docId = snapshot.docs[0].id;
-    await deleteDoc(doc(db, "follows", docId));
-    button.textContent = "Connect";
+
+    const docId =
+      snapshot.docs[0].id;
+
+    await deleteDoc(
+      doc(db, "follows", docId)
+    );
+
+    button.textContent =
+      "Connect";
+
     return;
   }
 
-  await addDoc(collection(db, "follows"), {
-    followerId: currentUser.uid,
-    followingId: targetUserId,
-    createdAt: new Date()
-  });
 
-  button.textContent = "Connected";
+  // ======================
+  // CONNECT
+  // ======================
+
+  await addDoc(
+    collection(db, "follows"),
+    {
+      followerId:
+        currentUser.uid,
+
+      followingId:
+        targetUserId,
+
+      createdAt:
+        serverTimestamp()
+    }
+  );
+
+
+  // ======================
+  // NOTIFICATION
+  // ======================
+
+  await createNotification(
+
+    targetUserId,
+
+    "connect",
+
+    `${currentUser.displayName || "Someone"} connected with you.`
+
+  );
+
+
+  button.textContent =
+    "Connected";
+
 }

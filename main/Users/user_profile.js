@@ -13,7 +13,8 @@ import {
     doc,
     onSnapshot,
     addDoc,
-    deleteDoc
+    deleteDoc,
+    serverTimestamp
 
 }
     from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -523,37 +524,88 @@ async function checkFollowStatus() {
 
 }
 
+// ===========================================================
+// CREATE NOTIFICATION
+// ===========================================================
+
+async function createNotification(
+    recipientId,
+    type,
+    message,
+    relatedId = null
+){
+
+    try{
+
+        await addDoc(
+
+            collection(db, "notifications"),
+
+            {
+                recipientId: recipientId,
+                senderId: currentUser.uid,
+                type: type,
+                message: message,
+                relatedId: relatedId,
+                read: false,
+                createdAt: serverTimestamp()
+            }
+
+        );
+
+        console.log(
+            "Notification created successfully"
+        );
+
+    }
+    catch(error){
+
+        console.error(
+            "Notification Error:",
+            error
+        );
+
+    }
+
+}
 
 /* ===========================================================
    CONNECT USER
    =========================================================== */
 
-async function connectUser() {
+async function connectUser(){
 
-    try {
+    try{
 
         await addDoc(
 
             collection(db, "follows"),
 
             {
-
                 followerId:
-                    currentUser.uid,
+                currentUser.uid,
 
                 followingId:
-                    profileUserId,
+                profileUserId,
 
                 createdAt:
-                    new Date()
-
+                new Date()
             }
 
         );
 
-    }
+        await createNotification(
 
-    catch (error) {
+            profileUserId,
+
+            "connect",
+
+            `${currentUser.displayName || "Someone"} connected with you.`
+
+        );
+
+    }
+    catch(error){
 
         console.error(
             "Connect Error:",
