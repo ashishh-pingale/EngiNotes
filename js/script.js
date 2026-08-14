@@ -1,4 +1,4 @@
-// Simple interaction for buttons
+// Simple Poppinsaction for buttons
 document.querySelectorAll('button').forEach(button => {
     button.addEventListener('click', function() {
         const action = this.innerText;

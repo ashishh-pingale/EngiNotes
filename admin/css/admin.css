@@ -26,7 +26,7 @@
 }
 
 body {
-    font-family: "Inter", sans-serif;
+    font-family: "Poppins", sans-serif;
     background: var(--background);
     color: var(--text);
 }
@@ -119,7 +119,7 @@ body {
     color: white;
     padding: 14px;
     border-radius: 10px;
-    cursor: pointer;
+    cursor: poPoppins;
     font-size: 15px;
     transition: .25s;
 }
@@ -156,7 +156,7 @@ body {
     border: none;
     background: transparent;
     font-size: 22px;
-    cursor: pointer;
+    cursor: poPoppins;
 }
 
 .topbar-right {
@@ -370,7 +370,7 @@ body {
     padding: 0 14px;
     border: none;
     border-radius: 10px;
-    cursor: pointer;
+    cursor: poPoppins;
     transition: .25s;
     font-size: 14px;
     font-weight: 500;
@@ -407,7 +407,7 @@ body {
     color: white;
     padding: 14px 20px;
     border-radius: 10px;
-    cursor: pointer;
+    cursor: poPoppins;
     font-size: 15px;
     transition: .25s;
 }
@@ -421,7 +421,7 @@ body {
     border: none;
     padding: 12px 22px;
     border-radius: 10px;
-    cursor: pointer;
+    cursor: poPoppins;
     font-size: 14px;
 }
 
@@ -568,7 +568,7 @@ body {
     border: none;
     background: transparent;
     font-size: 20px;
-    cursor: pointer;
+    cursor: poPoppins;
 }
 
 .modal-body {

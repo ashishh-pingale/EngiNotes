@@ -18,7 +18,7 @@
 }
 
 body {
-    font-family: 'Inter', -apple-system, sans-serif;
+    font-family: 'Poppins', -apple-system, sans-serif;
     background-color: var(--off-white);
     color: var(--text-main);
     height: 100vh;
@@ -71,7 +71,7 @@ body {
     display: flex;
     align-items: center;
     padding: 15px 20px;
-    cursor: pointer;
+    cursor: poPoppins;
     transition: background 0.2s;
 }
 
@@ -197,7 +197,7 @@ body {
     border: none;
     padding: 8px 20px;
     border-radius: 20px;
-    cursor: pointer;
+    cursor: poPoppins;
     font-weight: 600;
 }
 
@@ -208,6 +208,6 @@ body {
     border: none;
     font-size: 24px;
     color: var(--text-muted);
-    cursor: pointer;
+    cursor: poPoppins;
     margin: 0 10px;
 }

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Profile | EngiNotes</title>
+
+    <link
+        rel="stylesheet"
+        href="/main/Users/edit_profile.css">
+
+    <link rel="preconnect"
+        href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+</head>
+
+<body>
+
+    <!-- =========================
+         NAVBAR
+    ========================== -->
+
+    <nav class="navbar">
+
+        <a
+            href="/main/index.html"
+            class="logo">
+
+            Engi<span>Notes</span>
+
+        </a>
+
+    </nav>
+
+
+    <!-- =========================
+         PAGE
+    ========================== -->
+
+    <main class="edit-page">
+
+        <div class="edit-container">
+
+
+            <!-- HEADER -->
+
+            <div class="page-header">
+
+                <a
+                    href="javascript:history.back()"
+                    class="back-btn">
+
+                    ← Back to Profile
+
+                </a>
+
+                <h1>Edit Profile</h1>
+
+                <p>
+                    Update your profile information.
+                </p>
+
+            </div>
+
+
+            <!-- FORM -->
+
+            <section class="edit-card">
+
+                <form id="profileForm">
+
+
+                    <!-- NAME -->
+
+                    <div class="form-group">
+
+                        <label for="profileNameInput">
+                            Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="profileNameInput"
+                            placeholder="Enter your name"
+                            autocomplete="name"
+                            required>
+
+                    </div>
+
+
+                    <!-- BRANCH -->
+
+                    <div class="form-group">
+
+                        <label for="profileBranchInput">
+                            Branch
+                        </label>
+
+                        <select id="profileBranchInput">
+
+                            <option value="">
+                                Select Branch
+                            </option>
+
+                            <option value="Computer Engineering">
+                                Computer Engineering
+                            </option>
+
+                            <option value="Information Technology">
+                                Information Technology
+                            </option>
+
+                            <option value="AIML">
+                                Artificial Intelligence & Machine Learning
+                            </option>
+
+                            <option value="AIDS">
+                                Artificial Intelligence & Data Science
+                            </option>
+
+                            <option value="ENTC">
+                                Electronics & Telecommunication 
+                            </option>
+
+                            <option value="Mechanical Engineering">
+                                Mechanical Engineering
+                            </option>
+
+                            <option value="Civil Engineering">
+                                Civil Engineering
+                            </option>
+
+                            <option value="Electrical Engineering">
+                                Electrical Engineering
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- YEAR -->
+
+                    <div class="form-group">
+
+                        <label for="profileYearInput">
+                            Year
+                        </label>
+
+                        <select id="profileYearInput">
+
+                            <option value="">
+                                Select Year
+                            </option>
+
+                            <option value="1st Year">
+                                1st Year
+                            </option>
+
+                            <option value="2nd Year">
+                                2nd Year
+                            </option>
+
+                            <option value="3rd Year">
+                                3rd Year
+                            </option>
+
+                            <option value="4th Year">
+                                4th Year
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- BIO -->
+
+                    <div class="form-group">
+
+                        <label for="profileBioInput">
+                            Bio
+                        </label>
+
+                        <textarea
+                            id="profileBioInput"
+                            rows="5"
+                            maxlength="250"
+                            placeholder="Tell other students a little about yourself..."></textarea>
+
+                        <div class="character-count">
+
+                            <span id="bioCount">
+                                0
+                            </span>
+
+                            / 250
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ACTIONS -->
+
+                    <div class="form-actions">
+
+                        <a
+                            href="javascript:history.back()"
+                            class="cancel-btn">
+
+                            Cancel
+
+                        </a>
+
+                        <button
+                            type="submit"
+                            id="saveProfileBtn"
+                            class="save-btn">
+
+                            Save Changes
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- STATUS -->
+
+                    <p
+                        id="formMessage"
+                        class="form-message">
+                    </p>
+
+                </form>
+
+            </section>
+
+        </div>
+
+    </main>
+
+
+    <script type="module" src="/main/Users/edit_profile.js"></script>
+
+</body>
+
+</html>

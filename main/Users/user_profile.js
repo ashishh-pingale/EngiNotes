@@ -68,6 +68,9 @@ document.getElementById("followersCount");
 const recentUploads =
 document.getElementById("recentUploads");
 
+const editProfileBtn =
+document.getElementById("editProfileBtn");
+
 
 /* ===========================================================
    GLOBAL VARIABLES
@@ -207,6 +210,33 @@ async function loadUserProfile(){
             "Profile Error:",
             error
         );
+
+    }
+
+}
+
+
+/* ===========================================================
+   SELF PROFILE CHECK
+   =========================================================== */
+
+   function preventSelfFollow(){
+
+    if(currentUser.uid === profileUserId){
+
+        connectBtn.style.display = "none";
+        messageBtn.style.display = "none";
+
+        if(editProfileBtn){
+            editProfileBtn.style.display = "inline-flex";
+        }
+
+    }
+    else{
+
+        if(editProfileBtn){
+            editProfileBtn.style.display = "none";
+        }
 
     }
 
@@ -630,17 +660,7 @@ function listenFollowersCount(){
    PREVENT SELF FOLLOW
    =========================================================== */
 
-function preventSelfFollow(){
 
-    if(currentUser.uid===profileUserId){
-
-        connectBtn.style.display="none";
-
-        messageBtn.style.display="none";
-
-    }
-
-}
 
 /* ===========================================================
    MESSAGE BUTTON

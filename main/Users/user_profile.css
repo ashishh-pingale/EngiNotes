@@ -2,7 +2,7 @@
    Google Font
 ========================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
 /* ==========================================================
    Variables
@@ -63,7 +63,7 @@ button{
 
     font-family:inherit;
 
-    cursor:pointer;
+    cursor:poPoppins;
 
 }
 
@@ -721,7 +721,7 @@ button{
 
     font-weight:600;
 
-    cursor:pointer;
+    cursor:poPoppins;
 
     font-size:15px;
 
@@ -746,7 +746,7 @@ button{
     font-weight: 500;
     color: white;
     background: var(--primary);
-    cursor: pointer;
+    cursor: poPoppins;
     display: flex;
     justify-content: center;
     align-items: center;
