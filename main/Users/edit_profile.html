@@ -5,25 +5,17 @@
 
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Edit Profile | EngiNotes</title>
 
-    <link
-        rel="stylesheet"
-        href="/main/Users/edit_profile.css">
+    <link rel="stylesheet" href="/main/Users/edit_profile.css">
 
-    <link rel="preconnect"
-        href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
 
-    <link rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=poppins:wght@300;400;500;600;700;800&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=poppins:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
 
 </head>
@@ -36,9 +28,7 @@
 
     <nav class="navbar">
 
-        <a
-            href="/main/index.html"
-            class="logo">
+        <a href="/main/index.html" class="logo">
 
             Engi<span>Notes</span>
 
@@ -60,9 +50,7 @@
 
             <div class="page-header">
 
-                <a
-                    href="javascript:history.back()"
-                    class="back-btn">
+                <a href="javascript:history.back()" class="back-btn">
 
                     ← Back to Profile
 
@@ -83,6 +71,40 @@
 
                 <form id="profileForm">
 
+                    <!-- PROFILE PICTURE -->
+
+                    <div class="profile-picture-section">
+
+                        <div class="profile-picture-preview" id="profilePicturePreview">
+                            A
+                        </div>
+
+                        <div class="profile-picture-info">
+
+                            <h3>Profile Picture</h3>
+
+                            <p>
+                                Choose a photo to use on your profile.
+                            </p>
+
+                            <label for="profilePictureInput" class="choose-photo-btn">
+
+                                Choose Photo
+
+                            </label>
+
+                            <input type="file" id="profilePictureInput" accept="image/png,image/jpeg,image/webp" hidden>
+
+                            <small>
+                                JPG, PNG or WebP · Max 5MB
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+
 
                     <!-- NAME -->
 
@@ -92,11 +114,7 @@
                             Name
                         </label>
 
-                        <input
-                            type="text"
-                            id="profileNameInput"
-                            placeholder="Enter your name"
-                            autocomplete="name"
+                        <input type="text" id="profileNameInput" placeholder="Enter your name" autocomplete="name"
                             required>
 
                     </div>
@@ -133,7 +151,7 @@
                             </option>
 
                             <option value="ENTC">
-                                Electronics & Telecommunication 
+                                Electronics & Telecommunication
                             </option>
 
                             <option value="Mechanical Engineering">
@@ -196,10 +214,7 @@
                             Bio
                         </label>
 
-                        <textarea
-                            id="profileBioInput"
-                            rows="5"
-                            maxlength="250"
+                        <textarea id="profileBioInput" rows="5" maxlength="250"
                             placeholder="Tell other students a little about yourself..."></textarea>
 
                         <div class="character-count">
@@ -219,18 +234,13 @@
 
                     <div class="form-actions">
 
-                        <a
-                            href="javascript:history.back()"
-                            class="cancel-btn">
+                        <a href="javascript:history.back()" class="cancel-btn">
 
                             Cancel
 
                         </a>
 
-                        <button
-                            type="submit"
-                            id="saveProfileBtn"
-                            class="save-btn">
+                        <button type="submit" id="saveProfileBtn" class="save-btn">
 
                             Save Changes
 
@@ -241,9 +251,7 @@
 
                     <!-- STATUS -->
 
-                    <p
-                        id="formMessage"
-                        class="form-message">
+                    <p id="formMessage" class="form-message">
                     </p>
 
                 </form>

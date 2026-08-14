@@ -14,9 +14,9 @@ import {
     onSnapshot,
     addDoc,
     deleteDoc
-   
+
 }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import {
     onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -27,49 +27,49 @@ import {
    =========================================================== */
 
 const profileAvatar =
-document.getElementById("profileAvatar");
+    document.getElementById("profileAvatar");
 
 const profileName =
-document.getElementById("profileName");
+    document.getElementById("profileName");
 
 const profileBranch =
-document.getElementById("profileBranch");
+    document.getElementById("profileBranch");
 
 const profileYear =
-document.getElementById("profileYear");
+    document.getElementById("profileYear");
 
 const profileJoined =
-document.getElementById("profileJoined");
+    document.getElementById("profileJoined");
 
 const profileBio =
-document.getElementById("profileBio");
+    document.getElementById("profileBio");
 
 const connectBtn =
-document.getElementById("connectBtn");
+    document.getElementById("connectBtn");
 
 const messageBtn =
-document.getElementById("messageBtn");
+    document.getElementById("messageBtn");
 
 const uploadsCount =
-document.getElementById("uploadsCount");
+    document.getElementById("uploadsCount");
 
 const likesCount =
-document.getElementById("likesCount");
+    document.getElementById("likesCount");
 
 const viewsCount =
-document.getElementById("viewsCount");
+    document.getElementById("viewsCount");
 
 const downloadsCount =
-document.getElementById("downloadsCount");
+    document.getElementById("downloadsCount");
 
 const followersCount =
-document.getElementById("followersCount");
+    document.getElementById("followersCount");
 
 const recentUploads =
-document.getElementById("recentUploads");
+    document.getElementById("recentUploads");
 
 const editProfileBtn =
-document.getElementById("editProfileBtn");
+    document.getElementById("editProfileBtn");
 
 
 /* ===========================================================
@@ -90,16 +90,16 @@ let userNotes = [];
    =========================================================== */
 
 const params =
-new URLSearchParams(window.location.search);
+    new URLSearchParams(window.location.search);
 
 profileUserId =
-params.get("uid");
+    params.get("uid");
 
-if(!profileUserId){
+if (!profileUserId) {
 
     alert("Invalid Profile");
 
-    window.location.href="/main/index.html";
+    window.location.href = "/main/index.html";
 
 }
 
@@ -112,18 +112,18 @@ onAuthStateChanged(
 
     auth,
 
-    async(user)=>{
+    async (user) => {
 
-        if(!user){
+        if (!user) {
 
-            window.location.href=
-            "/main/login.html";
+            window.location.href =
+                "/main/login.html";
 
             return;
 
         }
 
-        currentUser=user;
+        currentUser = user;
 
         await initializeProfile();
 
@@ -136,7 +136,7 @@ onAuthStateChanged(
    INITIALIZATION
    =========================================================== */
 
-async function initializeProfile(){
+async function initializeProfile() {
 
     await loadUserProfile();
 
@@ -155,48 +155,61 @@ async function initializeProfile(){
    LOAD USER PROFILE
    =========================================================== */
 
-async function loadUserProfile(){
+async function loadUserProfile() {
 
-    try{
+    try {
 
-        const userRef=
-        doc(
-            db,
-            "users",
-            profileUserId
-        );
+        const userRef =
+            doc(
+                db,
+                "users",
+                profileUserId
+            );
 
-        const userSnap=
-        await getDoc(userRef);
+        const userSnap =
+            await getDoc(userRef);
 
-        if(!userSnap.exists()){
+        if (!userSnap.exists()) {
 
-            profileName.textContent=
-            "User Not Found";
+            profileName.textContent =
+                "User Not Found";
 
             return;
 
         }
 
-        profileUser=
-        userSnap.data();
+        profileUser =
+            userSnap.data();
 
-        profileName.textContent=
-        profileUser.name || "Anonymous";
+        profileName.textContent =
+            profileUser.name || "Anonymous";
 
-        profileBranch.textContent=
-        profileUser.branch || "-";
+        profileBranch.textContent =
+            profileUser.branch || "-";
 
-        profileYear.textContent=
-        profileUser.year || "-";
+        profileYear.textContent =
+            profileUser.year || "-";
 
-        profileBio.textContent=
-        profileUser.bio ||
-        "This user hasn't added a bio yet.";
+        profileBio.textContent =
+            profileUser.bio ||
+            "This user hasn't added a bio yet.";
 
-        generateAvatar(
-            profileUser.name
-        );
+        if (profileUser.profileImage) {
+
+            profileAvatar.innerHTML = `
+        <img
+            src="${profileUser.profileImage}"
+            alt="Profile Picture">
+    `;
+
+        }
+        else {
+
+            generateAvatar(
+                profileUser.name
+            );
+
+        }
 
         formatJoinedDate(
             profileUser.createdAt
@@ -204,7 +217,7 @@ async function loadUserProfile(){
 
     }
 
-    catch(error){
+    catch (error) {
 
         console.error(
             "Profile Error:",
@@ -220,21 +233,21 @@ async function loadUserProfile(){
    SELF PROFILE CHECK
    =========================================================== */
 
-   function preventSelfFollow(){
+function preventSelfFollow() {
 
-    if(currentUser.uid === profileUserId){
+    if (currentUser.uid === profileUserId) {
 
         connectBtn.style.display = "none";
         messageBtn.style.display = "none";
 
-        if(editProfileBtn){
+        if (editProfileBtn) {
             editProfileBtn.style.display = "inline-flex";
         }
 
     }
-    else{
+    else {
 
-        if(editProfileBtn){
+        if (editProfileBtn) {
             editProfileBtn.style.display = "none";
         }
 
@@ -247,21 +260,21 @@ async function loadUserProfile(){
    GENERATE AVATAR
    =========================================================== */
 
-function generateAvatar(name){
+function generateAvatar(name) {
 
-    if(!name){
+    if (!name) {
 
-        profileAvatar.textContent="U";
+        profileAvatar.textContent = "U";
 
         return;
 
     }
 
-    profileAvatar.textContent=
-    name
-    .trim()
-    .charAt(0)
-    .toUpperCase();
+    profileAvatar.textContent =
+        name
+            .trim()
+            .charAt(0)
+            .toUpperCase();
 
 }
 
@@ -270,33 +283,33 @@ function generateAvatar(name){
    FORMAT JOIN DATE
    =========================================================== */
 
-function formatJoinedDate(timestamp){
+function formatJoinedDate(timestamp) {
 
-    if(!timestamp){
+    if (!timestamp) {
 
-        profileJoined.textContent="-";
+        profileJoined.textContent = "-";
 
         return;
 
     }
 
-    const date=
-    timestamp.toDate();
+    const date =
+        timestamp.toDate();
 
-    profileJoined.textContent=
-    date.toLocaleDateString(
+    profileJoined.textContent =
+        date.toLocaleDateString(
 
-        "en-US",
+            "en-US",
 
-        {
+            {
 
-            month:"long",
+                month: "long",
 
-            year:"numeric"
+                year: "numeric"
 
-        }
+            }
 
-    );
+        );
 
 }
 
@@ -305,86 +318,86 @@ function formatJoinedDate(timestamp){
    LOAD USER STATISTICS
    =========================================================== */
 
-async function loadUserStatistics(){
+async function loadUserStatistics() {
 
-    try{
+    try {
 
-        const q=query(
+        const q = query(
 
-            collection(db,"notes"),
+            collection(db, "notes"),
 
-            where("uploaderId","==",profileUserId),
-            where("status","==","approved")
+            where("uploaderId", "==", profileUserId),
+            where("status", "==", "approved")
 
         );
 
-        const snapshot=
-        await getDocs(q);
+        const snapshot =
+            await getDocs(q);
 
-        userNotes=[];
+        userNotes = [];
 
-        let totalLikes=0;
+        let totalLikes = 0;
 
-        let totalViews=0;
+        let totalViews = 0;
 
-        let totalDownloads=0;
+        let totalDownloads = 0;
 
-        snapshot.forEach(doc=>{
+        snapshot.forEach(doc => {
 
-            const note=doc.data();
+            const note = doc.data();
 
             userNotes.push({
 
-                id:doc.id,
+                id: doc.id,
 
                 ...note
 
             });
 
-            totalLikes+=
-            note.likes || 0;
+            totalLikes +=
+                note.likes || 0;
 
-            totalViews+=
-            note.views || 0;
+            totalViews +=
+                note.views || 0;
 
-            totalDownloads+=
-            note.downloads || 0;
+            totalDownloads +=
+                note.downloads || 0;
 
         });
 
-        uploadsCount.textContent=
-        userNotes.length;
+        uploadsCount.textContent =
+            userNotes.length;
 
-        likesCount.textContent=
-        totalLikes;
+        likesCount.textContent =
+            totalLikes;
 
-        viewsCount.textContent=
-        totalViews;
+        viewsCount.textContent =
+            totalViews;
 
-        downloadsCount.textContent=
-        totalDownloads;
+        downloadsCount.textContent =
+            totalDownloads;
 
         userNotes.sort(
 
-            (a,b)=>{
+            (a, b) => {
 
-                const first=
-                a.uploadedAt?.seconds || 0;
+                const first =
+                    a.uploadedAt?.seconds || 0;
 
-                const second=
-                b.uploadedAt?.seconds || 0;
+                const second =
+                    b.uploadedAt?.seconds || 0;
 
-                return second-first;
+                return second - first;
 
             }
 
         );
 
-                renderRecentUploads();
+        renderRecentUploads();
 
     }
 
-    catch(error){
+    catch (error) {
 
         console.error(
             "Statistics Error:",
@@ -460,17 +473,17 @@ function renderRecentUploads() {
    FOLLOW SYSTEM
    =========================================================== */
 
-async function checkFollowStatus(){
+async function checkFollowStatus() {
 
-    if(currentUser.uid===profileUserId){
+    if (currentUser.uid === profileUserId) {
 
         return;
 
     }
 
-    const q=query(
+    const q = query(
 
-        collection(db,"follows"),
+        collection(db, "follows"),
 
         where(
             "followerId",
@@ -486,25 +499,25 @@ async function checkFollowStatus(){
 
     );
 
-    const snapshot=
-    await getDocs(q);
+    const snapshot =
+        await getDocs(q);
 
-    if(snapshot.empty){
+    if (snapshot.empty) {
 
-        connectBtn.textContent=
-        "Connect";
+        connectBtn.textContent =
+            "Connect";
 
-        connectBtn.dataset.followId="";
+        connectBtn.dataset.followId = "";
 
     }
 
-    else{
+    else {
 
-        connectBtn.textContent=
-        "Disconnect";
+        connectBtn.textContent =
+            "Disconnect";
 
-        connectBtn.dataset.followId=
-        snapshot.docs[0].id;
+        connectBtn.dataset.followId =
+            snapshot.docs[0].id;
 
     }
 
@@ -515,24 +528,24 @@ async function checkFollowStatus(){
    CONNECT USER
    =========================================================== */
 
-async function connectUser(){
+async function connectUser() {
 
-    try{
+    try {
 
         await addDoc(
 
-            collection(db,"follows"),
+            collection(db, "follows"),
 
             {
 
                 followerId:
-                currentUser.uid,
+                    currentUser.uid,
 
                 followingId:
-                profileUserId,
+                    profileUserId,
 
                 createdAt:
-                new Date()
+                    new Date()
 
             }
 
@@ -540,7 +553,7 @@ async function connectUser(){
 
     }
 
-    catch(error){
+    catch (error) {
 
         console.error(
             "Connect Error:",
@@ -556,9 +569,9 @@ async function connectUser(){
    DISCONNECT USER
    =========================================================== */
 
-async function disconnectUser(id){
+async function disconnectUser(id) {
 
-    try{
+    try {
 
         await deleteDoc(
 
@@ -572,7 +585,7 @@ async function disconnectUser(id){
 
     }
 
-    catch(error){
+    catch (error) {
 
         console.error(
             "Disconnect Error:",
@@ -592,14 +605,14 @@ connectBtn.addEventListener(
 
     "click",
 
-    async()=>{
+    async () => {
 
-        connectBtn.disabled=true;
+        connectBtn.disabled = true;
 
-        const followId=
-        connectBtn.dataset.followId;
+        const followId =
+            connectBtn.dataset.followId;
 
-        if(followId){
+        if (followId) {
 
             await disconnectUser(
                 followId
@@ -607,7 +620,7 @@ connectBtn.addEventListener(
 
         }
 
-        else{
+        else {
 
             await connectUser();
 
@@ -615,7 +628,7 @@ connectBtn.addEventListener(
 
         await checkFollowStatus();
 
-        connectBtn.disabled=false;
+        connectBtn.disabled = false;
 
     }
 
@@ -626,11 +639,11 @@ connectBtn.addEventListener(
    REALTIME FOLLOWERS
    =========================================================== */
 
-function listenFollowersCount(){
+function listenFollowersCount() {
 
-    const q=query(
+    const q = query(
 
-        collection(db,"follows"),
+        collection(db, "follows"),
 
         where(
             "followingId",
@@ -644,10 +657,10 @@ function listenFollowersCount(){
 
         q,
 
-        snapshot=>{
+        snapshot => {
 
-            followersCount.textContent=
-            snapshot.size;
+            followersCount.textContent =
+                snapshot.size;
 
         }
 
@@ -670,16 +683,16 @@ messageBtn.addEventListener(
 
     "click",
 
-    ()=>{
+    () => {
 
-        if(currentUser.uid===profileUserId){
+        if (currentUser.uid === profileUserId) {
 
             return;
 
         }
 
-        window.location.href=
-        `/main/chat.html?uid=${profileUserId}`;
+        window.location.href =
+            `/main/chat.html?uid=${profileUserId}`;
 
     }
 
@@ -690,15 +703,15 @@ messageBtn.addEventListener(
    REFRESH FOLLOW BUTTON
    =========================================================== */
 
-async function refreshFollowButton(){
+async function refreshFollowButton() {
 
-    try{
+    try {
 
         await checkFollowStatus();
 
     }
 
-    catch(error){
+    catch (error) {
 
         console.error(error);
 
@@ -711,21 +724,21 @@ async function refreshFollowButton(){
    FORMAT LARGE NUMBERS
    =========================================================== */
 
-function formatNumber(number){
+function formatNumber(number) {
 
-    if(number>=1000000){
+    if (number >= 1000000) {
 
         return (
-            number/1000000
-        ).toFixed(1)+"M";
+            number / 1000000
+        ).toFixed(1) + "M";
 
     }
 
-    if(number>=1000){
+    if (number >= 1000) {
 
         return (
-            number/1000
-        ).toFixed(1)+"K";
+            number / 1000
+        ).toFixed(1) + "K";
 
     }
 
@@ -766,7 +779,7 @@ window.addEventListener(
 
     "error",
 
-    (event)=>{
+    (event) => {
 
         console.error(
 

@@ -12,6 +12,14 @@ import {
 
 
 // =============================================
+// CLOUDINARY
+// =============================================
+
+const CLOUD_NAME = "p7mrldyo";
+const PROFILE_UPLOAD_PRESET = "enginotes_profile_uploads";
+
+
+// =============================================
 // DOM
 // =============================================
 
@@ -39,28 +47,45 @@ const saveProfileBtn =
 const formMessage =
     document.getElementById("formMessage");
 
+const profilePictureInput =
+    document.getElementById("profilePictureInput");
+
+const profilePicturePreview =
+    document.getElementById("profilePicturePreview");
+
+
+// =============================================
+// GLOBAL
+// =============================================
+
+let currentUser = null;
+
+let existingProfileImage = "";
+
 
 // =============================================
 // AUTH
 // =============================================
 
-let currentUser = null;
+onAuthStateChanged(
+    auth,
+    async (user) => {
 
-onAuthStateChanged(auth, async (user) => {
+        if (!user) {
 
-    if (!user) {
+            window.location.href =
+                "/main/login.html";
 
-        window.location.href = "/login.html";
+            return;
 
-        return;
+        }
+
+        currentUser = user;
+
+        await loadProfile();
 
     }
-
-    currentUser = user;
-
-    await loadProfile();
-
-});
+);
 
 
 // =============================================
@@ -72,7 +97,11 @@ async function loadProfile() {
     try {
 
         const userRef =
-            doc(db, "users", currentUser.uid);
+            doc(
+                db,
+                "users",
+                currentUser.uid
+            );
 
         const userSnap =
             await getDoc(userRef);
@@ -93,6 +122,10 @@ async function loadProfile() {
             userSnap.data();
 
 
+        // -----------------------------
+        // Text fields
+        // -----------------------------
+
         nameInput.value =
             data.name || "";
 
@@ -104,6 +137,33 @@ async function loadProfile() {
 
         bioInput.value =
             data.bio || "";
+
+
+        // -----------------------------
+        // Existing profile picture
+        // -----------------------------
+
+        existingProfileImage =
+            data.profileImage || "";
+
+
+        if (existingProfileImage) {
+
+            profilePicturePreview.innerHTML = `
+                <img
+                    src="${existingProfileImage}"
+                    alt="Profile Picture">
+            `;
+
+        }
+        else {
+
+            profilePicturePreview.textContent =
+                (data.name || "U")
+                .charAt(0)
+                .toUpperCase();
+
+        }
 
 
         updateBioCount();
@@ -146,6 +206,132 @@ bioInput.addEventListener(
 
 
 // =============================================
+// PROFILE IMAGE PREVIEW
+// =============================================
+
+profilePictureInput.addEventListener(
+    "change",
+    () => {
+
+        const file =
+            profilePictureInput.files[0];
+
+        if (!file) {
+
+            return;
+
+        }
+
+
+        // Check type
+
+        if (!file.type.startsWith("image/")) {
+
+            alert(
+                "Please select a valid image."
+            );
+
+            profilePictureInput.value = "";
+
+            return;
+
+        }
+
+
+        // Check size - 5MB
+
+        if (
+            file.size >
+            5 * 1024 * 1024
+        ) {
+
+            alert(
+                "Profile picture must be smaller than 5MB."
+            );
+
+            profilePictureInput.value = "";
+
+            return;
+
+        }
+
+
+        const imageUrl =
+            URL.createObjectURL(file);
+
+
+        profilePicturePreview.innerHTML = `
+            <img
+                src="${imageUrl}"
+                alt="Profile Preview">
+        `;
+
+    }
+);
+
+
+// =============================================
+// CLOUDINARY PROFILE IMAGE UPLOAD
+// =============================================
+
+async function uploadProfilePicture(file) {
+
+    const formData =
+        new FormData();
+
+
+    formData.append(
+        "file",
+        file
+    );
+
+    formData.append(
+        "upload_preset",
+        PROFILE_UPLOAD_PRESET
+);
+
+
+
+    const response =
+        await fetch(
+
+            `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+
+            {
+                method: "POST",
+                body: formData
+            }
+
+        );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            "Profile picture upload failed."
+        );
+
+    }
+
+
+    const data =
+        await response.json();
+
+
+    return {
+
+        imageUrl:
+            data.secure_url,
+
+        publicId:
+            data.public_id
+
+    };
+
+}
+
+
+// =============================================
 // SAVE PROFILE
 // =============================================
 
@@ -176,7 +362,9 @@ profileForm.addEventListener(
             bioInput.value.trim();
 
 
-        // Basic validation
+        // -----------------------------
+        // Validation
+        // -----------------------------
 
         if (!name) {
 
@@ -199,6 +387,49 @@ profileForm.addEventListener(
 
         try {
 
+            let profileImage =
+                existingProfileImage;
+
+            let profileImagePublicId =
+                null;
+
+
+            // -----------------------------
+            // Upload new picture if selected
+            // -----------------------------
+
+            if (
+                profilePictureInput.files.length > 0
+            ) {
+
+                formMessage.textContent =
+                    "Uploading profile picture...";
+
+                formMessage.className =
+                    "form-message";
+
+
+                const file =
+                    profilePictureInput.files[0];
+
+
+                const uploadResult =
+                    await uploadProfilePicture(file);
+
+
+                profileImage =
+                    uploadResult.imageUrl;
+
+                profileImagePublicId =
+                    uploadResult.publicId;
+
+            }
+
+
+            // -----------------------------
+            // Update Firestore
+            // -----------------------------
+
             const userRef =
                 doc(
                     db,
@@ -207,21 +438,44 @@ profileForm.addEventListener(
                 );
 
 
+            const updateData = {
+
+                name: name,
+
+                branch: branch,
+
+                year: year,
+
+                bio: bio
+
+            };
+
+
+            // Only add image fields
+            // when a new image was uploaded
+
+            if (
+                profilePictureInput.files.length > 0
+            ) {
+
+                updateData.profileImage =
+                    profileImage;
+
+                updateData.profileImagePublicId =
+                    profileImagePublicId;
+
+            }
+
+
             await updateDoc(
                 userRef,
-                {
-
-                    name: name,
-
-                    branch: branch,
-
-                    year: year,
-
-                    bio: bio
-
-                }
+                updateData
             );
 
+
+            // -----------------------------
+            // Success
+            // -----------------------------
 
             formMessage.textContent =
                 "Profile updated successfully!";
@@ -234,27 +488,32 @@ profileForm.addEventListener(
                 "Saved ✓";
 
 
-            setTimeout(() => {
+            setTimeout(
+                () => {
 
-                window.location.href =
-                    `/main/Users/user_profile.html?uid=${currentUser.uid}`;
+                    window.location.href =
+                        `/main/Users/user_profile.html?uid=${currentUser.uid}`;
 
-            }, 1000);
+                },
+                1000
+            );
 
         }
 
         catch (error) {
 
             console.error(
-                "Error updating profile:",
+                "Profile update error:",
                 error
             );
+
 
             formMessage.textContent =
                 "Unable to update profile. Please try again.";
 
             formMessage.className =
                 "form-message error";
+
 
             saveProfileBtn.disabled =
                 false;
