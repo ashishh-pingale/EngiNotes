@@ -91,6 +91,53 @@ async function loadConnectedUsers() {
 }
 
 // ============================
+// CREATE NOTIFICATION
+// ============================
+
+async function createNotification(
+  recipientId,
+  type,
+  message,
+  relatedId = null
+) {
+
+  try {
+
+    await addDoc(
+      collection(db, "notifications"),
+      {
+        recipientId: recipientId,
+
+        senderId: currentUser.uid,
+
+        type: type,
+
+        message: message,
+
+        relatedId: relatedId,
+
+        read: false,
+
+        createdAt: serverTimestamp()
+      }
+    );
+
+    console.log(
+      "Message notification created"
+    );
+
+  }
+  catch (error) {
+
+    console.error(
+      "Notification Error:",
+      error
+    );
+
+  }
+
+}
+// ============================
 // SEND MESSAGE
 // ============================
 sendBtn.addEventListener("click", async () => {
@@ -98,12 +145,32 @@ sendBtn.addEventListener("click", async () => {
 
   if (!text || !receiverId || !currentUser) return;
 
-  await addDoc(collection(db, "chats"), {
+await addDoc(
+  collection(db, "chats"),
+  {
     senderId: currentUser.uid,
     receiverId: receiverId,
     message: text,
     timestamp: serverTimestamp()
-  });
+  }
+);
+
+
+// ============================
+// CREATE MESSAGE NOTIFICATION
+// ============================
+
+await createNotification(
+
+  receiverId,
+
+  "message",
+
+  `${currentUser.displayName || "Someone"} sent you a message.`
+
+);
+
+input.value = "";
 
   input.value = "";
 });
