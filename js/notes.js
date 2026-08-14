@@ -8,9 +8,11 @@ import {
     increment,
     updateDoc,
     doc,
+    addDoc,
     getDoc,
     setDoc,
-    deleteDoc
+    deleteDoc,
+    serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import {
@@ -69,9 +71,9 @@ async function fetchNotes() {
         const selectedBranch = branchFilter.value;
         const selectedYear = yearFilter.value;
         const searchText =
-        searchInput.value
-        .trim()
-        .toLowerCase();
+            searchInput.value
+                .trim()
+                .toLowerCase();
 
         // Only fetch APPROVED notes
         const notesQuery = query(
@@ -86,9 +88,9 @@ async function fetchNotes() {
         snapshot.forEach((docSnap) => {
 
             const note = {
-            id: docSnap.id,
-            ...docSnap.data()
-        };
+                id: docSnap.id,
+                ...docSnap.data()
+            };
 
             const matchesBranch =
                 selectedBranch === "" ||
@@ -112,10 +114,7 @@ async function fetchNotes() {
                 matchesBranch &&
                 matchesYear &&
                 matchesSearch
-            ) 
-
-                        
-            {
+            ) {
 
                 notesFound = true;
 
@@ -146,8 +145,8 @@ async function fetchNotes() {
 
                         <div class="avatar">
                             ${(note.uploaderName || "U")
-                                .charAt(0)
-                                .toUpperCase()}
+                        .charAt(0)
+                        .toUpperCase()}
                         </div>
 
                         <span>
@@ -169,18 +168,18 @@ async function fetchNotes() {
                 const openPdfBtn =
                     card.querySelector(".btn-download-small");
 
-            openPdfBtn.addEventListener("click", async () => {
+                openPdfBtn.addEventListener("click", async () => {
 
-                if (!currentUser) {
+                    if (!currentUser) {
 
-                    window.location.href = "login.html";
-                    return;
+                        window.location.href = "login.html";
+                        return;
 
-                }
+                    }
 
-                openPreview(note);
+                    openPreview(note);
 
-            });
+                });
 
                 notesContainer.appendChild(card);
 
@@ -252,20 +251,20 @@ async function checkIfLiked(noteId) {
 
 
 
-async function openPreview(note){
+async function openPreview(note) {
     currentPreviewNote = note;
-    
+
     try {
-    await updateDoc(
-        doc(db, "notes", note.id),{
+        await updateDoc(
+            doc(db, "notes", note.id), {
             views: increment(1)
         }
-    );
-    note.views = (note.views || 0) + 1;
-} catch (err) {
-    console.error("Failed to update views:", err);
+        );
+        note.views = (note.views || 0) + 1;
+    } catch (err) {
+        console.error("Failed to update views:", err);
 
-}
+    }
     previewTitle.textContent = note.title;
     previewSubject.textContent = note.subject;
     previewSubject2.textContent = note.subject;
@@ -275,11 +274,11 @@ async function openPreview(note){
 
     previewUploader.textContent = note.uploaderName;
 
-   if (note.uploadedAt?.toDate) {
-    previewDate.textContent =
-        note.uploadedAt.toDate().toLocaleDateString();
+    if (note.uploadedAt?.toDate) {
+        previewDate.textContent =
+            note.uploadedAt.toDate().toLocaleDateString();
     }
-    else{
+    else {
         previewDate.textContent = "-";
     }
 
@@ -296,7 +295,7 @@ async function openPreview(note){
 
 }
 
-function closePreview(){
+function closePreview() {
 
     notePreviewModal.classList.remove("show");
 
@@ -307,9 +306,9 @@ function closePreview(){
 
 closePreviewBtn.addEventListener("click", closePreview);
 
-notePreviewModal.addEventListener("click",(e)=>{
+notePreviewModal.addEventListener("click", (e) => {
 
-    if(e.target===notePreviewModal){
+    if (e.target === notePreviewModal) {
 
         closePreview();
 
@@ -321,9 +320,9 @@ notePreviewModal.addEventListener("click",(e)=>{
 
 downloadBtn.addEventListener("click", async () => {
     if (!currentUser) {
-    window.location.href = "login.html";
-    return;
-}
+        window.location.href = "login.html";
+        return;
+    }
 
     if (!currentPreviewNote) return;
 
@@ -355,6 +354,68 @@ downloadBtn.addEventListener("click", async () => {
     );
 
 });
+
+// ======================================================
+// CREATE NOTIFICATION
+// ======================================================
+
+async function createNotification(
+    recipientId,
+    type,
+    message,
+    relatedId = null
+) {
+
+    const notificationData = {
+
+        recipientId: recipientId,
+
+        senderId: currentUser.uid,
+
+        type: type,
+
+        message: message,
+
+        relatedId: relatedId,
+
+        read: false,
+
+        createdAt: serverTimestamp()
+
+    };
+
+    console.log(
+        "Creating notification:",
+        notificationData
+    );
+
+    console.log(
+        "Authenticated UID:",
+        currentUser.uid
+    );
+
+    try {
+
+        await addDoc(
+            collection(db, "notifications"),
+            notificationData
+        );
+
+        console.log(
+            "Like notification created successfully"
+        );
+
+    }
+    catch (error) {
+
+        console.error(
+            "Notification Error:",
+            error
+        );
+
+    }
+
+}
 
 likeBtn.addEventListener("click", async () => {
 
@@ -405,11 +466,55 @@ likeBtn.addEventListener("click", async () => {
                 }
             );
 
+            // ==========================================
+            // CREATE LIKE NOTIFICATION
+            // ==========================================
+
+            if (
+                currentPreviewNote.uploaderId &&
+                currentPreviewNote.uploaderId !== currentUser.uid
+            ) {
+
+                try {
+
+                    console.log("ABOUT TO CREATE LIKE NOTIFICATION");
+
+                    await addDoc(
+                        collection(db, "notifications"),
+                        {
+                            recipientId: currentPreviewNote.uploaderId,
+                            senderId: currentUser.uid,
+                            type: "like",
+                            message: "Someone liked your note.",
+                            relatedId: currentPreviewNote.id,
+                            read: false,
+                            createdAt: serverTimestamp()
+                        }
+                    );
+
+                    console.log("LIKE NOTIFICATION CREATED");
+
+                }
+                catch (error) {
+
+                    console.error(
+                        "LIKE NOTIFICATION ERROR:",
+                        error.code,
+                        error.message
+                    );
+
+                }
+
+            }
+
+
             hasLikedCurrentNote = true;
 
             currentPreviewNote.likes =
                 (currentPreviewNote.likes || 0) + 1;
+
         }
+
 
         previewLikes.textContent = currentPreviewNote.likes;
 
@@ -459,6 +564,6 @@ function getYearText(year) {
 fetchNotes();
 
 // filterBtn.addEventListener("click", fetchNotes);
-searchInput.addEventListener("input", fetchNotes); 
-branchFilter.addEventListener("change", fetchNotes); 
+searchInput.addEventListener("input", fetchNotes);
+branchFilter.addEventListener("change", fetchNotes);
 yearFilter.addEventListener("change", fetchNotes);
