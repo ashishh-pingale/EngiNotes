@@ -388,28 +388,29 @@ onAuthStateChanged(
                        NOTIFICATION LIST
                     -------------------------- */
 
-                   notificationList.innerHTML =
-    notifications
-        .map(
-            notification => `
+                    notificationList.innerHTML =
+                        notifications
+                            .map(
+                                notification => `
 
                 <div
                     class="
                         notification-item
-                        ${
-                            notification.read
-                                ? ""
-                                : "unread"
-                        }
+                        ${notification.read
+                                        ? ""
+                                        : "unread"
+                                    }
                     "
                     data-notification-id="${notification.id}"
+                    data-notification-type="${notification.type}"
+                    data-related-id="${notification.relatedId || ""}"
                 >
 
                     <div class="notification-icon">
 
                         ${getNotificationIcon(
-                            notification.type
-                        )}
+                                        notification.type
+                                    )}
 
                     </div>
 
@@ -431,8 +432,8 @@ onAuthStateChanged(
                             "
                         >
                             ${getRelativeTime(
-                                notification.createdAt
-                            )}
+                                        notification.createdAt
+                                    )}
                         </div>
 
                     </div>
@@ -440,8 +441,8 @@ onAuthStateChanged(
                 </div>
 
             `
-        )
-        .join("");
+                            )
+                            .join("");
 
 
                     /* -------------------------
@@ -466,15 +467,24 @@ onAuthStateChanged(
                                             .notificationId
                                             ?.trim();
 
+                                    const notificationType =
+                                        item.dataset
+                                            .notificationType;
 
-                                    if (
-                                        !notificationId
-                                    ) {
+                                    const relatedId =
+                                        item.dataset
+                                            .relatedId
+                                            ?.trim();
 
+
+                                    if (!notificationId) {
                                         return;
-
                                     }
 
+
+                                    /* -------------------------
+                                       MARK AS READ
+                                    -------------------------- */
 
                                     try {
 
@@ -501,6 +511,46 @@ onAuthStateChanged(
                                             error
                                         );
 
+                                    }
+
+
+                                    /* -------------------------
+                                       NOTIFICATION ACTION
+                                    -------------------------- */
+
+                                    if (
+                                        notificationType === "like" &&
+                                        relatedId
+                                    ) {
+
+                                        window.location.href =
+                                            `/main/browse.html?note=${relatedId}`;
+
+                                        return;
+
+                                    }
+
+
+                                    if (
+                                        notificationType === "connect" &&
+                                        relatedId
+                                    ) {
+
+                                        window.location.href =
+                                            `/main/Users/user_profile.html?uid=${relatedId}`;
+
+                                        return;
+
+                                    }
+
+                                    if (
+                                        notificationType === "message" &&
+                                        relatedId
+                                    ) {
+                                        window.location.href =
+                                            `/main/chat.html?uid=${relatedId}`;
+
+                                        return;
                                     }
 
                                 }

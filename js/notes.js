@@ -19,232 +19,393 @@ import {
     onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+
 // ======================================================
 // Auth
 // ======================================================
+
 let currentUser = null;
 let currentPreviewNote = null;
 let hasLikedCurrentNote = false;
 let currentUserName = "A user";
 
-onAuthStateChanged(auth, async (user) => {
 
-    currentUser = user;
+// ======================================================
+// Notification Note ID
+// ======================================================
 
-    if (!user) {
-        return;
-    }
+const urlParams =
+    new URLSearchParams(
+        window.location.search
+    );
 
-    try {
+const notificationNoteId =
+    urlParams.get("note");
 
-        const userSnap = await getDoc(
-            doc(db, "users", user.uid)
-        );
-
-        if (userSnap.exists()) {
-
-            currentUserName =
-                userSnap.data().name || "A user";
-
-        }
-
-    }
-    catch (error) {
-
-        console.error(
-            "Failed to load current user:",
-            error
-        );
-
-    }
-
-});
 
 // ======================================================
 // DOM Elements
 // ======================================================
 
-const notesContainer = document.getElementById("notesContainer");
-const branchFilter = document.getElementById("branchFilter");
-const yearFilter = document.getElementById("yearFilter");
-const filterBtn = document.getElementById("filterBtn");
-const notePreviewModal = document.getElementById("notePreviewModal");
-const previewFrame = document.getElementById("previewFrame");
-const previewTitle = document.getElementById("previewTitle");
-const previewSubject = document.getElementById("previewSubject");
-const previewSubject2 = document.getElementById("previewSubject2");
-const previewUploader = document.getElementById("previewUploader");
-const previewDate = document.getElementById("previewDate");
-const previewViews = document.getElementById("previewViews");
-const previewLikes = document.getElementById("previewLikes");
-const previewBranch = document.getElementById("previewBranch");
-const previewSemester = document.getElementById("previewSemester");
-const previewDescription = document.getElementById("previewDescription");
-const closePreviewBtn = document.getElementById("closePreview");
-const previewDownloads = document.getElementById("previewDownloads");
-const downloadBtn = document.getElementById("downloadBtn");
-const likeBtn = document.getElementById("likeBtn");
-const searchInput = document.getElementById("searchInput");
+const notesContainer =
+    document.getElementById("notesContainer");
+
+const branchFilter =
+    document.getElementById("branchFilter");
+
+const yearFilter =
+    document.getElementById("yearFilter");
+
+const filterBtn =
+    document.getElementById("filterBtn");
+
+const notePreviewModal =
+    document.getElementById("notePreviewModal");
+
+const previewFrame =
+    document.getElementById("previewFrame");
+
+const previewTitle =
+    document.getElementById("previewTitle");
+
+const previewSubject =
+    document.getElementById("previewSubject");
+
+const previewSubject2 =
+    document.getElementById("previewSubject2");
+
+const previewUploader =
+    document.getElementById("previewUploader");
+
+const previewDate =
+    document.getElementById("previewDate");
+
+const previewViews =
+    document.getElementById("previewViews");
+
+const previewLikes =
+    document.getElementById("previewLikes");
+
+const previewBranch =
+    document.getElementById("previewBranch");
+
+const previewSemester =
+    document.getElementById("previewSemester");
+
+const previewDescription =
+    document.getElementById("previewDescription");
+
+const closePreviewBtn =
+    document.getElementById("closePreview");
+
+const previewDownloads =
+    document.getElementById("previewDownloads");
+
+const downloadBtn =
+    document.getElementById("downloadBtn");
+
+const likeBtn =
+    document.getElementById("likeBtn");
+
+const searchInput =
+    document.getElementById("searchInput");
 
 
 // ======================================================
-// Fetch Notes
+// FETCH NOTES
 // ======================================================
 
 async function fetchNotes() {
-    console.log("fetchNotes started");
+
+    console.log(
+        "fetchNotes started"
+    );
 
     try {
 
         notesContainer.innerHTML = "";
 
-        const selectedBranch = branchFilter.value;
-        const selectedYear = yearFilter.value;
+        const selectedBranch =
+            branchFilter.value;
+
+        const selectedYear =
+            yearFilter.value;
+
         const searchText =
             searchInput.value
                 .trim()
                 .toLowerCase();
 
-        // Only fetch APPROVED notes
-        const notesQuery = query(
-            collection(db, "notes"),
-            where("status", "==", "approved")
-        );
 
-        const snapshot = await getDocs(notesQuery);
+        // Only fetch APPROVED notes
+
+        const notesQuery =
+            query(
+                collection(
+                    db,
+                    "notes"
+                ),
+                where(
+                    "status",
+                    "==",
+                    "approved"
+                )
+            );
+
+
+        const snapshot =
+            await getDocs(
+                notesQuery
+            );
+
 
         let notesFound = false;
 
-        snapshot.forEach((docSnap) => {
 
-            const note = {
-                id: docSnap.id,
-                ...docSnap.data()
-            };
+        snapshot.forEach(
+            (docSnap) => {
 
-            const matchesBranch =
-                selectedBranch === "" ||
-                note.branch === selectedBranch;
+                const note = {
 
-            const matchesYear =
-                selectedYear === "" ||
-                note.year === selectedYear;
+                    id:
+                        docSnap.id,
 
-            const matchesSearch =
+                    ...docSnap.data()
 
-                searchText === "" ||
+                };
 
-                note.title?.toLowerCase().includes(searchText) ||
 
-                note.subject?.toLowerCase().includes(searchText) ||
+                const matchesBranch =
+                    selectedBranch === "" ||
+                    note.branch === selectedBranch;
 
-                note.uploaderName?.toLowerCase().includes(searchText);
 
-            if (
-                matchesBranch &&
-                matchesYear &&
-                matchesSearch
-            ) {
+                const matchesYear =
+                    selectedYear === "" ||
+                    note.year === selectedYear;
 
-                notesFound = true;
 
-                const card = document.createElement("div");
+                const matchesSearch =
 
-                card.classList.add("note-card");
+                    searchText === "" ||
 
-                if (note.branch) {
-                    card.classList.add(note.branch.toLowerCase());
-                }
+                    note.title
+                        ?.toLowerCase()
+                        .includes(
+                            searchText
+                        ) ||
 
-                card.innerHTML = `
-                    <span class="branch-badge">
-                        ${note.branch || "General"}
-                    </span>
+                    note.subject
+                        ?.toLowerCase()
+                        .includes(
+                            searchText
+                        ) ||
 
-                    <h3>
-                        ${note.title || "Untitled Note"}
-                    </h3>
+                    note.uploaderName
+                        ?.toLowerCase()
+                        .includes(
+                            searchText
+                        );
 
-                    <p class="subject-code">
-                        ${note.subject || "Unknown Subject"}
-                        • ${getYearText(note.year)}
-                        • Semester ${note.semester || "-"}
-                    </p>
 
-                    <div class="user-info">
+                if (
+                    matchesBranch &&
+                    matchesYear &&
+                    matchesSearch
+                ) {
 
-                        <div class="avatar">
-                            ${(note.uploaderName || "U")
-                        .charAt(0)
-                        .toUpperCase()}
-                        </div>
+                    notesFound = true;
 
-                        <span>
-                            Uploaded by
-                            <strong>${note.uploaderName || "Unknown"}</strong>
-                        </span>
 
-                    </div>
+                    const card =
+                        document.createElement(
+                            "div"
+                        );
 
-                    <div class="card-footer">
 
-                        <button class="btn-download-small">
-                            Open PDF
-                        </button>
+                    card.classList.add(
+                        "note-card"
+                    );
 
-                    </div>
-                `;
 
-                const openPdfBtn =
-                    card.querySelector(".btn-download-small");
+                    if (note.branch) {
 
-                openPdfBtn.addEventListener("click", async () => {
-
-                    if (!currentUser) {
-
-                        window.location.href = "login.html";
-                        return;
+                        card.classList.add(
+                            note.branch.toLowerCase()
+                        );
 
                     }
 
-                    openPreview(note);
 
-                });
+                    card.innerHTML = `
 
-                notesContainer.appendChild(card);
+                        <span class="branch-badge">
+                            ${
+                                note.branch ||
+                                "General"
+                            }
+                        </span>
+
+
+                        <h3>
+                            ${
+                                note.title ||
+                                "Untitled Note"
+                            }
+                        </h3>
+
+
+                        <p class="subject-code">
+
+                            ${
+                                note.subject ||
+                                "Unknown Subject"
+                            }
+
+                            •
+                            ${
+                                getYearText(
+                                    note.year
+                                )
+                            }
+
+                            • Semester
+                            ${
+                                note.semester ||
+                                "-"
+                            }
+
+                        </p>
+
+
+                        <div class="user-info">
+
+                            <div class="avatar">
+
+                                ${
+                                    (
+                                        note.uploaderName ||
+                                        "U"
+                                    )
+                                    .charAt(0)
+                                    .toUpperCase()
+                                }
+
+                            </div>
+
+
+                            <span>
+
+                                Uploaded by
+
+                                <strong>
+                                    ${
+                                        note.uploaderName ||
+                                        "Unknown"
+                                    }
+                                </strong>
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="card-footer">
+
+                            <button
+                                class="btn-download-small"
+                            >
+                                Open PDF
+                            </button>
+
+                        </div>
+
+                    `;
+
+
+                    const openPdfBtn =
+                        card.querySelector(
+                            ".btn-download-small"
+                        );
+
+
+                    openPdfBtn.addEventListener(
+                        "click",
+                        async () => {
+
+                            if (!currentUser) {
+
+                                window.location.href =
+                                    "login.html";
+
+                                return;
+
+                            }
+
+
+                            await openPreview(
+                                note
+                            );
+
+                        }
+                    );
+
+
+                    notesContainer.appendChild(
+                        card
+                    );
+
+                }
 
             }
+        );
 
-        });
 
         if (!notesFound) {
 
             notesContainer.innerHTML = `
+
                 <div class="no-notes">
 
-                    <h2>No Notes Found 📚</h2>
+                    <h2>
+                        No Notes Found 📚
+                    </h2>
 
                     <p>
-                        There are no approved notes matching your filters.
+                        There are no approved notes
+                        matching your filters.
                     </p>
 
                 </div>
+
             `;
 
         }
 
-    } catch (error) {
+    }
 
-        console.error("Error fetching notes:", error);
+    catch (error) {
+
+        console.error(
+            "Error fetching notes:",
+            error
+        );
+
 
         notesContainer.innerHTML = `
+
             <div class="no-notes">
 
-                <h2>Something went wrong</h2>
+                <h2>
+                    Something went wrong
+                </h2>
 
-                <p>Please refresh the page.</p>
+                <p>
+                    Please refresh the page.
+                </p>
 
             </div>
+
         `;
 
     }
@@ -252,194 +413,79 @@ async function fetchNotes() {
 }
 
 
-// -------------------------
-// Preview Functions
-// -------------------------
-async function checkIfLiked(noteId) {
+// ======================================================
+// OPEN NOTE FROM NOTIFICATION
+// ======================================================
 
-    if (!currentUser) {
-        hasLikedCurrentNote = false;
-        likeBtn.innerHTML = `🤍 Like`;
+async function openNoteFromNotification() {
+
+    if (!notificationNoteId) {
+
         return;
+
     }
 
-    const likeRef = doc(
-        db,
-        "noteLikes",
-        `${noteId}_${currentUser.uid}`
+
+    console.log(
+        "Opening notification note:",
+        notificationNoteId
     );
 
-    const likeSnap = await getDoc(likeRef);
-
-    hasLikedCurrentNote = likeSnap.exists();
-
-    likeBtn.innerHTML = hasLikedCurrentNote
-        ? "❤️ Liked"
-        : "🤍 Like";
-}
-
-
-
-
-async function openPreview(note) {
-    currentPreviewNote = note;
 
     try {
-        await updateDoc(
-            doc(db, "notes", note.id), {
-            views: increment(1)
+
+        const noteRef =
+            doc(
+                db,
+                "notes",
+                notificationNoteId
+            );
+
+
+        const noteSnap =
+            await getDoc(
+                noteRef
+            );
+
+
+        if (!noteSnap.exists()) {
+
+            console.error(
+                "Notification note not found:",
+                notificationNoteId
+            );
+
+            return;
+
         }
-        );
-        note.views = (note.views || 0) + 1;
-    } catch (err) {
-        console.error("Failed to update views:", err);
-
-    }
-    previewTitle.textContent = note.title;
-    previewSubject.textContent = note.subject;
-    previewSubject2.textContent = note.subject;
-    previewViews.textContent = note.views || 0;
-    previewDownloads.textContent = note.downloads || 0;
-    previewLikes.textContent = note.likes || 0;
-
-    previewUploader.textContent = note.uploaderName;
-
-    if (note.uploadedAt?.toDate) {
-        previewDate.textContent =
-            note.uploadedAt.toDate().toLocaleDateString();
-    }
-    else {
-        previewDate.textContent = "-";
-    }
 
 
-    previewBranch.textContent = note.branch;
-    previewSemester.textContent = note.semester;
+        const note = {
 
-    previewDescription.textContent = note.description;
+            id:
+                noteSnap.id,
 
-    previewFrame.src = note.pdfUrl;
+            ...noteSnap.data()
 
-    notePreviewModal.classList.add("show");
-    checkIfLiked(note.id);
+        };
 
-}
-
-function closePreview() {
-
-    notePreviewModal.classList.remove("show");
-
-    previewFrame.src = "";
-
-}
-
-
-closePreviewBtn.addEventListener("click", closePreview);
-
-notePreviewModal.addEventListener("click", (e) => {
-
-    if (e.target === notePreviewModal) {
-
-        closePreview();
-
-    }
-
-});
-
-
-
-downloadBtn.addEventListener("click", async () => {
-    if (!currentUser) {
-        window.location.href = "login.html";
-        return;
-    }
-
-    if (!currentPreviewNote) return;
-
-    try {
-
-        await updateDoc(
-            doc(db, "notes", currentPreviewNote.id),
-            {
-                downloads: increment(1)
-            }
-        );
-
-        currentPreviewNote.downloads =
-            (currentPreviewNote.downloads || 0) + 1;
-
-        previewDownloads.textContent =
-            currentPreviewNote.downloads;
-
-    } catch (err) {
-
-        console.error(err);
-
-    }
-
-    window.open(
-        currentPreviewNote.pdfUrl,
-        "_blank",
-        "noopener,noreferrer"
-    );
-
-});
-
-// ======================================================
-// CREATE NOTIFICATION
-// ======================================================
-
-async function createNotification(
-    recipientId,
-    type,
-    message,
-    relatedId = null
-) {
-
-    const notificationData = {
-
-        recipientId: recipientId,
-
-        senderId: currentUser.uid,
-
-        type: type,
-
-        message: message,
-
-        relatedId: relatedId,
-
-        read: false,
-
-        createdAt: serverTimestamp()
-
-    };
-
-    console.log(
-        "Creating notification:",
-        notificationData
-    );
-
-    console.log(
-        "Authenticated UID:",
-        currentUser.uid
-    );
-
-    try {
-
-        await addDoc(
-            collection(db, "notifications"),
-            notificationData
-        );
 
         console.log(
-            "Like notification created successfully"
+            "Notification note found:",
+            note
+        );
+
+
+        await openPreview(
+            note
         );
 
     }
+
     catch (error) {
 
         console.error(
-            "Notification Error:",
+            "Failed to open notification note:",
             error
         );
 
@@ -447,126 +493,523 @@ async function createNotification(
 
 }
 
-likeBtn.addEventListener("click", async () => {
+
+// ======================================================
+// PREVIEW FUNCTIONS
+// ======================================================
+
+async function checkIfLiked(
+    noteId
+) {
 
     if (!currentUser) {
-        window.location.href = "login.html";
+
+        hasLikedCurrentNote = false;
+
+        likeBtn.innerHTML =
+            `🤍 Like`;
+
         return;
+
     }
 
-    if (!currentPreviewNote) return;
 
-    const likeRef = doc(
-        db,
-        "noteLikes",
-        `${currentPreviewNote.id}_${currentUser.uid}`
-    );
+    const likeRef =
+        doc(
+            db,
+            "noteLikes",
+            `${noteId}_${currentUser.uid}`
+        );
+
+
+    const likeSnap =
+        await getDoc(
+            likeRef
+        );
+
+
+    hasLikedCurrentNote =
+        likeSnap.exists();
+
+
+    likeBtn.innerHTML =
+        hasLikedCurrentNote
+            ? "❤️ Liked"
+            : "🤍 Like";
+
+}
+
+
+// ======================================================
+// OPEN PREVIEW
+// ======================================================
+
+async function openPreview(
+    note
+) {
+
+    currentPreviewNote =
+        note;
+
 
     try {
 
-        if (hasLikedCurrentNote) {
+        await updateDoc(
 
-            await deleteDoc(likeRef);
+            doc(
+                db,
+                "notes",
+                note.id
+            ),
 
-            await updateDoc(
-                doc(db, "notes", currentPreviewNote.id),
-                {
-                    likes: increment(-1)
-                }
-            );
-
-            hasLikedCurrentNote = false;
-
-            currentPreviewNote.likes--;
-
-        } else {
-
-            await setDoc(likeRef, {
-
-                noteId: currentPreviewNote.id,
-                userId: currentUser.uid,
-                likedAt: new Date()
-
-            });
-
-            await updateDoc(
-                doc(db, "notes", currentPreviewNote.id),
-                {
-                    likes: increment(1)
-                }
-            );
-
-            // ==========================================
-            // CREATE LIKE NOTIFICATION
-            // ==========================================
-
-            if (
-                currentPreviewNote.uploaderId &&
-                currentPreviewNote.uploaderId !== currentUser.uid
-            ) {
-
-                try {
-
-                    console.log("ABOUT TO CREATE LIKE NOTIFICATION");
-
-                    await addDoc(
-                        collection(db, "notifications"),
-                        {
-                            recipientId: currentPreviewNote.uploaderId,
-                            senderId: currentUser.uid,
-                            type: "like",
-                            message: `${currentUserName} liked your note.`,
-                            relatedId: currentPreviewNote.id,
-                            read: false,
-                            createdAt: serverTimestamp()
-                        }
-                    );
-
-                    console.log("LIKE NOTIFICATION CREATED");
-
-                }
-                catch (error) {
-
-                    console.error(
-                        "LIKE NOTIFICATION ERROR:",
-                        error.code,
-                        error.message
-                    );
-
-                }
-
+            {
+                views:
+                    increment(1)
             }
 
+        );
 
-            hasLikedCurrentNote = true;
 
-            currentPreviewNote.likes =
-                (currentPreviewNote.likes || 0) + 1;
+        note.views =
+            (note.views || 0) + 1;
+
+    }
+
+    catch (err) {
+
+        console.error(
+            "Failed to update views:",
+            err
+        );
+
+    }
+
+
+    previewTitle.textContent =
+        note.title || "Untitled Note";
+
+
+    previewSubject.textContent =
+        note.subject || "Unknown Subject";
+
+
+    previewSubject2.textContent =
+        note.subject || "Unknown Subject";
+
+
+    previewViews.textContent =
+        note.views || 0;
+
+
+    previewDownloads.textContent =
+        note.downloads || 0;
+
+
+    previewLikes.textContent =
+        note.likes || 0;
+
+
+    previewUploader.textContent =
+        note.uploaderName || "Unknown";
+
+
+    if (
+        note.uploadedAt?.toDate
+    ) {
+
+        previewDate.textContent =
+            note.uploadedAt
+                .toDate()
+                .toLocaleDateString();
+
+    }
+
+    else {
+
+        previewDate.textContent =
+            "-";
+
+    }
+
+
+    previewBranch.textContent =
+        note.branch || "-";
+
+
+    previewSemester.textContent =
+        note.semester || "-";
+
+
+    previewDescription.textContent =
+        note.description || "No description available.";
+
+
+    previewFrame.src =
+        note.pdfUrl;
+
+
+    notePreviewModal.classList.add(
+        "show"
+    );
+
+
+    await checkIfLiked(
+        note.id
+    );
+
+}
+
+
+// ======================================================
+// CLOSE PREVIEW
+// ======================================================
+
+function closePreview() {
+
+    notePreviewModal.classList.remove(
+        "show"
+    );
+
+
+    previewFrame.src =
+        "";
+
+}
+
+
+closePreviewBtn.addEventListener(
+    "click",
+    closePreview
+);
+
+
+notePreviewModal.addEventListener(
+    "click",
+    (e) => {
+
+        if (
+            e.target ===
+            notePreviewModal
+        ) {
+
+            closePreview();
+
+        }
+
+    }
+);
+
+
+// ======================================================
+// DOWNLOAD
+// ======================================================
+
+downloadBtn.addEventListener(
+    "click",
+    async () => {
+
+        if (!currentUser) {
+
+            window.location.href =
+                "login.html";
+
+            return;
 
         }
 
 
-        previewLikes.textContent = currentPreviewNote.likes;
+        if (!currentPreviewNote) {
 
-        likeBtn.innerHTML = hasLikedCurrentNote
-            ? "❤️ Liked"
-            : "🤍 Like";
+            return;
 
-    } catch (err) {
+        }
 
-        console.error(err);
+
+        try {
+
+            await updateDoc(
+
+                doc(
+                    db,
+                    "notes",
+                    currentPreviewNote.id
+                ),
+
+                {
+                    downloads:
+                        increment(1)
+                }
+
+            );
+
+
+            currentPreviewNote.downloads =
+                (
+                    currentPreviewNote.downloads ||
+                    0
+                ) + 1;
+
+
+            previewDownloads.textContent =
+                currentPreviewNote.downloads;
+
+        }
+
+        catch (err) {
+
+            console.error(
+                err
+            );
+
+        }
+
+
+        window.open(
+            currentPreviewNote.pdfUrl,
+            "_blank",
+            "noopener,noreferrer"
+        );
 
     }
+);
 
-});
 
 // ======================================================
-// Utility
+// LIKE
 // ======================================================
 
-function getYearText(year) {
+likeBtn.addEventListener(
+    "click",
+    async () => {
 
-    switch (String(year)) {
+        if (!currentUser) {
+
+            window.location.href =
+                "login.html";
+
+            return;
+
+        }
+
+
+        if (!currentPreviewNote) {
+
+            return;
+
+        }
+
+
+        const likeRef =
+            doc(
+                db,
+                "noteLikes",
+                `${currentPreviewNote.id}_${currentUser.uid}`
+            );
+
+
+        try {
+
+            // ==============================
+            // UNLIKE
+            // ==============================
+
+            if (
+                hasLikedCurrentNote
+            ) {
+
+                await deleteDoc(
+                    likeRef
+                );
+
+
+                await updateDoc(
+
+                    doc(
+                        db,
+                        "notes",
+                        currentPreviewNote.id
+                    ),
+
+                    {
+                        likes:
+                            increment(-1)
+                    }
+
+                );
+
+
+                hasLikedCurrentNote =
+                    false;
+
+
+                currentPreviewNote.likes =
+                    Math.max(
+                        0,
+                        (
+                            currentPreviewNote.likes ||
+                            0
+                        ) - 1
+                    );
+
+            }
+
+
+            // ==============================
+            // LIKE
+            // ==============================
+
+            else {
+
+                await setDoc(
+
+                    likeRef,
+
+                    {
+
+                        noteId:
+                            currentPreviewNote.id,
+
+                        userId:
+                            currentUser.uid,
+
+                        likedAt:
+                            serverTimestamp()
+
+                    }
+
+                );
+
+
+                await updateDoc(
+
+                    doc(
+                        db,
+                        "notes",
+                        currentPreviewNote.id
+                    ),
+
+                    {
+                        likes:
+                            increment(1)
+                    }
+
+                );
+
+
+                // ==============================
+                // CREATE LIKE NOTIFICATION
+                // ==============================
+
+                if (
+                    currentPreviewNote.uploaderId &&
+                    currentPreviewNote.uploaderId !==
+                        currentUser.uid
+                ) {
+
+                    try {
+
+                        await addDoc(
+
+                            collection(
+                                db,
+                                "notifications"
+                            ),
+
+                            {
+
+                                recipientId:
+                                    currentPreviewNote.uploaderId,
+
+                                senderId:
+                                    currentUser.uid,
+
+                                type:
+                                    "like",
+
+                                message:
+                                    `${currentUserName} liked your note.`,
+
+                                relatedId:
+                                    currentPreviewNote.id,
+
+                                read:
+                                    false,
+
+                                createdAt:
+                                    serverTimestamp()
+
+                            }
+
+                        );
+
+
+                        console.log(
+                            "LIKE NOTIFICATION CREATED"
+                        );
+
+                    }
+
+                    catch (error) {
+
+                        console.error(
+                            "LIKE NOTIFICATION ERROR:",
+                            error.code,
+                            error.message
+                        );
+
+                    }
+
+                }
+
+
+                hasLikedCurrentNote =
+                    true;
+
+
+                currentPreviewNote.likes =
+                    (
+                        currentPreviewNote.likes ||
+                        0
+                    ) + 1;
+
+            }
+
+
+            previewLikes.textContent =
+                currentPreviewNote.likes;
+
+
+            likeBtn.innerHTML =
+                hasLikedCurrentNote
+                    ? "❤️ Liked"
+                    : "🤍 Like";
+
+        }
+
+        catch (err) {
+
+            console.error(
+                "Like Error:",
+                err
+            );
+
+        }
+
+    }
+);
+
+
+// ======================================================
+// UTILITY
+// ======================================================
+
+function getYearText(
+    year
+) {
+
+    switch (
+        String(year)
+    ) {
 
         case "1":
             return "1st Year";
@@ -587,13 +1030,109 @@ function getYearText(year) {
 
 }
 
+
 // ======================================================
-// Events
+// AUTH
 // ======================================================
 
-fetchNotes();
+onAuthStateChanged(
+    auth,
+    async (user) => {
 
-// filterBtn.addEventListener("click", fetchNotes);
-searchInput.addEventListener("input", fetchNotes);
-branchFilter.addEventListener("change", fetchNotes);
-yearFilter.addEventListener("change", fetchNotes);
+        currentUser =
+            user;
+
+
+        if (!user) {
+
+            return;
+
+        }
+
+
+        try {
+
+            const userSnap =
+                await getDoc(
+
+                    doc(
+                        db,
+                        "users",
+                        user.uid
+                    )
+
+                );
+
+
+            if (
+                userSnap.exists()
+            ) {
+
+                currentUserName =
+                    userSnap.data().name ||
+                    "A user";
+
+            }
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Failed to load current user:",
+                error
+            );
+
+        }
+
+
+        // ==========================================
+        // LOAD NOTES
+        // ==========================================
+
+        await fetchNotes();
+
+
+        // ==========================================
+        // OPEN NOTE FROM NOTIFICATION
+        // ==========================================
+
+        if (
+            notificationNoteId
+        ) {
+
+            await openNoteFromNotification();
+
+        }
+
+    }
+);
+
+
+// ======================================================
+// EVENTS
+// ======================================================
+
+// Search and filters
+
+searchInput.addEventListener(
+    "input",
+    fetchNotes
+);
+
+
+branchFilter.addEventListener(
+    "change",
+    fetchNotes
+);
+
+
+yearFilter.addEventListener(
+    "change",
+    fetchNotes
+);
+
+// filterBtn.addEventListener(
+//     "click",
+//     fetchNotes
+// );

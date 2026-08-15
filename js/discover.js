@@ -243,7 +243,8 @@ async function toggleConnection(targetUserId, button) {
 
     "connect",
 
-    `${currentUserName} connected with you.`
+    `${currentUserName} connected with you.`,
+     currentUser.uid
 
   );
 

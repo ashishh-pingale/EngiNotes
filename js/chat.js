@@ -22,6 +22,8 @@ const input = document.getElementById("messageInput");
 const sendBtn = document.getElementById("sendBtn");
 const contactList = document.querySelector(".contact-list");
 const usernameEl = document.querySelector(".username");
+const urlParams = new URLSearchParams(window.location.search);
+const notificationUserId = urlParams.get("uid");
 
 let currentUser = null;
 let receiverId = null;
@@ -102,19 +104,53 @@ async function loadConnectedUsers() {
       </div>
     `;
 
-    div.addEventListener("click", () => {
+    function selectContact(div, targetId, user) {
+
       document
         .querySelectorAll(".contact")
-        .forEach(c => c.classList.remove("active"));
+        .forEach(c =>
+          c.classList.remove("active")
+        );
 
       div.classList.add("active");
 
       receiverId = targetId;
-      usernameEl.textContent = user.name;
+
+      usernameEl.textContent =
+        user.name;
 
       loadMessages();
+    }
+
+
+    div.addEventListener("click", () => {
+
+      selectContact(
+        div,
+        targetId,
+        user
+      );
+
     });
 
+
+    contactList.appendChild(div);
+
+
+    // Open chat automatically if coming from notification
+
+    if (
+      notificationUserId &&
+      notificationUserId === targetId
+    ) {
+
+      selectContact(
+        div,
+        targetId,
+        user
+      );
+
+    }
     contactList.appendChild(div);
   }
 }
@@ -136,17 +172,11 @@ async function createNotification(
       collection(db, "notifications"),
       {
         recipientId: recipientId,
-
         senderId: currentUser.uid,
-
         type: type,
-
-        message: message,
-
+        message: `${currentUserName} sent you a message.`,
         relatedId: relatedId,
-
         read: false,
-
         createdAt: serverTimestamp()
       }
     );
@@ -174,32 +204,31 @@ sendBtn.addEventListener("click", async () => {
 
   if (!text || !receiverId || !currentUser) return;
 
-await addDoc(
-  collection(db, "chats"),
-  {
-    senderId: currentUser.uid,
-    receiverId: receiverId,
-    message: text,
-    timestamp: serverTimestamp()
-  }
-);
+  await addDoc(
+    collection(db, "chats"),
+    {
+      senderId: currentUser.uid,
+      receiverId: receiverId,
+      message: text,
+      timestamp: serverTimestamp()
+    }
+  );
 
 
-// ============================
-// CREATE MESSAGE NOTIFICATION
-// ============================
+  // ============================
+  // CREATE MESSAGE NOTIFICATION
+  // ============================
 
-await createNotification(
+  await createNotification(
 
-  receiverId,
+    receiverId,
+    "message",
+    `${currentUserName} sent you a message.`,
+    currentUser.uid
 
-  "message",
+  );
 
-  `${currentUserName} sent you a message.`
-
-);
-
-input.value = "";
+  input.value = "";
 });
 
 input.addEventListener("keypress", (e) => {
