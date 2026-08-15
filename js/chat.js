@@ -26,16 +26,45 @@ const usernameEl = document.querySelector(".username");
 let currentUser = null;
 let receiverId = null;
 let unsubscribeMessages = null;
+let currentUserName = "A user";
 
 // 🔐 AUTH CHECK
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
+
   if (!user) {
+
     window.location.href = "login.html";
     return;
+
   }
 
   currentUser = user;
+
+  try {
+
+    const userSnap = await getDoc(
+      doc(db, "users", user.uid)
+    );
+
+    if (userSnap.exists()) {
+
+      currentUserName =
+        userSnap.data().name || "A user";
+
+    }
+
+  }
+  catch (error) {
+
+    console.error(
+      "Failed to load current user:",
+      error
+    );
+
+  }
+
   loadConnectedUsers();
+
 });
 
 // ============================
@@ -166,13 +195,11 @@ await createNotification(
 
   "message",
 
-  `${currentUser.displayName || "Someone"} sent you a message.`
+  `${currentUserName} sent you a message.`
 
 );
 
 input.value = "";
-
-  input.value = "";
 });
 
 input.addEventListener("keypress", (e) => {

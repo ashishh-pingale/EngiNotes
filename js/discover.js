@@ -8,6 +8,7 @@ import {
   query,
   where,
   doc,
+  getDoc,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -20,15 +21,42 @@ const searchInput = document.getElementById("searchInput");
 
 let currentUser = null;
 let allUsers = [];
+let currentUserName = "A user";
 
 // ======================
 // WAIT FOR LOGIN
 // ======================
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
+
   if (!user) return;
 
   currentUser = user;
+
+  try {
+
+    const userSnap = await getDoc(
+      doc(db, "users", user.uid)
+    );
+
+    if (userSnap.exists()) {
+
+      currentUserName =
+        userSnap.data().name || "A user";
+
+    }
+
+  }
+  catch (error) {
+
+    console.error(
+      "Failed to load current user:",
+      error
+    );
+
+  }
+
   loadUsers();
+
 });
 
 // ======================
@@ -215,7 +243,7 @@ async function toggleConnection(targetUserId, button) {
 
     "connect",
 
-    `${currentUser.displayName || "Someone"} connected with you.`
+    `${currentUserName} connected with you.`
 
   );
 

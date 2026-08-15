@@ -25,9 +25,39 @@ import {
 let currentUser = null;
 let currentPreviewNote = null;
 let hasLikedCurrentNote = false;
+let currentUserName = "A user";
 
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
+
     currentUser = user;
+
+    if (!user) {
+        return;
+    }
+
+    try {
+
+        const userSnap = await getDoc(
+            doc(db, "users", user.uid)
+        );
+
+        if (userSnap.exists()) {
+
+            currentUserName =
+                userSnap.data().name || "A user";
+
+        }
+
+    }
+    catch (error) {
+
+        console.error(
+            "Failed to load current user:",
+            error
+        );
+
+    }
+
 });
 
 // ======================================================
@@ -485,7 +515,7 @@ likeBtn.addEventListener("click", async () => {
                             recipientId: currentPreviewNote.uploaderId,
                             senderId: currentUser.uid,
                             type: "like",
-                            message: "Someone liked your note.",
+                            message: `${currentUserName} liked your note.`,
                             relatedId: currentPreviewNote.id,
                             read: false,
                             createdAt: serverTimestamp()

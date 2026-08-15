@@ -29,11 +29,64 @@
             <a href="/admin/html/admin.html">Admin</a></li>
             
         </ul>
-        <div class="nav-auth" id="authSection">
-            <span class="auth-loading">...</span>
-            <button class="btn-secondary">Sign In</button>
-            <button class="btn-primary">Sign Up</button>
+<div class="nav-auth">
+
+    <!-- Notification -->
+    <div class="notification-wrapper">
+
+        <button
+            class="notification-btn"
+            id="notificationBtn"
+            aria-label="Notifications"
+        >
+            🔔
+
+            <span
+                class="notification-badge hidden"
+                id="notificationBadge"
+            >
+                0
+            </span>
+        </button>
+
+        <div
+            class="notification-dropdown"
+            id="notificationDropdown"
+        >
+
+            <div class="notification-header">
+                <h3>Notifications</h3>
+            </div>
+
+            <div
+                class="notification-list"
+                id="notificationList"
+            >
+                <p class="notification-empty">
+                    No notifications yet.
+                </p>
+            </div>
+
         </div>
+
+    </div>
+
+    <!-- Auth controls -->
+    <div id="authSection">
+
+        <span class="auth-loading">...</span>
+
+        <button class="btn-secondary">
+            Sign In
+        </button>
+
+        <button class="btn-primary">
+            Sign Up
+        </button>
+
+    </div>
+
+</div>
     </nav>
 
     <header class="about-hero">
