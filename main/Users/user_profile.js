@@ -26,6 +26,8 @@ import {
 /* ===========================================================
    DOM ELEMENTS
    =========================================================== */
+const backBtn =
+    document.getElementById("backBtn");
 
 const profileAvatar =
     document.getElementById("profileAvatar");
@@ -150,6 +152,31 @@ async function initializeProfile() {
     checkFollowStatus();
 
 }
+
+/* ===========================================================
+   BACK BUTTON
+   =========================================================== */
+backBtn.addEventListener(
+    "click",
+    () => {
+
+        if (
+            document.referrer &&
+            document.referrer !== window.location.href
+        ) {
+
+            window.history.back();
+
+        }
+        else {
+
+            window.location.href =
+                "/main/discover.html";
+
+        }
+
+    }
+);
 
 
 /* ===========================================================

@@ -5,21 +5,15 @@
 
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>User Profile | EngiNotes</title>
 
-    <link rel="stylesheet"
-        href="/main/Users/user_profile.css">
+    <link rel="stylesheet" href="/main/Users/user_profile.css">
 
-    <link rel="preconnect"
-        href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
 
-    <link rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
@@ -48,6 +42,15 @@
     ============================ -->
 
     <main class="profile-page">
+        <div class="profile-back-wrapper">
+
+            <button id="backBtn" class="profile-back-btn">
+
+                ← Back
+
+            </button>
+
+        </div>
 
 
         <!-- ===========================
@@ -65,9 +68,7 @@
 
                 <!-- Avatar -->
 
-                <div
-                    class="profile-avatar"
-                    id="profileAvatar">
+                <div class="profile-avatar" id="profileAvatar">
 
                     A
 
@@ -108,42 +109,19 @@
 
                 <div class="joined-wrapper">
 
-                    <svg
-                        class="joined-icon"
-                        width="18"
-                        height="18"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
+                    <svg class="joined-icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
                         viewBox="0 0 24 24">
 
-                        <rect
-                            x="3"
-                            y="4"
-                            width="18"
-                            height="18"
-                            rx="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2">
                         </rect>
 
-                        <line
-                            x1="16"
-                            y1="2"
-                            x2="16"
-                            y2="6">
+                        <line x1="16" y1="2" x2="16" y2="6">
                         </line>
 
-                        <line
-                            x1="8"
-                            y1="2"
-                            x2="8"
-                            y2="6">
+                        <line x1="8" y1="2" x2="8" y2="6">
                         </line>
 
-                        <line
-                            x1="3"
-                            y1="10"
-                            x2="21"
-                            y2="10">
+                        <line x1="3" y1="10" x2="21" y2="10">
                         </line>
 
                     </svg>
@@ -154,8 +132,7 @@
 
                     </span>
 
-                    <strong
-                        id="profileJoined">
+                    <strong id="profileJoined">
 
                         July 2026
 
@@ -168,23 +145,19 @@
 
                 <div class="profile-actions">
 
-                    <button
-                        id="connectBtn"
-                        class="primary-btn">
+                    <button id="connectBtn" class="primary-btn">
 
                         Connect
 
                     </button>
 
-                    <button
-                        id="messageBtn"
-                        class="secondary-btn">
+                    <button id="messageBtn" class="secondary-btn">
 
                         Message
 
                     </button>
-                        
-                <a href="/main/Users/edit_profile.html" id="editProfileBtn" class="secondary-btn">Edit Profile</a>
+
+                    <a href="/main/Users/edit_profile.html" id="editProfileBtn" class="secondary-btn">Edit Profile</a>
 
                 </div>
 
@@ -205,7 +178,7 @@
 
                 <div class="stat-icon">
 
-                    
+
 
                 </div>
 
@@ -228,7 +201,7 @@
 
                 <div class="stat-icon">
 
-                    
+
 
                 </div>
 
@@ -251,13 +224,13 @@
 
                 <div class="stat-icon">
 
-                   
+
 
                 </div>
 
                 <h2 id="viewsCount">
 
-                    
+
 
                 </h2>
 
@@ -274,7 +247,7 @@
 
                 <div class="stat-icon">
 
-                    
+
 
                 </div>
 
@@ -297,7 +270,7 @@
 
                 <div class="stat-icon">
 
-                    
+
 
                 </div>
 
@@ -317,112 +290,112 @@
 
         </section>
 
-<!-- ===========================
+        <!-- ===========================
      CONTENT
 =========================== -->
 
-<section class="profile-content">
+        <section class="profile-content">
 
-    <!-- LEFT SIDEBAR -->
+            <!-- LEFT SIDEBAR -->
 
-    <aside class="profile-sidebar">
+            <aside class="profile-sidebar">
 
-        <!-- About -->
+                <!-- About -->
 
-        <section class="content-card">
+                <section class="content-card">
 
-            <div class="card-header">
+                    <div class="card-header">
 
-                <div class="header-left">
+                        <div class="header-left">
 
-                    <span class="section-icon">📝</span>
+                            <span class="section-icon">📝</span>
 
-                    <div>
+                            <div>
 
-                        <h2>About</h2>
+                                <h2>About</h2>
 
-                        <p>Information about this student.</p>
+                                <p>Information about this student.</p>
+
+                            </div>
+
+                        </div>
 
                     </div>
 
-                </div>
+                    <div class="about-content">
 
-            </div>
+                        <p id="profileBio">
 
-            <div class="about-content">
+                            This user hasn't added a bio yet.
 
-                <p id="profileBio">
-
-                    This user hasn't added a bio yet.
-
-                </p>
-
-            </div>
-
-        </section>
-
-    </aside>
-
-
-    <!-- RIGHT CONTENT -->
-
-    <section class="profile-main">
-
-        <section class="content-card uploads-section">
-
-            <div class="card-header">
-
-                <div class="header-left">
-
-                    <span class="section-icon">📚</span>
-
-                    <div>
-
-                        <h2>Recent Uploads</h2>
-
-                        <p>
-                            Notes uploaded by this student.
                         </p>
 
                     </div>
 
-                </div>
+                </section>
 
-            </div>
+            </aside>
 
-            <div id="recentUploads">
 
-                <!-- JS Generates Upload Rows -->
+            <!-- RIGHT CONTENT -->
 
-                <div class="upload-empty">
+            <section class="profile-main">
 
-                    <div class="empty-icon">
+                <section class="content-card uploads-section">
 
-                        📄
+                    <div class="card-header">
+
+                        <div class="header-left">
+
+                            <span class="section-icon">📚</span>
+
+                            <div>
+
+                                <h2>Recent Uploads</h2>
+
+                                <p>
+                                    Notes uploaded by this student.
+                                </p>
+
+                            </div>
+
+                        </div>
 
                     </div>
 
-                    <h3>
+                    <div id="recentUploads">
 
-                        No uploads yet
+                        <!-- JS Generates Upload Rows -->
 
-                    </h3>
+                        <div class="upload-empty">
 
-                    <p>
+                            <div class="empty-icon">
 
-                        Uploaded notes will appear here.
+                                📄
 
-                    </p>
+                            </div>
 
-                </div>
+                            <h3>
 
-            </div>
+                                No uploads yet
+
+                            </h3>
+
+                            <p>
+
+                                Uploaded notes will appear here.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </section>
 
         </section>
-
-    </section>
-
-</section>
 
     </main>
 

@@ -17,9 +17,9 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
-/* ============================================
-   DOM
-============================================ */
+// ============================================
+// DOM
+// ============================================
 
 const notificationBtn =
     document.getElementById("notificationBtn");
@@ -33,18 +33,16 @@ const notificationList =
 const notificationBadge =
     document.getElementById("notificationBadge");
 
-
-/* ============================================
-   Navbar
-============================================ */
-
 const authSection =
     document.getElementById("authSection");
 
+const adminLink =
+    document.getElementById("adminLink");
 
-/* ============================================
-   Protected Routes
-============================================ */
+
+// ============================================
+// PROTECTED ROUTES
+// ============================================
 
 const protectedPages = [
     "/main/upload.html",
@@ -69,19 +67,24 @@ const isAdminPage =
     );
 
 
-/* ============================================
-   Admin Check
-============================================ */
+// ============================================
+// ADMIN CHECK
+// ============================================
 
 async function checkAdminAccess(uid) {
 
     try {
 
         const userRef =
-            doc(db, "users", uid);
+            doc(
+                db,
+                "users",
+                uid
+            );
 
         const userSnap =
             await getDoc(userRef);
+
 
         if (!userSnap.exists()) {
 
@@ -89,7 +92,12 @@ async function checkAdminAccess(uid) {
 
         }
 
-        return userSnap.data().role === "admin";
+
+        const userData =
+            userSnap.data();
+
+
+        return userData.role === "admin";
 
     }
 
@@ -105,6 +113,11 @@ async function checkAdminAccess(uid) {
     }
 
 }
+
+
+// ============================================
+// NOTIFICATION ICON
+// ============================================
 
 function getNotificationIcon(type) {
 
@@ -127,69 +140,122 @@ function getNotificationIcon(type) {
 }
 
 
+// ============================================
+// RELATIVE TIME
+// ============================================
+
 function getRelativeTime(timestamp) {
 
     if (!timestamp) {
+
         return "";
+
     }
 
-    const date = timestamp.toDate
-        ? timestamp.toDate()
-        : new Date(timestamp);
 
-    const now = new Date();
+    const date =
+        timestamp.toDate
+            ? timestamp.toDate()
+            : new Date(timestamp);
+
+
+    const now =
+        new Date();
+
 
     const seconds =
         Math.floor(
             (now - date) / 1000
         );
 
+
     if (seconds < 60) {
+
         return "just now";
+
     }
+
 
     const minutes =
-        Math.floor(seconds / 60);
+        Math.floor(
+            seconds / 60
+        );
+
 
     if (minutes < 60) {
+
         return `${minutes} min ago`;
+
     }
+
 
     const hours =
-        Math.floor(minutes / 60);
+        Math.floor(
+            minutes / 60
+        );
+
 
     if (hours < 24) {
+
         return `${hours} hr ago`;
+
     }
+
 
     const days =
-        Math.floor(hours / 24);
+        Math.floor(
+            hours / 24
+        );
+
 
     if (days === 1) {
+
         return "yesterday";
+
     }
 
+
     if (days < 7) {
+
         return `${days} days ago`;
+
     }
+
 
     return date.toLocaleDateString();
 
 }
-/* ============================================
-   Authentication State
-============================================ */
+
+
+// ============================================
+// AUTHENTICATION STATE
+// ============================================
 
 onAuthStateChanged(
     auth,
     async (user) => {
 
 
-        /* ========================================
-           USER NOT LOGGED IN
-        ======================================== */
+        // ========================================
+        // USER NOT LOGGED IN
+        // ========================================
 
         if (!user) {
+
+
+            // Always hide admin link
+            // when nobody is logged in
+
+            if (adminLink) {
+
+                adminLink.classList.add(
+                    "hidden"
+                );
+
+            }
+
+
+            // Protected pages
 
             if (
                 isProtectedPage ||
@@ -204,6 +270,8 @@ onAuthStateChanged(
 
             }
 
+
+            // Logged-out navbar
 
             if (authSection) {
 
@@ -230,6 +298,7 @@ onAuthStateChanged(
                     document.getElementById(
                         "loginBtn"
                     );
+
 
                 const signupBtn =
                     document.getElementById(
@@ -268,14 +337,72 @@ onAuthStateChanged(
 
             }
 
+
             return;
 
         }
 
 
-        /* ========================================
-           NOTIFICATIONS
-        ======================================== */
+        // ========================================
+        // CHECK ADMIN ROLE
+        // ========================================
+
+        const isAdmin =
+            await checkAdminAccess(
+                user.uid
+            );
+
+
+        // ========================================
+        // ADMIN NAVBAR VISIBILITY
+        // ========================================
+
+        if (adminLink) {
+
+            if (isAdmin) {
+
+                adminLink.classList.remove(
+                    "hidden"
+                );
+
+            }
+            else {
+
+                adminLink.classList.add(
+                    "hidden"
+                );
+
+            }
+
+        }
+
+
+        // ========================================
+        // ADMIN PAGE PROTECTION
+        // ========================================
+
+        if (isAdminPage) {
+
+            if (!isAdmin) {
+
+                alert(
+                    "Access Denied!"
+                );
+
+                window.location.replace(
+                    "/main/index.html"
+                );
+
+                return;
+
+            }
+
+        }
+
+
+        // ========================================
+        // NOTIFICATIONS
+        // ========================================
 
         if (
             notificationBtn &&
@@ -325,9 +452,9 @@ onAuthStateChanged(
                         );
 
 
-                    /* -------------------------
-                       UNREAD COUNT
-                    -------------------------- */
+                    // ==================================
+                    // UNREAD COUNT
+                    // ==================================
 
                     const unreadCount =
                         notifications.filter(
@@ -359,9 +486,9 @@ onAuthStateChanged(
                     }
 
 
-                    /* -------------------------
-                       EMPTY STATE
-                    -------------------------- */
+                    // ==================================
+                    // EMPTY STATE
+                    // ==================================
 
                     if (
                         notifications.length === 0
@@ -384,70 +511,86 @@ onAuthStateChanged(
                     }
 
 
-                    /* -------------------------
-                       NOTIFICATION LIST
-                    -------------------------- */
+                    // ==================================
+                    // NOTIFICATION LIST
+                    // ==================================
 
                     notificationList.innerHTML =
                         notifications
                             .map(
                                 notification => `
 
-                <div
-                    class="
-                        notification-item
-                        ${notification.read
-                                        ? ""
-                                        : "unread"
-                                    }
-                    "
-                    data-notification-id="${notification.id}"
-                    data-notification-type="${notification.type}"
-                    data-related-id="${notification.relatedId || ""}"
-                >
+                                <div
+                                    class="
+                                        notification-item
+                                        ${
+                                            notification.read
+                                                ? ""
+                                                : "unread"
+                                        }
+                                    "
 
-                    <div class="notification-icon">
+                                    data-notification-id="${notification.id}"
 
-                        ${getNotificationIcon(
-                                        notification.type
-                                    )}
+                                    data-notification-type="${notification.type}"
 
-                    </div>
+                                    data-related-id="${notification.relatedId || ""}"
+                                >
 
+                                    <div
+                                        class="notification-icon"
+                                    >
 
-                    <div class="notification-content">
+                                        ${getNotificationIcon(
+                                            notification.type
+                                        )}
 
-                        <div
-                            class="
-                                notification-message
-                            "
-                        >
-                            ${notification.message}
-                        </div>
+                                    </div>
 
 
-                        <div
-                            class="
-                                notification-time
-                            "
-                        >
-                            ${getRelativeTime(
-                                        notification.createdAt
-                                    )}
-                        </div>
+                                    <div
+                                        class="notification-content"
+                                    >
 
-                    </div>
+                                        <div
+                                            class="
+                                                notification-message
+                                            "
+                                        >
 
-                </div>
+                                            ${
+                                                notification.message
+                                            }
 
-            `
+                                        </div>
+
+
+                                        <div
+                                            class="
+                                                notification-time
+                                            "
+                                        >
+
+                                            ${
+                                                getRelativeTime(
+                                                    notification.createdAt
+                                                )
+                                            }
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            `
                             )
                             .join("");
 
 
-                    /* -------------------------
-                       MARK AS READ
-                    -------------------------- */
+                    // ==================================
+                    // NOTIFICATION CLICK
+                    // ==================================
 
                     const notificationItems =
                         notificationList.querySelectorAll(
@@ -467,9 +610,11 @@ onAuthStateChanged(
                                             .notificationId
                                             ?.trim();
 
+
                                     const notificationType =
                                         item.dataset
                                             .notificationType;
+
 
                                     const relatedId =
                                         item.dataset
@@ -477,14 +622,14 @@ onAuthStateChanged(
                                             ?.trim();
 
 
-                                    if (!notificationId) {
+                                    if (
+                                        !notificationId
+                                    ) {
+
                                         return;
+
                                     }
 
-
-                                    /* -------------------------
-                                       MARK AS READ
-                                    -------------------------- */
 
                                     try {
 
@@ -514,9 +659,7 @@ onAuthStateChanged(
                                     }
 
 
-                                    /* -------------------------
-                                       NOTIFICATION ACTION
-                                    -------------------------- */
+                                    // LIKE
 
                                     if (
                                         notificationType === "like" &&
@@ -531,6 +674,8 @@ onAuthStateChanged(
                                     }
 
 
+                                    // CONNECT
+
                                     if (
                                         notificationType === "connect" &&
                                         relatedId
@@ -543,21 +688,25 @@ onAuthStateChanged(
 
                                     }
 
+
+                                    // MESSAGE
+
                                     if (
                                         notificationType === "message" &&
                                         relatedId
                                     ) {
+
                                         window.location.href =
                                             `/main/chat.html?uid=${relatedId}`;
 
                                         return;
+
                                     }
 
                                 }
                             );
 
-                        }
-                    );
+                        });
 
                 },
 
@@ -575,38 +724,9 @@ onAuthStateChanged(
         }
 
 
-        /* ========================================
-           ADMIN ROUTE PROTECTION
-        ======================================== */
-
-        if (isAdminPage) {
-
-            const isAdmin =
-                await checkAdminAccess(
-                    user.uid
-                );
-
-
-            if (!isAdmin) {
-
-                alert(
-                    "Access Denied!"
-                );
-
-                window.location.replace(
-                    "/main/index.html"
-                );
-
-                return;
-
-            }
-
-        }
-
-
-        /* ========================================
-           PAGES WITHOUT NAVBAR
-        ======================================== */
+        // ========================================
+        // PAGES WITHOUT NAVBAR
+        // ========================================
 
         if (!authSection) {
 
@@ -615,9 +735,9 @@ onAuthStateChanged(
         }
 
 
-        /* ========================================
-           LOGGED IN NAVBAR
-        ======================================== */
+        // ========================================
+        // LOGGED-IN NAVBAR
+        // ========================================
 
         authSection.innerHTML = `
 
@@ -642,9 +762,9 @@ onAuthStateChanged(
         `;
 
 
-        /* -------------------------
-           PROFILE BUTTON
-        -------------------------- */
+        // ========================================
+        // PROFILE
+        // ========================================
 
         const profileBtn =
             document.getElementById(
@@ -667,9 +787,9 @@ onAuthStateChanged(
         }
 
 
-        /* -------------------------
-           LOGOUT BUTTON
-        -------------------------- */
+        // ========================================
+        // LOGOUT
+        // ========================================
 
         const logoutBtn =
             document.getElementById(
@@ -685,7 +805,9 @@ onAuthStateChanged(
 
                     try {
 
-                        await signOut(auth);
+                        await signOut(
+                            auth
+                        );
 
                         window.location.replace(
                             "/main/login.html"
@@ -711,9 +833,9 @@ onAuthStateChanged(
 );
 
 
-/* ============================================
-   NOTIFICATION DROPDOWN
-============================================ */
+// ============================================
+// NOTIFICATION DROPDOWN
+// ============================================
 
 if (
     notificationBtn &&
