@@ -15,17 +15,19 @@ import {
     addDoc,
     deleteDoc,
     serverTimestamp
-
 }
-    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 import {
     onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 
 /* ===========================================================
    DOM ELEMENTS
    =========================================================== */
+
 const backBtn =
     document.getElementById("backBtn");
 
@@ -65,8 +67,35 @@ const viewsCount =
 const downloadsCount =
     document.getElementById("downloadsCount");
 
-const followersCount =
-    document.getElementById("followersCount");
+
+/* ===========================================================
+   FOLLOWERS / FOLLOWING
+   =========================================================== */
+
+const followersBtn =
+    document.getElementById("followersBtn");
+
+const followingBtn =
+    document.getElementById("followingBtn");
+
+const followingCount =
+    document.getElementById("followingCount");
+
+const socialModal =
+    document.getElementById("socialModal");
+
+const socialModalTitle =
+    document.getElementById("socialModalTitle");
+
+const socialUserList =
+    document.getElementById("socialUserList");
+
+const socialModalClose =
+    document.getElementById("socialModalClose");
+
+const socialModalBackdrop =
+    document.getElementById("socialModalBackdrop");
+
 
 const recentUploads =
     document.getElementById("recentUploads");
@@ -93,16 +122,20 @@ let userNotes = [];
    =========================================================== */
 
 const params =
-    new URLSearchParams(window.location.search);
+    new URLSearchParams(
+        window.location.search
+    );
 
 profileUserId =
     params.get("uid");
+
 
 if (!profileUserId) {
 
     alert("Invalid Profile");
 
-    window.location.href = "/main/index.html";
+    window.location.href =
+        "/main/index.html";
 
 }
 
@@ -126,7 +159,8 @@ onAuthStateChanged(
 
         }
 
-        currentUser = user;
+        currentUser =
+            user;
 
         await initializeProfile();
 
@@ -147,36 +181,44 @@ async function initializeProfile() {
 
     preventSelfFollow();
 
-    listenFollowersCount();
+    listenSocialCounts();
 
     checkFollowStatus();
 
 }
 
+
 /* ===========================================================
    BACK BUTTON
    =========================================================== */
-backBtn.addEventListener(
-    "click",
-    () => {
 
-        if (
-            document.referrer &&
-            document.referrer !== window.location.href
-        ) {
+if (backBtn) {
 
-            window.history.back();
+    backBtn.addEventListener(
+        "click",
+        () => {
+
+            if (
+                document.referrer &&
+                document.referrer !==
+                window.location.href
+            ) {
+
+                window.history.back();
+
+            }
+
+            else {
+
+                window.location.href =
+                    "/main/discover.html";
+
+            }
 
         }
-        else {
+    );
 
-            window.location.href =
-                "/main/discover.html";
-
-        }
-
-    }
-);
+}
 
 
 /* ===========================================================
@@ -197,6 +239,7 @@ async function loadUserProfile() {
         const userSnap =
             await getDoc(userRef);
 
+
         if (!userSnap.exists()) {
 
             profileName.textContent =
@@ -206,31 +249,50 @@ async function loadUserProfile() {
 
         }
 
+
         profileUser =
             userSnap.data();
 
+
         profileName.textContent =
-            profileUser.name || "Anonymous";
+            profileUser.name ||
+            "Anonymous";
+
 
         profileBranch.textContent =
-            profileUser.branch || "-";
+            profileUser.branch ||
+            "-";
+
 
         profileYear.textContent =
-            profileUser.year || "-";
+            profileUser.year ||
+            "-";
+
 
         profileBio.textContent =
             profileUser.bio ||
             "This user hasn't added a bio yet.";
 
-        if (profileUser.profileImage) {
+
+        /* =========================
+           PROFILE IMAGE
+        ========================= */
+
+        if (
+            profileUser.profileImage
+        ) {
 
             profileAvatar.innerHTML = `
-        <img
-            src="${profileUser.profileImage}"
-            alt="Profile Picture">
-    `;
+
+                <img
+                    src="${profileUser.profileImage}"
+                    alt="Profile Picture"
+                >
+
+            `;
 
         }
+
         else {
 
             generateAvatar(
@@ -238,6 +300,7 @@ async function loadUserProfile() {
             );
 
         }
+
 
         formatJoinedDate(
             profileUser.createdAt
@@ -263,20 +326,34 @@ async function loadUserProfile() {
 
 function preventSelfFollow() {
 
-    if (currentUser.uid === profileUserId) {
+    if (
+        currentUser.uid ===
+        profileUserId
+    ) {
 
-        connectBtn.style.display = "none";
-        messageBtn.style.display = "none";
+        connectBtn.style.display =
+            "none";
+
+        messageBtn.style.display =
+            "none";
+
 
         if (editProfileBtn) {
-            editProfileBtn.style.display = "inline-flex";
+
+            editProfileBtn.style.display =
+                "inline-flex";
+
         }
 
     }
+
     else {
 
         if (editProfileBtn) {
-            editProfileBtn.style.display = "none";
+
+            editProfileBtn.style.display =
+                "none";
+
         }
 
     }
@@ -292,11 +369,13 @@ function generateAvatar(name) {
 
     if (!name) {
 
-        profileAvatar.textContent = "U";
+        profileAvatar.textContent =
+            "U";
 
         return;
 
     }
+
 
     profileAvatar.textContent =
         name
@@ -315,14 +394,17 @@ function formatJoinedDate(timestamp) {
 
     if (!timestamp) {
 
-        profileJoined.textContent = "-";
+        profileJoined.textContent =
+            "-";
 
         return;
 
     }
 
+
     const date =
         timestamp.toDate();
+
 
     profileJoined.textContent =
         date.toLocaleDateString(
@@ -350,19 +432,35 @@ async function loadUserStatistics() {
 
     try {
 
-        const q = query(
+        const q =
+            query(
 
-            collection(db, "notes"),
+                collection(
+                    db,
+                    "notes"
+                ),
 
-            where("uploaderId", "==", profileUserId),
-            where("status", "==", "approved")
+                where(
+                    "uploaderId",
+                    "==",
+                    profileUserId
+                ),
 
-        );
+                where(
+                    "status",
+                    "==",
+                    "approved"
+                )
+
+            );
+
 
         const snapshot =
             await getDocs(q);
 
+
         userNotes = [];
+
 
         let totalLikes = 0;
 
@@ -370,56 +468,75 @@ async function loadUserStatistics() {
 
         let totalDownloads = 0;
 
-        snapshot.forEach(doc => {
 
-            const note = doc.data();
+        snapshot.forEach(
+            noteDoc => {
 
-            userNotes.push({
+                const note =
+                    noteDoc.data();
 
-                id: doc.id,
 
-                ...note
+                userNotes.push({
 
-            });
+                    id:
+                        noteDoc.id,
 
-            totalLikes +=
-                note.likes || 0;
+                    ...note
 
-            totalViews +=
-                note.views || 0;
+                });
 
-            totalDownloads +=
-                note.downloads || 0;
 
-        });
+                totalLikes +=
+                    note.likes || 0;
+
+
+                totalViews +=
+                    note.views || 0;
+
+
+                totalDownloads +=
+                    note.downloads || 0;
+
+            }
+        );
+
 
         uploadsCount.textContent =
             userNotes.length;
 
+
         likesCount.textContent =
             totalLikes;
+
 
         viewsCount.textContent =
             totalViews;
 
+
         downloadsCount.textContent =
             totalDownloads;
+
 
         userNotes.sort(
 
             (a, b) => {
 
                 const first =
-                    a.uploadedAt?.seconds || 0;
+                    a.uploadedAt?.seconds ||
+                    0;
+
 
                 const second =
-                    b.uploadedAt?.seconds || 0;
+                    b.uploadedAt?.seconds ||
+                    0;
+
 
                 return second - first;
 
             }
 
         );
+
 
         renderRecentUploads();
 
@@ -443,59 +560,119 @@ async function loadUserStatistics() {
 
 function renderRecentUploads() {
 
-    recentUploads.innerHTML = "";
+    recentUploads.innerHTML =
+        "";
 
-    if (userNotes.length === 0) {
+
+    if (
+        userNotes.length === 0
+    ) {
 
         recentUploads.innerHTML = `
+
             <div class="upload-empty">
-                <div class="empty-icon">📄</div>
-                <h3>No uploads yet</h3>
-                <p>This user hasn't uploaded any notes yet.</p>
+
+                <div class="empty-icon">
+                    📄
+                </div>
+
+                <h3>
+                    No uploads yet
+                </h3>
+
+                <p>
+                    This user hasn't uploaded any notes yet.
+                </p>
+
             </div>
+
         `;
 
         return;
+
     }
 
-    const recent = userNotes.slice(0, 6);
 
-    recent.forEach(note => {
+    const recent =
+        userNotes.slice(0, 6);
 
-        const row = document.createElement("div");
 
-        row.className = "upload-row";
+    recent.forEach(
+        note => {
 
-        row.innerHTML = `
-            <div class="upload-info">
-                <h3>${note.title}</h3>
-                <span>${note.subject || "Unknown Subject"}</span>
-            </div>
+            const row =
+                document.createElement(
+                    "div"
+                );
 
-            <button class="details-btn">
-                View Details
-            </button>
-        `;
 
-        row.querySelector(".details-btn").addEventListener("click", (e) => {
+            row.className =
+                "upload-row";
 
-            e.stopPropagation();
 
-            window.location.href = `/main/Users/notes-details.html?id=${note.id}`;
+            row.innerHTML = `
 
-        });
+                <div class="upload-info">
 
-        row.addEventListener("click", () => {
+                    <h3>
+                        ${note.title}
+                    </h3>
 
-            window.location.href = `/main/Users/notes-details.html?id=${note.id}`;
+                    <span>
+                        ${
+                            note.subject ||
+                            "Unknown Subject"
+                        }
+                    </span>
 
-        });
+                </div>
 
-        recentUploads.appendChild(row);
 
-    });
+                <button
+                    class="details-btn"
+                >
+                    View Details
+                </button>
+
+            `;
+
+
+            row.querySelector(
+                ".details-btn"
+            ).addEventListener(
+                "click",
+                (event) => {
+
+                    event.stopPropagation();
+
+
+                    window.location.href =
+                        `/main/Users/notes-details.html?id=${note.id}`;
+
+                }
+            );
+
+
+            row.addEventListener(
+                "click",
+                () => {
+
+                    window.location.href =
+                        `/main/Users/notes-details.html?id=${note.id}`;
+
+                }
+            );
+
+
+            recentUploads.appendChild(
+                row
+            );
+
+        }
+    );
 
 }
+
 
 /* ===========================================================
    FOLLOW SYSTEM
@@ -503,39 +680,52 @@ function renderRecentUploads() {
 
 async function checkFollowStatus() {
 
-    if (currentUser.uid === profileUserId) {
+    if (
+        currentUser.uid ===
+        profileUserId
+    ) {
 
         return;
 
     }
 
-    const q = query(
 
-        collection(db, "follows"),
+    const q =
+        query(
 
-        where(
-            "followerId",
-            "==",
-            currentUser.uid
-        ),
+            collection(
+                db,
+                "follows"
+            ),
 
-        where(
-            "followingId",
-            "==",
-            profileUserId
-        )
+            where(
+                "followerId",
+                "==",
+                currentUser.uid
+            ),
 
-    );
+            where(
+                "followingId",
+                "==",
+                profileUserId
+            )
+
+        );
+
 
     const snapshot =
         await getDocs(q);
 
-    if (snapshot.empty) {
+
+    if (
+        snapshot.empty
+    ) {
 
         connectBtn.textContent =
             "Connect";
 
-        connectBtn.dataset.followId = "";
+        connectBtn.dataset.followId =
+            "";
 
     }
 
@@ -551,41 +741,62 @@ async function checkFollowStatus() {
 
 }
 
-// ===========================================================
-// CREATE NOTIFICATION
-// ===========================================================
+
+/* ===========================================================
+   CREATE NOTIFICATION
+   =========================================================== */
 
 async function createNotification(
     recipientId,
     type,
     message,
     relatedId = null
-){
+) {
 
-    try{
+    try {
 
         await addDoc(
 
-            collection(db, "notifications"),
+            collection(
+                db,
+                "notifications"
+            ),
 
             {
-                recipientId: recipientId,
-                senderId: currentUser.uid,
-                type: type,
-                message: message,
-                relatedId: relatedId,
-                read: false,
-                createdAt: serverTimestamp()
+
+                recipientId:
+                    recipientId,
+
+                senderId:
+                    currentUser.uid,
+
+                type:
+                    type,
+
+                message:
+                    message,
+
+                relatedId:
+                    relatedId,
+
+                read:
+                    false,
+
+                createdAt:
+                    serverTimestamp()
+
             }
 
         );
+
 
         console.log(
             "Notification created successfully"
         );
 
     }
-    catch(error){
+
+    catch (error) {
 
         console.error(
             "Notification Error:",
@@ -596,30 +807,37 @@ async function createNotification(
 
 }
 
+
 /* ===========================================================
    CONNECT USER
    =========================================================== */
 
-async function connectUser(){
+async function connectUser() {
 
-    try{
+    try {
 
         await addDoc(
 
-            collection(db, "follows"),
+            collection(
+                db,
+                "follows"
+            ),
 
             {
+
                 followerId:
-                currentUser.uid,
+                    currentUser.uid,
 
                 followingId:
-                profileUserId,
+                    profileUserId,
 
                 createdAt:
-                new Date()
+                    serverTimestamp()
+
             }
 
         );
+
 
         await createNotification(
 
@@ -627,12 +845,15 @@ async function connectUser(){
 
             "connect",
 
-            `${currentUser.displayName || "Someone"} connected with you.`
+            `${currentUser.displayName || "Someone"} connected with you.`,
+
+            currentUser.uid
 
         );
 
     }
-    catch(error){
+
+    catch (error) {
 
         console.error(
             "Connect Error:",
@@ -680,66 +901,42 @@ async function disconnectUser(id) {
    CONNECT BUTTON
    =========================================================== */
 
-connectBtn.addEventListener(
+if (connectBtn) {
 
-    "click",
+    connectBtn.addEventListener(
 
-    async () => {
+        "click",
 
-        connectBtn.disabled = true;
+        async () => {
 
-        const followId =
-            connectBtn.dataset.followId;
-
-        if (followId) {
-
-            await disconnectUser(
-                followId
-            );
-
-        }
-
-        else {
-
-            await connectUser();
-
-        }
-
-        await checkFollowStatus();
-
-        connectBtn.disabled = false;
-
-    }
-
-);
+            connectBtn.disabled =
+                true;
 
 
-/* ===========================================================
-   REALTIME FOLLOWERS
-   =========================================================== */
+            const followId =
+                connectBtn.dataset.followId;
 
-function listenFollowersCount() {
 
-    const q = query(
+            if (followId) {
 
-        collection(db, "follows"),
+                await disconnectUser(
+                    followId
+                );
 
-        where(
-            "followingId",
-            "==",
-            profileUserId
-        )
+            }
 
-    );
+            else {
 
-    onSnapshot(
+                await connectUser();
 
-        q,
+            }
 
-        snapshot => {
 
-            followersCount.textContent =
-                snapshot.size;
+            await checkFollowStatus();
+
+
+            connectBtn.disabled =
+                false;
 
         }
 
@@ -749,33 +946,637 @@ function listenFollowersCount() {
 
 
 /* ===========================================================
-   PREVENT SELF FOLLOW
+   FOLLOWERS / FOLLOWING COUNTS
    =========================================================== */
 
+function listenSocialCounts() {
+
+    /* =========================
+       FOLLOWERS
+    ========================= */
+
+    const followersQuery =
+        query(
+
+            collection(
+                db,
+                "follows"
+            ),
+
+            where(
+                "followingId",
+                "==",
+                profileUserId
+            )
+
+        );
+
+
+    onSnapshot(
+
+        followersQuery,
+
+        snapshot => {
+
+            const countElement =
+                followersBtn?.querySelector(
+                    "strong"
+                );
+
+
+            if (countElement) {
+
+                countElement.textContent =
+                    snapshot.size;
+
+            }
+
+        },
+
+        error => {
+
+            console.error(
+                "Followers Listener Error:",
+                error
+            );
+
+        }
+
+    );
+
+
+    /* =========================
+       FOLLOWING
+    ========================= */
+
+    const followingQuery =
+        query(
+
+            collection(
+                db,
+                "follows"
+            ),
+
+            where(
+                "followerId",
+                "==",
+                profileUserId
+            )
+
+        );
+
+
+    onSnapshot(
+
+        followingQuery,
+
+        snapshot => {
+
+            if (followingCount) {
+
+                followingCount.textContent =
+                    snapshot.size;
+
+            }
+
+        },
+
+        error => {
+
+            console.error(
+                "Following Listener Error:",
+                error
+            );
+
+        }
+
+    );
+
+}
+
+
+/* ===========================================================
+   OPEN FOLLOWERS / FOLLOWING MODAL
+   =========================================================== */
+
+async function openSocialModal(type) {
+
+    if (
+        !socialModal ||
+        !socialUserList
+    ) {
+
+        return;
+
+    }
+
+
+    const isFollowers =
+        type === "followers";
+
+
+    socialModalTitle.textContent =
+        isFollowers
+            ? "Followers"
+            : "Following";
+
+
+    socialUserList.innerHTML = `
+
+        <div class="social-user-loading">
+
+            Loading...
+
+        </div>
+
+    `;
+
+
+    socialModal.classList.add(
+        "show"
+    );
+
+
+    socialModal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+
+    document.body.style.overflow =
+        "hidden";
+
+
+    try {
+
+        const q =
+            query(
+
+                collection(
+                    db,
+                    "follows"
+                ),
+
+                where(
+
+                    isFollowers
+                        ? "followingId"
+                        : "followerId",
+
+                    "==",
+
+                    profileUserId
+
+                )
+
+            );
+
+
+        const snapshot =
+            await getDocs(q);
+
+
+        /* =========================
+           EMPTY
+        ========================= */
+
+        if (
+            snapshot.empty
+        ) {
+
+            socialUserList.innerHTML = `
+
+                <div class="social-user-empty">
+
+                    <strong>
+
+                        No ${
+                            isFollowers
+                                ? "followers"
+                                : "following"
+                        } yet
+
+                    </strong>
+
+                    <span>
+
+                        ${
+                            isFollowers
+
+                                ? "People who connect with this user will appear here."
+
+                                : "People this user connects with will appear here."
+
+                        }
+
+                    </span>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        /* =========================
+           LOAD USER DOCUMENTS
+        ========================= */
+
+        const users =
+            await Promise.all(
+
+                snapshot.docs.map(
+                    async followDoc => {
+
+                        const follow =
+                            followDoc.data();
+
+
+                        const userId =
+                            isFollowers
+
+                                ? follow.followerId
+
+                                : follow.followingId;
+
+
+                        const userSnap =
+                            await getDoc(
+
+                                doc(
+                                    db,
+                                    "users",
+                                    userId
+                                )
+
+                            );
+
+
+                        if (
+                            !userSnap.exists()
+                        ) {
+
+                            return null;
+
+                        }
+
+
+                        return {
+
+                            id:
+                                userId,
+
+                            ...userSnap.data()
+
+                        };
+
+                    }
+                )
+
+            );
+
+
+        const validUsers =
+            users.filter(Boolean);
+
+
+        /* =========================
+           NO VALID USERS
+        ========================= */
+
+        if (
+            validUsers.length === 0
+        ) {
+
+            socialUserList.innerHTML = `
+
+                <div class="social-user-empty">
+
+                    <strong>
+                        No users found
+                    </strong>
+
+                    <span>
+                        The users could not be loaded.
+                    </span>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        /* =========================
+           RENDER USERS
+        ========================= */
+
+        socialUserList.innerHTML =
+            "";
+
+
+        validUsers.forEach(
+            user => {
+
+                const row =
+                    document.createElement(
+                        "button"
+                    );
+
+
+                row.type =
+                    "button";
+
+
+                row.className =
+                    "social-user-row";
+
+
+                const name =
+                    user.name ||
+                    "Unknown User";
+
+
+                const initial =
+                    name
+                        .trim()
+                        .charAt(0)
+                        .toUpperCase() ||
+                    "U";
+
+
+                row.innerHTML = `
+
+                    <div
+                        class="social-user-avatar"
+                    >
+
+                        ${
+                            user.profileImage
+
+                                ? `
+
+                                    <img
+                                        src="${user.profileImage}"
+                                        alt="Profile Picture"
+                                    >
+
+                                  `
+
+                                : initial
+                        }
+
+                    </div>
+
+
+                    <div
+                        class="social-user-info"
+                    >
+
+                        <div
+                            class="social-user-name"
+                        >
+
+                            ${name}
+
+                        </div>
+
+
+                        <div
+                            class="social-user-meta"
+                        >
+
+                            ${
+                                user.branch ||
+                                "Engineering"
+                            }
+
+                            ${
+                                user.year
+
+                                    ? ` • ${user.year}`
+
+                                    : ""
+
+                            }
+
+                        </div>
+
+                    </div>
+
+                `;
+
+
+                row.addEventListener(
+                    "click",
+                    () => {
+
+                        closeSocialModal();
+
+
+                        window.location.href =
+                            `/main/Users/user_profile.html?uid=${user.id}`;
+
+                    }
+                );
+
+
+                socialUserList.appendChild(
+                    row
+                );
+
+            }
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Social List Error:",
+            error
+        );
+
+
+        socialUserList.innerHTML = `
+
+            <div class="social-user-empty">
+
+                <strong>
+                    Couldn't load users
+                </strong>
+
+                <span>
+                    Please try again.
+                </span>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* ===========================================================
+   CLOSE SOCIAL MODAL
+   =========================================================== */
+
+function closeSocialModal() {
+
+    if (!socialModal) {
+
+        return;
+
+    }
+
+
+    socialModal.classList.remove(
+        "show"
+    );
+
+
+    socialModal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+
+    document.body.style.overflow =
+        "";
+
+}
+
+
+/* ===========================================================
+   FOLLOWERS BUTTON
+   =========================================================== */
+
+if (followersBtn) {
+
+    followersBtn.addEventListener(
+        "click",
+        () => {
+
+            openSocialModal(
+                "followers"
+            );
+
+        }
+    );
+
+}
+
+
+/* ===========================================================
+   FOLLOWING BUTTON
+   =========================================================== */
+
+if (followingBtn) {
+
+    followingBtn.addEventListener(
+        "click",
+        () => {
+
+            openSocialModal(
+                "following"
+            );
+
+        }
+    );
+
+}
+
+
+/* ===========================================================
+   CLOSE BUTTON
+   =========================================================== */
+
+if (socialModalClose) {
+
+    socialModalClose.addEventListener(
+        "click",
+        closeSocialModal
+    );
+
+}
+
+
+/* ===========================================================
+   CLOSE BY BACKDROP
+   =========================================================== */
+
+if (socialModalBackdrop) {
+
+    socialModalBackdrop.addEventListener(
+        "click",
+        closeSocialModal
+    );
+
+}
+
+
+/* ===========================================================
+   CLOSE WITH ESCAPE
+   =========================================================== */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+
+            event.key === "Escape" &&
+
+            socialModal?.classList.contains(
+                "show"
+            )
+
+        ) {
+
+            closeSocialModal();
+
+        }
+
+    }
+);
 
 
 /* ===========================================================
    MESSAGE BUTTON
    =========================================================== */
 
-messageBtn.addEventListener(
+if (messageBtn) {
 
-    "click",
+    messageBtn.addEventListener(
 
-    () => {
+        "click",
 
-        if (currentUser.uid === profileUserId) {
+        () => {
 
-            return;
+            if (
+                currentUser.uid ===
+                profileUserId
+            ) {
+
+                return;
+
+            }
+
+
+            window.location.href =
+                `/main/chat.html?uid=${profileUserId}`;
 
         }
 
-        window.location.href =
-            `/main/chat.html?uid=${profileUserId}`;
+    );
 
-    }
-
-);
+}
 
 
 /* ===========================================================
@@ -792,7 +1593,9 @@ async function refreshFollowButton() {
 
     catch (error) {
 
-        console.error(error);
+        console.error(
+            error
+        );
 
     }
 
@@ -805,49 +1608,37 @@ async function refreshFollowButton() {
 
 function formatNumber(number) {
 
-    if (number >= 1000000) {
+    if (
+        number >= 1000000
+    ) {
 
         return (
-            number / 1000000
+
+            number /
+            1000000
+
         ).toFixed(1) + "M";
 
     }
 
-    if (number >= 1000) {
+
+    if (
+        number >= 1000
+    ) {
 
         return (
-            number / 1000
+
+            number /
+            1000
+
         ).toFixed(1) + "K";
 
     }
 
+
     return number;
 
 }
-
-
-/* ===========================================================
-   OPTIONAL NUMBER FORMATTING
-   =========================================================== */
-
-// Uncomment if you want 1200 → 1.2K
-
-/*
-uploadsCount.textContent =
-formatNumber(Number(uploadsCount.textContent));
-
-likesCount.textContent =
-formatNumber(Number(likesCount.textContent));
-
-viewsCount.textContent =
-formatNumber(Number(viewsCount.textContent));
-
-downloadsCount.textContent =
-formatNumber(Number(downloadsCount.textContent));
-
-followersCount.textContent =
-formatNumber(Number(followersCount.textContent));
-*/
 
 
 /* ===========================================================
@@ -858,7 +1649,7 @@ window.addEventListener(
 
     "error",
 
-    (event) => {
+    event => {
 
         console.error(
 
@@ -874,10 +1665,22 @@ window.addEventListener(
 
 
 /* ===========================================================
-   DEBUG (REMOVE LATER)
+   DEBUG
    =========================================================== */
 
-console.log("================================");
-console.log("EngiNotes User Profile Loaded");
-console.log("Profile UID:", profileUserId);
-console.log("================================");
+console.log(
+    "================================"
+);
+
+console.log(
+    "EngiNotes User Profile Loaded"
+);
+
+console.log(
+    "Profile UID:",
+    profileUserId
+);
+
+console.log(
+    "================================"
+);

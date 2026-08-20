@@ -141,6 +141,25 @@
                 </div>
 
 
+                <!-- Followers / Following -->
+
+                <div class="social-stats">
+
+                    <button type="button" class="social-stat-btn" id="followersBtn">
+                        <strong id="followersCount">0</strong>
+                        <span>Followers</span>
+                    </button>
+
+                    <span class="social-stat-divider"></span>
+
+                    <button type="button" class="social-stat-btn" id="followingBtn">
+                        <strong id="followingCount">0</strong>
+                        <span>Following</span>
+                    </button>
+
+                </div>
+
+
                 <!-- Buttons -->
 
                 <div class="profile-actions">
@@ -266,27 +285,7 @@
             </div>
 
 
-            <div class="stat-card">
 
-                <div class="stat-icon">
-
-
-
-                </div>
-
-                <h2 id="followersCount">
-
-                    0
-
-                </h2>
-
-                <p>
-
-                    Followers
-
-                </p>
-
-            </div>
 
         </section>
 
@@ -398,6 +397,33 @@
         </section>
 
     </main>
+
+
+    <!-- Followers / Following Modal -->
+    <div class="social-modal" id="socialModal" aria-hidden="true">
+
+        <div class="social-modal-backdrop" id="socialModalBackdrop"></div>
+
+        <div class="social-modal-card" role="dialog" aria-modal="true">
+
+            <div class="social-modal-header">
+                <h2 id="socialModalTitle">Followers</h2>
+
+                <button
+                    type="button"
+                    class="social-modal-close"
+                    id="socialModalClose"
+                    aria-label="Close"
+                >
+                    ×
+                </button>
+            </div>
+
+            <div class="social-user-list" id="socialUserList"></div>
+
+        </div>
+
+    </div>
 
 </body>
 
