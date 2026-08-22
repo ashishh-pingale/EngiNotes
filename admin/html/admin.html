@@ -10,7 +10,8 @@
 
     <link rel="stylesheet" href="/admin/css/admin.css">
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
@@ -33,6 +34,11 @@
                 </div>
             </div>
             <nav class="sidebar-nav">
+
+                <a href="/main/index.html" class="home-link">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Home</span>
+                </a>
                 <a href="#dashboard" class="nav-link active">
                     <i class="fa-solid fa-house"></i>
                     <span>Dashboard</span>
@@ -88,11 +94,21 @@
 
                     </div>
                     <div class="admin-info">
-                        <img src="https://ui-avatars.com/api/?name=Admin&background=2563eb&color=fff" alt="Admin">
+
+                        <img id="adminAvatar" src="" alt="Profile">
+
                         <div>
-                            <h4>Administrator</h4>
-                            <span>Super Admin</span>
+
+                            <h4 id="adminName">
+                                Loading...
+                            </h4>
+
+                            <span id="adminEmail">
+                                Loading...
+                            </span>
+
                         </div>
+
                     </div>
                 </div>
             </header>
@@ -456,7 +472,7 @@
 
             </div>
 
-    
+
 
             <!-- Delete Confirmation Modal -->
 

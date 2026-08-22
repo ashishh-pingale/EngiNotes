@@ -85,7 +85,7 @@ const cancelDeleteBtn = document.getElementById("cancelDelete");
 const closeDeleteModal = document.getElementById("closeDeleteModal");
 let noteToDelete = null;
 
-function openDeleteModal(noteId, noteTitle){
+function openDeleteModal(noteId, noteTitle) {
 
     noteToDelete = noteId;
 
@@ -96,7 +96,7 @@ function openDeleteModal(noteId, noteTitle){
 
 }
 
-function closeDelete(){
+function closeDelete() {
 
     noteToDelete = null;
 
@@ -232,14 +232,14 @@ userModal.addEventListener("click", (e) => {
 
 });
 
-function showToast(type, title, message){
+function showToast(type, title, message) {
 
     const icons = {
 
-        success:"fa-circle-check",
-        error:"fa-circle-xmark",
-        warning:"fa-triangle-exclamation",
-        info:"fa-circle-info"
+        success: "fa-circle-check",
+        error: "fa-circle-xmark",
+        warning: "fa-triangle-exclamation",
+        info: "fa-circle-info"
 
     };
 
@@ -263,17 +263,17 @@ function showToast(type, title, message){
 
     toastContainer.appendChild(toast);
 
-    setTimeout(()=>{
+    setTimeout(() => {
 
-        toast.style.animation="toastOut .3s forwards";
+        toast.style.animation = "toastOut .3s forwards";
 
-        setTimeout(()=>{
+        setTimeout(() => {
 
             toast.remove();
 
-        },300);
+        }, 300);
 
-    },3000);
+    }, 3000);
 
 }
 
@@ -402,15 +402,15 @@ async function loadRecentUploads() {
 // Confirm Delete Function
 // ======================================
 
-async function confirmDeleteNote(){
+async function confirmDeleteNote() {
     console.log("DELETE CLICKED");
 
-    if(!noteToDelete) return;
+    if (!noteToDelete) return;
 
-    try{
+    try {
 
         await deleteDoc(
-            doc(db,"notes",noteToDelete)
+            doc(db, "notes", noteToDelete)
         );
 
         closeDelete();
@@ -425,7 +425,7 @@ async function confirmDeleteNote(){
 
     }
 
-    catch(error){
+    catch (error) {
 
         console.error(error);
 
@@ -618,7 +618,7 @@ async function approveNote(noteId) {
         );
 
         await refreshAdmin();
-            showToast(
+        showToast(
             "success",
             "Note Approved",
             "The note has been approved successfully."
@@ -658,7 +658,7 @@ async function rejectNote(noteId) {
         );
 
         await refreshAdmin();
-            showToast(
+        showToast(
             "warning",
             "Note Rejected",
             "The note has been moved to rejected."
@@ -668,7 +668,7 @@ async function rejectNote(noteId) {
 
     catch (error) {
 
-            showToast(
+        showToast(
             "error",
             "Reject Failed",
             "Unable to reject the note."
@@ -982,7 +982,7 @@ function renderRejectedNotes(notes) {
         row.querySelector(".delete-btn")
             .addEventListener("click", () => {
 
-                deleteNote(note.id , note.title);
+                deleteNote(note.id, note.title);
 
             });
 
@@ -1005,7 +1005,7 @@ function renderRejectedNotes(notes) {
 // Delete Note
 // ======================================
 
-function deleteNote(noteId, noteTitle){
+function deleteNote(noteId, noteTitle) {
 
     openDeleteModal(noteId, noteTitle);
 
@@ -1224,11 +1224,11 @@ async function loadSettings() {
 
 saveSettingsBtn.addEventListener("click", () => {
 
-showToast(
-    "info",
-    "Settings",
-    "Settings feature will be connected later."
-);
+    showToast(
+        "info",
+        "Settings",
+        "Settings feature will be connected later."
+    );
 });
 
 
@@ -1243,8 +1243,7 @@ logoutBtn.addEventListener("click", async () => {
 
         await signOut(auth);
 
-        window.location.href =
-            "/login/login.html";
+        window.location.href = "/main/login.html";
 
     }
 
