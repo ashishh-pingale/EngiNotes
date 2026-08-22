@@ -329,19 +329,15 @@ async function fetchNotes() {
                         );
 
 
+                    // ==========================================
+                    // OPEN PREVIEW
+                    // ==========================================
+                    // Preview is PUBLIC.
+                    // Logged-out users can open it too.
+
                     openPdfBtn.addEventListener(
                         "click",
                         async () => {
-
-                            if (!currentUser) {
-
-                                window.location.href =
-                                    "login.html";
-
-                                return;
-
-                            }
-
 
                             await openPreview(
                                 note
@@ -501,6 +497,8 @@ async function openNoteFromNotification() {
 async function checkIfLiked(
     noteId
 ) {
+
+    // Logged-out users cannot have a personal like state
 
     if (!currentUser) {
 
@@ -708,6 +706,8 @@ downloadBtn.addEventListener(
     "click",
     async () => {
 
+        // DOWNLOAD REMAINS LOGIN-ONLY
+
         if (!currentUser) {
 
             window.location.href =
@@ -781,6 +781,8 @@ downloadBtn.addEventListener(
 likeBtn.addEventListener(
     "click",
     async () => {
+
+        // LIKE REMAINS LOGIN-ONLY
 
         if (!currentUser) {
 
@@ -1043,45 +1045,47 @@ onAuthStateChanged(
             user;
 
 
-        if (!user) {
+        // ==========================================
+        // LOAD CURRENT USER DATA
+        // ==========================================
+        // Only logged-in users have a user document.
 
-            return;
+        if (user) {
 
-        }
+            try {
 
+                const userSnap =
+                    await getDoc(
 
-        try {
+                        doc(
+                            db,
+                            "users",
+                            user.uid
+                        )
 
-            const userSnap =
-                await getDoc(
-
-                    doc(
-                        db,
-                        "users",
-                        user.uid
-                    )
-
-                );
+                    );
 
 
-            if (
-                userSnap.exists()
-            ) {
+                if (
+                    userSnap.exists()
+                ) {
 
-                currentUserName =
-                    userSnap.data().name ||
-                    "A user";
+                    currentUserName =
+                        userSnap.data().name ||
+                        "A user";
+
+                }
 
             }
 
-        }
+            catch (error) {
 
-        catch (error) {
+                console.error(
+                    "Failed to load current user:",
+                    error
+                );
 
-            console.error(
-                "Failed to load current user:",
-                error
-            );
+            }
 
         }
 
@@ -1089,6 +1093,8 @@ onAuthStateChanged(
         // ==========================================
         // LOAD NOTES
         // ==========================================
+        // IMPORTANT:
+        // This runs for BOTH logged-in and logged-out users.
 
         await fetchNotes();
 

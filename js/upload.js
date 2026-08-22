@@ -1,10 +1,11 @@
-
 import { auth, db } from "./firebase.js";
 
 import {
     collection,
     addDoc,
-    serverTimestamp
+    serverTimestamp,
+    doc,
+    getDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // =======================================================
@@ -41,46 +42,46 @@ const fileName = document.getElementById("fileName");
 const fileSize = document.getElementById("fileSize");
 
 const removeFileBtn =
-document.querySelector(".remove-file-btn");
+    document.querySelector(".remove-file-btn");
 
 // Loading Overlay
 
 const loadingOverlay =
-document.getElementById("uploadLoadingOverlay");
+    document.getElementById("uploadLoadingOverlay");
 
 const loadingTitle =
-document.getElementById("loadingTitle");
+    document.getElementById("loadingTitle");
 
 const loadingMessage =
-document.getElementById("loadingMessage");
+    document.getElementById("loadingMessage");
 
 // Success Modal
 
 const successModal =
-document.getElementById("successModal");
+    document.getElementById("successModal");
 
 const successCloseBtn =
-document.getElementById("successCloseBtn");
+    document.getElementById("successCloseBtn");
 
 const uploadAnotherBtn =
-document.getElementById("uploadAnotherBtn");
+    document.getElementById("uploadAnotherBtn");
 
 const browseNotesBtn =
-document.getElementById("browseNotesBtn");
+    document.getElementById("browseNotesBtn");
 
 // Error Modal
 
 const errorModal =
-document.getElementById("errorModal");
+    document.getElementById("errorModal");
 
 const errorCloseBtn =
-document.getElementById("errorCloseBtn");
+    document.getElementById("errorCloseBtn");
 
 const retryUploadBtn =
-document.getElementById("retryUploadBtn");
+    document.getElementById("retryUploadBtn");
 
 const cancelUploadBtn =
-document.getElementById("cancelUploadBtn");
+    document.getElementById("cancelUploadBtn");
 
 // =======================================================
 // Initialization
@@ -88,7 +89,8 @@ document.getElementById("cancelUploadBtn");
 
 document.addEventListener("DOMContentLoaded", init);
 
-function init(){
+function init() {
+
     bindEvents();
     setupDragAndDrop();
 
@@ -98,7 +100,7 @@ function init(){
 // Event Listeners
 // =======================================================
 
-function bindEvents(){
+function bindEvents() {
 
     uploadForm.addEventListener(
         "submit",
@@ -135,7 +137,7 @@ function bindEvents(){
         () => {
 
             window.location.href =
-            "/main/browse.html";
+                "/main/browse.html";
 
         }
     );
@@ -161,48 +163,61 @@ function bindEvents(){
 // Drag & Drop
 // =======================================================
 
-function setupDragAndDrop(){
+function setupDragAndDrop() {
 
-    ["dragenter","dragover"].forEach(eventName=>{
+    ["dragenter", "dragover"].forEach(eventName => {
 
-        dropZone.addEventListener(eventName,(event)=>{
+        dropZone.addEventListener(
+            eventName,
+            (event) => {
 
-            event.preventDefault();
+                event.preventDefault();
 
-            dropZone.classList.add("drag-over");
+                dropZone.classList.add(
+                    "drag-over"
+                );
 
-        });
-
-    });
-
-    ["dragleave","drop"].forEach(eventName=>{
-
-        dropZone.addEventListener(eventName,(event)=>{
-
-            event.preventDefault();
-
-            dropZone.classList.remove("drag-over");
-
-        });
+            }
+        );
 
     });
 
-    dropZone.addEventListener("drop",(event)=>{
 
-        const files =
-        event.dataTransfer.files;
+    ["dragleave", "drop"].forEach(eventName => {
 
-        if(!files.length) return;
+        dropZone.addEventListener(
+            eventName,
+            (event) => {
 
-        fileInput.files = files;
+                event.preventDefault();
 
-        handleFileSelect({
+                dropZone.classList.remove(
+                    "drag-over"
+                );
 
-            target:fileInput
-
-        });
+            }
+        );
 
     });
+
+
+    dropZone.addEventListener(
+        "drop",
+        (event) => {
+
+            const files =
+                event.dataTransfer.files;
+
+            if (!files.length) return;
+
+            fileInput.files = files;
+
+            handleFileSelect({
+                target: fileInput
+            });
+
+        }
+    );
 
 }
 
@@ -210,9 +225,13 @@ function setupDragAndDrop(){
 // File Handling
 // =======================================================
 
-function handleDropZoneClick(event){
+function handleDropZoneClick(event) {
 
-    if(event.target.closest(".remove-file-btn")){
+    if (
+        event.target.closest(
+            ".remove-file-btn"
+        )
+    ) {
 
         return;
 
@@ -222,14 +241,17 @@ function handleDropZoneClick(event){
 
 }
 
-function handleFileSelect(event){
+
+function handleFileSelect(event) {
 
     const file =
-    event.target.files[0];
+        event.target.files[0];
 
-    if(!file) return;
+    if (!file) return;
 
-    if(file.type!==ACCEPTED_FILE_TYPE){
+    if (
+        file.type !== ACCEPTED_FILE_TYPE
+    ) {
 
         showErrorModal(
             "Please select a valid PDF file."
@@ -245,29 +267,35 @@ function handleFileSelect(event){
 
 }
 
-function updateFileBadge(file){
+
+function updateFileBadge(file) {
 
     fileName.textContent =
-    file.name;
+        file.name;
 
     fileSize.textContent =
-    formatFileSize(file.size);
+        formatFileSize(file.size);
 
-    fileBadge.classList.add("active");
+    fileBadge.classList.add(
+        "active"
+    );
 
 }
 
-function removeFile(event){
 
-    if(event){
+function removeFile(event) {
+
+    if (event) {
 
         event.stopPropagation();
 
     }
 
-    fileInput.value="";
+    fileInput.value = "";
 
-    fileBadge.classList.remove("active");
+    fileBadge.classList.remove(
+        "active"
+    );
 
 }
 
@@ -275,22 +303,29 @@ function removeFile(event){
 // Loading State
 // =======================================================
 
-function showLoading(title,message){
+function showLoading(
+    title,
+    message
+) {
 
     loadingTitle.textContent =
-    title;
+        title;
 
     loadingMessage.textContent =
-    message;
+        message;
 
-    loadingOverlay.classList.add("show");
+    loadingOverlay.classList.add(
+        "show"
+    );
 
-    uploadBtn.disabled=true;
+    uploadBtn.disabled = true;
 
-    uploadBtn.classList.add("loading");
+    uploadBtn.classList.add(
+        "loading"
+    );
 
     uploadBtnText.textContent =
-    "Uploading...";
+        "Uploading...";
 
     uploadForm.classList.add(
         "form-disabled"
@@ -298,16 +333,21 @@ function showLoading(title,message){
 
 }
 
-function hideLoading(){
 
-    loadingOverlay.classList.remove("show");
+function hideLoading() {
 
-    uploadBtn.disabled=false;
+    loadingOverlay.classList.remove(
+        "show"
+    );
 
-    uploadBtn.classList.remove("loading");
+    uploadBtn.disabled = false;
+
+    uploadBtn.classList.remove(
+        "loading"
+    );
 
     uploadBtnText.textContent =
-    "Upload Note";
+        "Upload Note";
 
     uploadForm.classList.remove(
         "form-disabled"
@@ -319,19 +359,25 @@ function hideLoading(){
 // Success Modal
 // =======================================================
 
-function showSuccessModal(){
+function showSuccessModal() {
 
-    successModal.classList.add("show");
-
-}
-
-function hideSuccessModal(){
-
-    successModal.classList.remove("show");
+    successModal.classList.add(
+        "show"
+    );
 
 }
 
-function uploadAnother(){
+
+function hideSuccessModal() {
+
+    successModal.classList.remove(
+        "show"
+    );
+
+}
+
+
+function uploadAnother() {
 
     hideSuccessModal();
 
@@ -340,8 +386,8 @@ function uploadAnother(){
     removeFile();
 
     document
-    .getElementById("title")
-    .focus();
+        .getElementById("title")
+        .focus();
 
 }
 
@@ -349,19 +395,24 @@ function uploadAnother(){
 // Error Modal
 // =======================================================
 
-function showErrorModal(message){
+function showErrorModal(message) {
 
     document.getElementById(
         "errorMessage"
     ).textContent = message;
 
-    errorModal.classList.add("show");
+    errorModal.classList.add(
+        "show"
+    );
 
 }
 
-function hideErrorModal(){
 
-    errorModal.classList.remove("show");
+function hideErrorModal() {
+
+    errorModal.classList.remove(
+        "show"
+    );
 
 }
 
@@ -369,24 +420,43 @@ function hideErrorModal(){
 // Utility
 // =======================================================
 
-function formatFileSize(bytes){
+function formatFileSize(bytes) {
 
     return (
         bytes /
-        (1024*1024)
+        (1024 * 1024)
     ).toFixed(2) + " MB";
 
 }
 
 // =======================================================
-// Form Submission
+// FORM SUBMISSION
 // =======================================================
 
-async function handleFormSubmit(event){
+async function handleFormSubmit(event) {
 
     event.preventDefault();
 
-    if(!fileInput.files.length){
+
+    // ===================================================
+    // CHECK AUTHENTICATION
+    // ===================================================
+
+    const user =
+        auth.currentUser;
+
+    if (!user) {
+
+        showErrorModal(
+            "You must be logged in to upload notes."
+        );
+
+        return;
+
+    }
+
+
+    if (!fileInput.files.length) {
 
         showErrorModal(
             "Please attach a PDF before submitting."
@@ -396,30 +466,42 @@ async function handleFormSubmit(event){
 
     }
 
-    const file = fileInput.files[0];
+
+    const file =
+        fileInput.files[0];
+
 
     const title =
-    document.getElementById("title")
-    .value.trim();
+        document.getElementById("title")
+            .value.trim();
+
 
     const description =
-    document.getElementById("description")
-    .value.trim();
+        document.getElementById("description")
+            .value.trim();
+
 
     const branch =
-    document.getElementById("branch").value;
+        document.getElementById("branch")
+            .value;
+
 
     const year =
-    document.getElementById("year").value;
+        document.getElementById("year")
+            .value;
+
 
     const semester =
-    document.getElementById("semester").value;
+        document.getElementById("semester")
+            .value;
+
 
     const subject =
-    document.getElementById("subject")
-    .value.trim();
+        document.getElementById("subject")
+            .value.trim();
 
-    try{
+
+    try {
 
         showLoading(
 
@@ -429,65 +511,148 @@ async function handleFormSubmit(event){
 
         );
 
-        const cloudinaryResult =
-        await uploadPDFToCloudinary(file);
+
+        // ===================================================
+        // GET USER NAME FROM FIRESTORE
+        // ===================================================
 
         loadingTitle.textContent =
-        "Saving Note...";
+            "Loading Profile...";
 
         loadingMessage.textContent =
-        "Creating your note entry.";
+            "Getting your profile information.";
+
+
+        const userRef =
+            doc(
+                db,
+                "users",
+                user.uid
+            );
+
+
+        const userSnap =
+            await getDoc(
+                userRef
+            );
+
+
+        let uploaderName =
+            "Anonymous";
+
+
+        if (
+            userSnap.exists()
+        ) {
+
+            const userData =
+                userSnap.data();
+
+
+            uploaderName =
+                userData.name ||
+                userData.displayName ||
+                "Anonymous";
+
+        }
+
+
+        // ===================================================
+        // UPLOAD PDF TO CLOUDINARY
+        // ===================================================
+
+        loadingTitle.textContent =
+            "Uploading PDF...";
+
+        loadingMessage.textContent =
+            "Please wait while we upload your file securely.";
+
+
+        const cloudinaryResult =
+            await uploadPDFToCloudinary(
+                file
+            );
+
+
+        // ===================================================
+        // SAVE NOTE TO FIRESTORE
+        // ===================================================
+
+        loadingTitle.textContent =
+            "Saving Note...";
+
+        loadingMessage.textContent =
+            "Creating your note entry.";
+
 
         await addDoc(
 
-            collection(db,"notes"),
+            collection(
+                db,
+                "notes"
+            ),
 
             {
 
                 title,
+
                 description,
+
                 branch,
+
                 year,
+
                 semester,
+
                 subject,
 
                 pdfUrl:
-                cloudinaryResult.pdfUrl,
+                    cloudinaryResult.pdfUrl,
 
                 publicId:
-                cloudinaryResult.publicId,
+                    cloudinaryResult.publicId,
 
                 uploaderId:
-                auth.currentUser.uid,
+                    user.uid,
 
                 uploaderName:
-                auth.currentUser.displayName
-                || "Anonymous",
+                    uploaderName,
 
                 uploaderEmail:
-                auth.currentUser.email,
+                    user.email || "",
 
                 uploadedAt:
-                serverTimestamp(),
+                    serverTimestamp(),
 
-                status:"pending",
+                status:
+                    "pending",
 
-                downloads:0,
-                likes:0,
-                views:0
+                downloads:
+                    0,
+
+                likes:
+                    0,
+
+                views:
+                    0
 
             }
 
         );
+
 
         hideLoading();
 
         showSuccessModal();
 
     }
-    catch(error){
 
-        console.error(error);
+    catch (error) {
+
+        console.error(
+            "Upload Error:",
+            error
+        );
 
         hideLoading();
 
@@ -505,39 +670,43 @@ async function handleFormSubmit(event){
 // Cloudinary Upload
 // =======================================================
 
-async function uploadPDFToCloudinary(file){
+async function uploadPDFToCloudinary(file) {
 
     const formData =
-    new FormData();
+        new FormData();
+
 
     formData.append(
         "file",
         file
     );
 
+
     formData.append(
         "upload_preset",
         UPLOAD_PRESET
     );
 
-    try{
+
+    try {
 
         const response =
-        await fetch(
+            await fetch(
 
-            `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/raw/upload`,
+                `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/raw/upload`,
 
-            {
+                {
 
-                method:"POST",
+                    method: "POST",
 
-                body:formData
+                    body: formData
 
-            }
+                }
 
-        );
+            );
 
-        if(!response.ok){
+
+        if (!response.ok) {
 
             throw new Error(
                 "Cloudinary upload failed."
@@ -545,23 +714,28 @@ async function uploadPDFToCloudinary(file){
 
         }
 
-        const data =
-        await response.json();
 
-        return{
+        const data =
+            await response.json();
+
+
+        return {
 
             pdfUrl:
-            data.secure_url,
+                data.secure_url,
 
             publicId:
-            data.public_id
+                data.public_id
 
         };
 
     }
-    catch(error){
 
-        console.error(error);
+    catch (error) {
+
+        console.error(
+            error
+        );
 
         throw error;
 
@@ -577,9 +751,11 @@ document.addEventListener(
 
     "keydown",
 
-    (event)=>{
+    (event) => {
 
-        if(event.key!=="Escape") return;
+        if (
+            event.key !== "Escape"
+        ) return;
 
         hideSuccessModal();
 
@@ -597,9 +773,12 @@ successModal.addEventListener(
 
     "click",
 
-    (event)=>{
+    (event) => {
 
-        if(event.target===successModal){
+        if (
+            event.target ===
+            successModal
+        ) {
 
             hideSuccessModal();
 
@@ -609,13 +788,17 @@ successModal.addEventListener(
 
 );
 
+
 errorModal.addEventListener(
 
     "click",
 
-    (event)=>{
+    (event) => {
 
-        if(event.target===errorModal){
+        if (
+            event.target ===
+            errorModal
+        ) {
 
             hideErrorModal();
 
