@@ -8,13 +8,15 @@ import {
     orderBy,
     limit,
     doc,
+    getDoc,
     updateDoc,
     deleteDoc,
     increment
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import {
-    signOut
+    signOut,
+    onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 
@@ -1166,6 +1168,85 @@ function renderUsers(users) {
 
 }
 
+// ======================================
+// Current Admin Profile
+// ======================================
+
+export function getCurrentAdmin() {
+
+    return new Promise((resolve) => {
+
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+
+            unsubscribe();
+
+            if (!user) {
+                resolve(null);
+                return;
+            }
+
+            try {
+
+                const userRef = doc(db, "users", user.uid);
+
+                const userSnap = await getDoc(userRef);
+
+                if (!userSnap.exists()) {
+
+                    resolve({
+                        uid: user.uid,
+                        name: user.displayName || "User",
+                        email: user.email || "",
+                        role: "student",
+                        photoURL: user.photoURL || ""
+                    });
+
+                    return;
+                }
+
+                const userData = userSnap.data();
+
+                resolve({
+
+                    uid: user.uid,
+
+                    name:
+                        userData.name ||
+                        user.displayName ||
+                        "User",
+
+                    email:
+                        userData.email ||
+                        user.email ||
+                        "",
+
+                    role:
+                        userData.role ||
+                        "student",
+
+                    photoURL:
+                        userData.profileImage ||
+                        user.photoURL ||
+                        ""
+
+                });
+
+            } catch (error) {
+
+                console.error(
+                    "Error loading current admin:",
+                    error
+                );
+
+                resolve(null);
+
+            }
+
+        });
+
+    });
+
+}
 
 
 // ======================================

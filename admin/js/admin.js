@@ -1,3 +1,5 @@
+import { getCurrentAdmin } from "./firebase-admin.js";
+
 // =========================================
 // Elements
 // =========================================
@@ -6,7 +8,13 @@ const sidebar = document.querySelector(".sidebar");
 const menuBtn = document.querySelector(".menu-btn");
 const navLinks = document.querySelectorAll(".nav-link");
 const sections = document.querySelectorAll(".page-section");
+// =========================================
+// Admin Profile
+// =========================================
 
+const adminAvatar = document.getElementById("adminAvatar");
+const adminName = document.getElementById("adminName");
+const adminRole = document.getElementById("adminRole");
 // =========================================
 // Sidebar Toggle
 // =========================================
@@ -46,6 +54,34 @@ navLinks.forEach(link => {
 
 });
 
+// =========================================
+// ADMIN PROFILE
+// =========================================
+
+async function loadAdminProfile() {
+
+    const admin = await getCurrentAdmin();
+
+    console.log("ADMIN DATA:", admin);
+
+    if (!admin) {
+        console.log("No admin data returned");
+        return;
+    }
+
+    adminName.textContent = admin.name;
+    adminRole.textContent =
+        admin.role === "admin"
+            ? "Super Admin"
+            : admin.role;
+
+    if (admin.photoURL) {
+        adminAvatar.src = admin.photoURL;
+    } else {
+        adminAvatar.src =
+            `https://ui-avatars.com/api/?name=${encodeURIComponent(admin.name)}&background=2563eb&color=fff`;
+    }
+}
 
 
 
@@ -62,6 +98,7 @@ window.addEventListener("resize", () => {
 
 });
 
+loadAdminProfile();
 // =========================================
 // Future API Functions
 // =========================================
