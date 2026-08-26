@@ -554,7 +554,7 @@ function renderPendingNotes(notes) {
             <td>${formatDate(note.uploadedAt)}</td>
 
             <td>
-
+                <div class="action-buttons">
                 <button class="table-btn approve-btn">
                     Approve
                 </button>
@@ -566,6 +566,7 @@ function renderPendingNotes(notes) {
                 <button class="table-btn view-btn">
                     View
                 </button>
+                </div>
 
             </td>
 
@@ -844,7 +845,7 @@ function renderApprovedNotes(notes) {
             <td>${formatDate(note.uploadedAt)}</td>
 
             <td>
-
+                <div class="action-buttons">
                 <button class="table-btn view-btn">
                     View
                 </button>
@@ -852,6 +853,7 @@ function renderApprovedNotes(notes) {
                 <button class="table-btn reject-btn">
                     Reject
                 </button>
+                </div>
 
             </td>
 
@@ -957,7 +959,7 @@ function renderRejectedNotes(notes) {
             <td>Rejected by Admin</td>
 
             <td>
-
+                <div class="action-buttons">
                 <button class="table-btn approve-btn">
                     Restore
                 </button>
@@ -969,6 +971,7 @@ function renderRejectedNotes(notes) {
                 <button class="table-btn view-btn">
                     View
                 </button>
+                <div>
 
             </td>
 

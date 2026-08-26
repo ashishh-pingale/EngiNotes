@@ -62,10 +62,9 @@ async function loadAdminProfile() {
 
     const admin = await getCurrentAdmin();
 
-    console.log("ADMIN DATA:", admin);
+    
 
     if (!admin) {
-        console.log("No admin data returned");
         return;
     }
 
