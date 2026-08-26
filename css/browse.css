@@ -144,84 +144,245 @@ select:focus {
     cursor: poPoppins;
 } */
 
-/* Enhanced Colored Cards */
+/* =========================================
+   Modern Note Cards
+========================================= */
+
 .notes-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 25px;
-    padding: 50px 0;
+    gap: 24px;
+    padding: 45px 0;
 }
+
+/* Base card */
 
 .note-card {
-    background: white;
-    border-radius: 16px;
-    padding: 25px;
     position: relative;
-    border-left: 6px solid transparent;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+    background: #ffffff;
+    border: 1px solid #e7edf5;
+    border-radius: 18px;
+    padding: 22px;
+    overflow: hidden;
+
+    box-shadow:
+        0 6px 20px rgba(15, 23, 42, 0.045);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
 }
+
+/* Small gradient accent */
+
+.note-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+
+    background: linear-gradient(
+        90deg,
+        #2563eb,
+        #06b6d4
+    );
+}
+
+/* Hover */
 
 .note-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+    transform: translateY(-4px);
+
+    border-color: #d8e3f0;
+
+    box-shadow:
+        0 16px 35px rgba(15, 23, 42, 0.09);
 }
 
-/* Branch Specific Themes */
-.note-card.cse { border-left-color: #0ea5e9; background: #f0f9ff; }
-.note-card.ece { border-left-color: #8b5cf6; background: #f5f3ff; }
-.note-card.mech { border-left-color: #f59e0b; background: #fffbeb; }
+
+/* =========================================
+   Branch Themes
+========================================= */
+
+/* Keep branch colors subtle */
+
+.note-card.cse::before {
+    background: linear-gradient(
+        90deg,
+        #2563eb,
+        #06b6d4
+    );
+}
+
+.note-card.ece::before {
+    background: linear-gradient(
+        90deg,
+        #7c3aed,
+        #a855f7
+    );
+}
+
+.note-card.mech::before {
+    background: linear-gradient(
+        90deg,
+        #f59e0b,
+        #f97316
+    );
+}
+
+
+/* =========================================
+   Branch Badge
+========================================= */
 
 .branch-badge {
-    font-size: 0.7rem;
-    font-weight: 800;
-    padding: 4px 10px;
-    border-radius: 20px;
-    background: white;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    display: inline-flex;
+    align-items: center;
+
+    padding: 5px 10px;
+
+    border-radius: 999px;
+
+    background: #eff6ff;
+    color: #2563eb;
+
+    border: 1px solid #dbeafe;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    letter-spacing: 0.2px;
 }
+
+
+/* =========================================
+   Title
+========================================= */
 
 .note-card h3 {
-    margin: 15px 0 5px;
-    color: var(--dark-blue);
-    font-size: 1.25rem;
+    margin: 16px 0 8px;
+
+    color: #0f172a;
+
+    font-size: 18px;
+    line-height: 1.4;
+
+    font-weight: 700;
 }
 
-.subject-code { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;}
+
+/* =========================================
+   Subject / Metadata
+========================================= */
+
+.subject-code {
+    color: #64748b;
+
+    font-size: 13px;
+    line-height: 1.6;
+
+    margin-bottom: 18px;
+}
+
+
+/* =========================================
+   Uploader
+========================================= */
 
 .user-info {
     display: flex;
     align-items: center;
+
     gap: 10px;
-    margin-bottom: 20px;
+
+    margin-bottom: 18px;
 }
 
 .avatar {
-    width: 32px; height: 32px;
-    background: var(--primary-blue);
-    color: white;
+    width: 34px;
+    height: 34px;
+
+    flex-shrink: 0;
+
+    background: #eff6ff;
+    color: #2563eb;
+
+    border: 1px solid #dbeafe;
+
     border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 0.75rem; font-weight: 700;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 12px;
+    font-weight: 700;
 }
+
+
+/* =========================================
+   Footer
+========================================= */
 
 .card-footer {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding-top: 15px;
-    border-top: 1px dashed #cbd5e1;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding-top: 16px;
+
+    border-top: 1px solid #edf1f6;
 }
 
-.file-size { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); }
+.file-size {
+    font-size: 12px;
+    font-weight: 600;
+    color: #94a3b8;
+}
+
+
+/* =========================================
+   Open PDF Button
+========================================= */
 
 .btn-download-small {
-    background: var(--primary-blue);
-    color: white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 105px;
+    height: 38px;
+
+    padding: 0 15px;
+
+    background: #0077b6;
+    color: #ffffff;
+
     border: none;
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-size: 0.85rem;
+    border-radius: 9px;
+
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
     font-weight: 600;
-    cursor: poPoppins;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.btn-download-small:hover {
+    background: #0086cf;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 5px 12px rgba(37, 99, 235, 0.25);
 }
