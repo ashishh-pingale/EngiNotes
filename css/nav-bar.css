@@ -1,18 +1,18 @@
-:root {
-    --primary-color: #3f51b5;
-    --secondary-color: #1a237e;
-    --accent-color: #00d1b2;
+/* :root {
+  --primary-color: #2563eb;
+    --secondary-color: #1d4ed8;
+    --accent-color: #06b6d4;
     --text-dark: #333;
     --text-light: #666;
     --bg-light: #f4f7f9;
     --white: #ffffff;
-    --primary-blue: #0077b6;
-    --dark-blue: #023e8a;
+    --primary-blue: #2563eb;
+    --dark-blue: #1d4ed8;
     --light-blue: #e0f2fe;
     --white: #ffffff;
     --text-dark: #1e293b;
     --text-muted: #64748b;
-}
+} */
 
 .navbar {
     display: grid;

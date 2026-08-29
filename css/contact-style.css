@@ -1,12 +1,12 @@
-:root {
-    --primary-blue: #0077b6;
-    --dark-blue: #023e8a;
+/* :root {
+    --primary-blue: #2563eb;
+    --dark-blue: #1d4ed8;
     --light-blue: #e0f2fe;
     --white: #ffffff;
     --text-dark: #1e293b;
     --text-muted: #64748b;
     --border-color: #e2e8f0;
-}
+} */
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
